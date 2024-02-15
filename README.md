@@ -5,6 +5,8 @@ Mobile Device [#c26bde]
 Hover [#7e35a0]
 
 
+new repo create successfully done 
+
 
 from-violet-500 to-fuchsia-500
 bg-gradient-to-r from-violet-500 to-fuchsia-500

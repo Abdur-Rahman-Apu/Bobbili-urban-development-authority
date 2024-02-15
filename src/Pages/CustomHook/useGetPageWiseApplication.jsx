@@ -4,7 +4,7 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const useGetPageWiseApplication = (searchApplicationName) => {
   const { userInfoFromLocalStorage } = useContext(AuthContext);
-  console.log(searchApplicationName.split(" ").join(""));
+  // console.log(searchApplicationName.split(" ").join(""));
   const { data, refetch, isLoading, isError, isSuccess } = useQuery(
     [`all${searchApplicationName.split(" ").join("")}`],
     async () => {
@@ -21,7 +21,7 @@ const useGetPageWiseApplication = (searchApplicationName) => {
     }
   );
 
-  console.log(data, "Data");
+  // console.log(data, "Data");
   return [data, refetch, isLoading, isError, isSuccess];
 };
 

@@ -16,7 +16,7 @@ const Approved = () => {
   const [data, refetch, isError, isLoading, isSuccess] =
     useGetPageWiseApplication("Approved Applications");
 
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     if (isError) {

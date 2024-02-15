@@ -66,6 +66,8 @@ const OnlinePayment = () => {
   //   ));
   // };
   console.log(filteredData, "FILTERED DATA");
+
+
   return (
     <div className="h-full font-roboto w-full px-2 mt-5 bg-[#E8EAEC]">
       <motion.div className={`${HomeCss.searchInputContainer} mx-2`}

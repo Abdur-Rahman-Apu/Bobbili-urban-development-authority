@@ -192,6 +192,18 @@ const AddUser = () => {
     }
   };
 
+  const handleInputAadhar = (e) => {
+    const inputValue = e.target.value.replace(/[^0-9]/g, "");
+    const truncatedValue = inputValue.slice(0, 12);
+    e.target.value = truncatedValue;
+
+    if (truncatedValue.length < 12) {
+      e.target.setCustomValidity("Fill up 12 numbers.");
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
   const inputLabel = "block mb-1 font-semibold text-gray-600";
   const inputBox =
     "w-full px-3 py-2 border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200";
@@ -392,7 +404,7 @@ const AddUser = () => {
 
             <div>
               <label htmlFor="adharNo" className={inputLabel}>
-                Adhar no
+                Aadhar no
               </label>
               <input
                 type="text"
@@ -400,6 +412,8 @@ const AddUser = () => {
                 id="adharNo"
                 className={inputBox}
                 placeholder="Enter phone no"
+                onInput={handleInputAadhar}
+                maxLength={12}
                 required
               />
             </div>
