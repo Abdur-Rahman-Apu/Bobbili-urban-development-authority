@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
-import router from "./Routes/Routes";
+import "./App.css";
 import socket from "./Pages/Common/socket";
+import router from "./Routes/Routes";
 
 function App() {
   useEffect(() => {
@@ -14,6 +14,7 @@ function App() {
       socket.disconnect();
     };
   }, []);
+
   return (
     <>
       <RouterProvider router={router} />

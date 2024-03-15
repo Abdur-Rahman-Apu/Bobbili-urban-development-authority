@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillMessage, AiOutlineHome } from "react-icons/ai";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { MdOutlineDashboard } from "react-icons/md";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import ParticleBg from "../Pages/Components/ParticleBg";
 
 import toast from "react-hot-toast";
@@ -67,6 +67,13 @@ const MainLayout = () => {
   }, [theme]);
 
   const [toggleChat, setToggleChat] = useState(false);
+
+  const navigate = useNavigate();
+  const isAuthExist = JSON.parse(localStorage.getItem("loggedUser"));
+
+  if (isAuthExist) {
+    navigate("/dashboard");
+  }
 
   return (
     <>
