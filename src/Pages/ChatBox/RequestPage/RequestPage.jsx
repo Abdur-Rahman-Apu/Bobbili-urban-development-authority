@@ -51,7 +51,7 @@ const RequestPage = ({ props }) => {
 
     try {
       const { data } = await axios.post(
-        "https://residential-building.onrender.com/messageRequest",
+        "http://localhost:5000/messageRequest",
         messageRequest,
         config
       );
@@ -104,7 +104,7 @@ const RequestPage = ({ props }) => {
 
       try {
         const { data } = await axios.post(
-          "https://residential-building.onrender.com/messageRequest",
+          "http://localhost:5000/messageRequest",
           messageRequest,
           config
         );

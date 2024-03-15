@@ -120,7 +120,7 @@ const Drawing = () => {
           formData.append("file", selectedFiles[file]);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=drawing",
+              "http://localhost:5000/upload?page=drawing",
               formData,
               {
                 headers: {

@@ -23,9 +23,7 @@ const ApplicationSearch = () => {
   const { fetchDataFromTheDb } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchDataFromTheDb(
-      "https://residential-building.onrender.com/allApplications"
-    ).then((data) => {
+    fetchDataFromTheDb("http://localhost:5000/allApplications").then((data) => {
       console.log(data);
       setApplicationData(data);
     });

@@ -33,7 +33,7 @@ const NewMessage = () => {
         console.log(allData, "After updating");
         try {
           const { data } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
+            "http://localhost:5000/messageRequest"
           );
 
           setAllData(data);
@@ -51,7 +51,7 @@ const NewMessage = () => {
         console.log(allData, "After updating");
         try {
           const { data } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
+            "http://localhost:5000/messageRequest"
           );
 
           setAllData(data);
@@ -71,7 +71,7 @@ const NewMessage = () => {
   useEffect(() => {
     setError("");
     setLoading(true);
-    fetch("https://residential-building.onrender.com/messageRequest")
+    fetch("http://localhost:5000/messageRequest")
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -90,20 +90,18 @@ const NewMessage = () => {
     console.log(id);
     try {
       const { data } = await axios.patch(
-        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-          {
-            id,
-            action: "accept",
-            acceptedBy: userInfoFromLocalStorage().role.toLowerCase(),
-          }
-        )}`
+        `http://localhost:5000/messageRequest?update=${JSON.stringify({
+          id,
+          action: "accept",
+          acceptedBy: userInfoFromLocalStorage().role.toLowerCase(),
+        })}`
       );
 
       if (data.acknowledged) {
         toast.success("Request accepted");
         try {
           const { data: updateData } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
+            "http://localhost:5000/messageRequest"
           );
           console.log(updateData, "UPD");
           setAllData(updateData);

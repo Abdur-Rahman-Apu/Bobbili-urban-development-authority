@@ -18,7 +18,7 @@ const MainLayout = () => {
 
   // get total visitor number
   useEffect(() => {
-    fetch("https://residential-building.onrender.com/getVisitorCount")
+    fetch("http://localhost:5000/getVisitorCount")
       .then((res) => res.json())
       .then((result) => {
         console.log(result, "result");
@@ -151,7 +151,7 @@ const MainLayout = () => {
               console.log("ASCHI REMOVE KORTE");
               try {
                 await axios.patch(
-                  `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
+                  `http://localhost:5000/messageRequest?update=${JSON.stringify(
                     {
                       id: removeChatUser.uniqueId,
                       action: "leaveFromTheMessage",

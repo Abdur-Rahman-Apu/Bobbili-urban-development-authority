@@ -91,16 +91,14 @@ const ChatWithCustomer = ({
     setMessages((prevMessages) => [...prevMessages, { ...messageData }]);
 
     await axios.patch(
-      `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-        {
-          id: activeChat?._id,
-          action: "text",
-          message: {
-            userId: userInfoFromLocalStorage()?.role?.toLowerCase(),
-            message: messageData?.message,
-          },
-        }
-      )}`
+      `http://localhost:5000/messageRequest?update=${JSON.stringify({
+        id: activeChat?._id,
+        action: "text",
+        message: {
+          userId: userInfoFromLocalStorage()?.role?.toLowerCase(),
+          message: messageData?.message,
+        },
+      })}`
     );
 
     resetField("message");

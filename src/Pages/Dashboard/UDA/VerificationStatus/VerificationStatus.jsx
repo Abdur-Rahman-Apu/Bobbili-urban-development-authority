@@ -25,7 +25,7 @@ const VerificationStatus = () => {
   useEffect(() => {
     setLoading(true);
     setError("");
-    fetch("https://residential-building.onrender.com/getVerificationStatus", {
+    fetch("http://localhost:5000/getVerificationStatus", {
       method: "GET",
       headers: { authorization: getToken },
     })

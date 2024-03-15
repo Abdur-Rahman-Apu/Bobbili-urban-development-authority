@@ -28,7 +28,7 @@ const RejectedApplications = () => {
   useEffect(() => {
     (async function () {
       const applicationData = await fetchDataFromTheDb(
-        `https://residential-building.onrender.com/getRejectedApplications?userId=${id}`
+        `http://localhost:5000/getRejectedApplications?userId=${id}`
       );
       if (applicationData?.length) {
         setData(applicationData);

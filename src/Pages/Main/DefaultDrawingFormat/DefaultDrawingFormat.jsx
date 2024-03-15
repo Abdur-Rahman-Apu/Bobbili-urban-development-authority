@@ -21,7 +21,7 @@ const DefaultDrawingFormat = () => {
       });
     }
 
-    fetch(`https://residential-building.onrender.com/downloadFile?data=${data}`)
+    fetch(`http://localhost:5000/downloadFile?data=${data}`)
       .then((res) => {
         if (res.ok) {
           // If the response status is OK, it means the file download is successful

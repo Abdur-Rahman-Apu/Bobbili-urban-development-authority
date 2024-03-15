@@ -19,7 +19,7 @@ const RightSidebar = ({
       (async function () {
         try {
           const { data } = await axios.get(
-            `https://residential-building.onrender.com/messages?id=${activeChat?._id}`
+            `http://localhost:5000/messages?id=${activeChat?._id}`
           );
 
           console.log(data, "GET OLD MESSAGES");

@@ -14,7 +14,6 @@ import Modal from "./Modal";
 import SaveData from "./SaveData";
 
 const Payment = () => {
-  const [openApplication, setOpenApplication] = useState(false);
   const [viewChallan, setViewChallan] = useState(false);
   const [Newly_Developed_Condition, setNewlyDevelopedCondition] =
     useState(false);
@@ -49,46 +48,44 @@ const Payment = () => {
   const role = userInfoFromLocalStorage().role;
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
-  const gradientColor = "bg-gradient-to-r from-violet-500 to-fuchsia-500";
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    getApplicationData(applicationNo, cameFrom).then((applicationData) => {
-      setApplicationData(applicationData);
+    getApplicationData(applicationNo, cameFrom).then((appData) => {
+      console.log(appData, "APP DATA");
+      setApplicationData(appData);
 
-      if (applicationData?.prevSavedState === 6) {
+      if (appData?.prevSavedState === 6) {
         localStorage.setItem("PPS", JSON.parse(1));
         setSentData(1);
       } else {
         localStorage.setItem("PPS", JSON.parse(0));
         setSentData(0);
       }
-      const generalInformation =
-        applicationData?.buildingInfo?.generalInformation;
+      const generalInformation = appData?.buildingInfo?.generalInformation;
 
-      const ltpDetails = applicationData?.applicantInfo?.ltpDetails;
+      const ltpDetails = appData?.applicantInfo?.ltpDetails;
 
-      const applicantDetailsData =
-        applicationData?.applicantInfo?.applicantDetails;
+      const applicantDetailsData = appData?.applicantInfo?.applicantDetails;
 
-      const plotDetails = applicationData?.buildingInfo?.plotDetails;
+      const plotDetails = appData?.buildingInfo?.plotDetails;
 
-      const gramaPanchaytImgId = applicationData?.payment?.gramaPanchayatFee
+      const gramaPanchaytImgId = appData?.payment?.gramaPanchayatFee
         ?.gramaBankReceipt
-        ? applicationData?.payment?.gramaPanchayatFee?.gramaBankReceipt
+        ? appData?.payment?.gramaPanchayatFee?.gramaBankReceipt
         : "";
 
-      const greenFeeImgId = applicationData?.payment?.greenFeeCharge
+      const greenFeeImgId = appData?.payment?.greenFeeCharge
         ?.greenFeeBankReceipt
-        ? applicationData?.payment?.greenFeeCharge?.greenFeeBankReceipt
+        ? appData?.payment?.greenFeeCharge?.greenFeeBankReceipt
         : "";
 
-      const labourCessImageId = applicationData?.payment?.labourCessCharge
+      const labourCessImageId = appData?.payment?.labourCessCharge
         ?.labourCessBankReceipt
-        ? applicationData?.payment?.labourCessCharge?.labourCessBankReceipt
+        ? appData?.payment?.labourCessCharge?.labourCessBankReceipt
         : "";
 
       setImageId({
@@ -116,7 +113,8 @@ const Payment = () => {
         generalInformation,
         ltpDetails,
         applicantDetailsData,
-        plotDetails
+        plotDetails,
+        appData
       );
     });
   }, []);
@@ -125,19 +123,20 @@ const Payment = () => {
     generalInformation,
     ltpDetails,
     applicantDetailsData,
-    plotDetails
+    plotDetails,
+    appData
   ) => {
     // Plots Details
     const { netPlotAreaCal, marketValueSqym, totalBuiltUpArea, vacantLand } =
       plotDetails;
     // General Informatin
-    const { natureOfTheSite } = generalInformation;
+    const { natureOfTheSite: nature_of_site } = generalInformation;
 
     const builtup_Area = Number(totalBuiltUpArea) || 0;
     const vacant_area = Number(vacantLand) || 0;
     const net_Plot_Area = Number(netPlotAreaCal) || 0;
     const market_value = Number(marketValueSqym) || 0;
-    const nature_of_site = natureOfTheSite;
+    // const nature_of_site = natureOfTheSite;
     const BuiltUp_area_SquareFeet = Number(builtup_Area * 10.7639104) || 0;
 
     console.log(typeof builtup_Area, "builtup_Area");
@@ -205,7 +204,7 @@ const Payment = () => {
     // ==== Labour Cess Component 2 ====
     const labourCessComponentUnitRate2 = 1400; // per Sq.Ft.
 
-    const laboutCessCompo2Calculation = (BuiltUp_area_SquareFeet) => {
+    const labourCessCompo2Calculation = (BuiltUp_area_SquareFeet) => {
       let labourCessComponentCharge2 = 0;
 
       if (BuiltUp_area_SquareFeet <= 10000) {
@@ -223,7 +222,7 @@ const Payment = () => {
       return labourCessComponentCharge2;
     };
     // ===== Total labour cess Compo 2 Charged====
-    const TotalLabourCessComp2Charged = laboutCessCompo2Calculation(
+    const TotalLabourCessComp2Charged = labourCessCompo2Calculation(
       BuiltUp_area_SquareFeet
     );
     // ====== User Charges======
@@ -242,6 +241,7 @@ const Payment = () => {
     };
     // =====UDA Total Charged=====
     const UDATotalCharged = UDATotal();
+
     console.log(
       {
         builtUpAreaDevelopmentCharged,
@@ -305,31 +305,144 @@ const Payment = () => {
 
     console.log(TotalLabourCessComp2Charged, "tt");
 
-    setCalculatedData({
-      UDATotalCharged: Number(UDATotalCharged.toFixed(2)),
-      GramaPanchayetTotalCharged: Number(GramaPanchayetTotalCharged.toFixed(2)),
-      builtUpAreaDevelopmentCharged: Number(
-        builtUpAreaDevelopmentCharged
-      ).toFixed(2),
-      labourCessCompo1Charged: Number(labourCessCompo1Charged.toFixed(2)),
-      TotalLabourCessComp2Charged: Number(
-        TotalLabourCessComp2Charged.toFixed(2)
-      ),
-      userCharged: Number(userCharged.toFixed(2)),
-      vacantAreaDevelopmentCharged: Number(
-        vacantAreaDevelopmentCharged.toFixed(2)
-      ),
-      builtup_Area: Number(builtup_Area.toFixed(2)),
-      nature_of_site,
-      greenFeeCharged: Number(greenFeeCharged.toFixed(2)),
-      TotalPenalizationCharged: Number(TotalPenalizationCharged.toFixed(2)),
-      TotalOpenSpaceCharged: Number(TotalOpenSpaceCharged.toFixed(2)),
-      bettermentCharged: Number(bettermentCharged.toFixed(2)),
-      processingFees: Number(processingFees.toFixed(2)),
-      paperPublicationCharged: Number(paperPublicationCharged.toFixed(2)),
-      buildingPermitFees: Number(paperPublicationCharged.toFixed(2)),
-      gramaSiteApprovalCharged: Number(gramaSiteApprovalCharged.toFixed(2)),
-    });
+    let needToPay = {};
+    if (generalInformation?.caseType?.toLowerCase() === "revision") {
+      console.log(appData, "Application data");
+
+      // retrieve previous payment information for revision case
+      const { udaCharge, labourCessCharge, greenFeeCharge, gramaPanchayatFee } =
+        appData?.previousPayment;
+
+      const newUDATotalCharged =
+        Number(UDATotalCharged.toFixed(2)) - Number(udaCharge?.UDATotalCharged);
+
+      const newGramaPanchayetTotalCharged =
+        Number(GramaPanchayetTotalCharged.toFixed(2)) -
+        Number(gramaPanchayatFee?.GramaPanchayetTotalCharged);
+
+      const newBuiltUpAreaDevelopmentCharged =
+        Number(builtUpAreaDevelopmentCharged.toFixed(2)) -
+        Number(udaCharge?.builtUpArea);
+
+      const newLabourCessCompo1Charged =
+        Number(labourCessCompo1Charged.toFixed(2)) -
+        Number(labourCessCharge?.labourCessOne);
+
+      const newTotalLabourCessComp2Charged =
+        Number(TotalLabourCessComp2Charged.toFixed(2)) -
+        Number(udaCharge?.labourCessTwo);
+
+      const newUserCharged =
+        Number(userCharged.toFixed(2)) - Number(udaCharge?.userCharges);
+
+      const newVacantAreaDevelopmentCharged =
+        Number(vacantAreaDevelopmentCharged.toFixed(2)) -
+        Number(udaCharge?.vacantArea);
+
+      const newGreenFeeCharged =
+        Number(greenFeeCharged.toFixed(2)) - Number(greenFeeCharge?.greenFee);
+
+      const newTotalPenalizationCharged =
+        Number(TotalPenalizationCharged.toFixed(2)) -
+        Number(udaCharge?.TotalPenalizationCharged);
+
+      const newTotalOpenSpaceCharged =
+        Number(TotalOpenSpaceCharged.toFixed(2)) -
+        Number(udaCharge?.TotalOpenSpaceCharged);
+
+      const newBettermentCharged =
+        Number(bettermentCharged.toFixed(2)) -
+        Number(gramaPanchayatFee?.bettermentCharged);
+
+      const newProcessingFees =
+        Number(processingFees.toFixed(2)) -
+        Number(gramaPanchayatFee?.processingFee);
+
+      const newPaperPublicationCharged =
+        Number(paperPublicationCharged.toFixed(2)) -
+        Number(gramaPanchayatFee?.paperPublicationFee);
+
+      const newBuildingPermitFees =
+        Number(paperPublicationCharged.toFixed(2)) -
+        Number(gramaPanchayatFee?.buildingPermitFees);
+
+      const newGramaSiteApprovalCharged =
+        Number(gramaSiteApprovalCharged.toFixed(2)) -
+        Number(gramaPanchayatFee?.gramaSiteApprovalCharged);
+
+      needToPay = {
+        UDATotalCharged: newUDATotalCharged < 0 ? 0 : newUDATotalCharged,
+
+        GramaPanchayetTotalCharged:
+          newGramaPanchayetTotalCharged < 0 ? 0 : newGramaPanchayetTotalCharged,
+
+        builtUpAreaDevelopmentCharged:
+          newBuiltUpAreaDevelopmentCharged < 0
+            ? 0
+            : newBuiltUpAreaDevelopmentCharged,
+
+        labourCessCompo1Charged:
+          newLabourCessCompo1Charged < 0 ? 0 : newLabourCessCompo1Charged,
+
+        TotalLabourCessComp2Charged:
+          newTotalLabourCessComp2Charged < 0
+            ? 0
+            : newTotalLabourCessComp2Charged,
+
+        userCharged: newUserCharged < 0 ? 0 : newUserCharged,
+
+        vacantAreaDevelopmentCharged:
+          newVacantAreaDevelopmentCharged < 0
+            ? 0
+            : newVacantAreaDevelopmentCharged,
+
+        builtup_Area: Number(builtup_Area.toFixed(2)),
+        nature_of_site,
+        greenFeeCharged: newGreenFeeCharged < 0 ? 0 : newGreenFeeCharged,
+        TotalPenalizationCharged:
+          newTotalPenalizationCharged < 0 ? 0 : newTotalPenalizationCharged,
+        TotalOpenSpaceCharged:
+          newTotalOpenSpaceCharged < 0 ? 0 : newTotalOpenSpaceCharged,
+        bettermentCharged: newBettermentCharged < 0 ? 0 : newBettermentCharged,
+        processingFees: newProcessingFees < 0 ? 0 : newProcessingFees,
+        paperPublicationCharged:
+          newPaperPublicationCharged < 0 ? 0 : newPaperPublicationCharged,
+        buildingPermitFees:
+          newBuildingPermitFees < 0 ? 0 : newBuildingPermitFees,
+        gramaSiteApprovalCharged:
+          newGramaSiteApprovalCharged < 0 ? 0 : newGramaSiteApprovalCharged,
+      };
+    } else {
+      needToPay = {
+        UDATotalCharged: Number(UDATotalCharged.toFixed(2)),
+        GramaPanchayetTotalCharged: Number(
+          GramaPanchayetTotalCharged.toFixed(2)
+        ),
+        builtUpAreaDevelopmentCharged: Number(
+          builtUpAreaDevelopmentCharged
+        ).toFixed(2),
+        labourCessCompo1Charged: Number(labourCessCompo1Charged.toFixed(2)),
+        TotalLabourCessComp2Charged: Number(
+          TotalLabourCessComp2Charged.toFixed(2)
+        ),
+        userCharged: Number(userCharged.toFixed(2)),
+        vacantAreaDevelopmentCharged: Number(
+          vacantAreaDevelopmentCharged.toFixed(2)
+        ),
+        builtup_Area: Number(builtup_Area.toFixed(2)),
+        nature_of_site,
+        greenFeeCharged: Number(greenFeeCharged.toFixed(2)),
+        TotalPenalizationCharged: Number(TotalPenalizationCharged.toFixed(2)),
+        TotalOpenSpaceCharged: Number(TotalOpenSpaceCharged.toFixed(2)),
+        bettermentCharged: Number(bettermentCharged.toFixed(2)),
+        processingFees: Number(processingFees.toFixed(2)),
+        paperPublicationCharged: Number(paperPublicationCharged.toFixed(2)),
+        buildingPermitFees: Number(paperPublicationCharged.toFixed(2)),
+        gramaSiteApprovalCharged: Number(gramaSiteApprovalCharged.toFixed(2)),
+      };
+    }
+
+    setCalculatedData(needToPay);
   };
 
   // THIS FUNCTION USED FOR GETTING SELECTED FILE
@@ -388,7 +501,7 @@ const Payment = () => {
         console.log(...formData);
         try {
           const response = await axios.post(
-            "https://residential-building.onrender.com/upload?page=payment",
+            "http://localhost:5000/upload?page=payment",
             formData,
             {
               headers: {

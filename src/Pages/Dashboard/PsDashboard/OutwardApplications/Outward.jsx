@@ -21,7 +21,7 @@ function Outward() {
     ["allOutwardApplications"],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/totalApplications?data=${JSON.stringify(
+        `http://localhost:5000/totalApplications?data=${JSON.stringify(
           userInfoFromLocalStorage()
         )}`
       );

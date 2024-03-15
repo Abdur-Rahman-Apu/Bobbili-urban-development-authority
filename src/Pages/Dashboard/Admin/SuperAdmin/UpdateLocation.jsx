@@ -51,7 +51,7 @@ const UpdateLocation = () => {
     (async function () {
       try {
         const locationData = await fetchDataFromTheDb(
-          "https://residential-building.onrender.com/getDistricts"
+          "http://localhost:5000/getDistricts"
         );
         console.log(locationData, "LOC");
         const extractsDataFromDB = locationData[0]?.district;
@@ -120,15 +120,11 @@ const UpdateLocation = () => {
       // add location
       console.log(data, "ADD");
 
-      url = `https://residential-building.onrender.com/addLocation?data=${JSON.stringify(
-        data
-      )}`;
+      url = `http://localhost:5000/addLocation?data=${JSON.stringify(data)}`;
     } else {
       // remove location
       console.log(data, "Remove");
-      url = `https://residential-building.onrender.com/removeLocation?data=${JSON.stringify(
-        data
-      )}`;
+      url = `http://localhost:5000/removeLocation?data=${JSON.stringify(data)}`;
     }
 
     fetch(url, {

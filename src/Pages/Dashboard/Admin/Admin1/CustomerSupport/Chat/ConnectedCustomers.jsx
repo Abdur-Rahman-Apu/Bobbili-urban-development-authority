@@ -29,7 +29,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
       ) {
         try {
           const { data: updateData } = await axios.get(
-            `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
+            `http://localhost:5000/acceptMessage?role=${JSON.stringify(
               userInfoFromLocalStorage().role.toLowerCase()
             )}`
           );
@@ -51,7 +51,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
     (async function () {
       try {
         const { data } = await axios.get(
-          `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
+          `http://localhost:5000/acceptMessage?role=${JSON.stringify(
             userInfoFromLocalStorage().role.toLowerCase()
           )}`
         );
@@ -88,12 +88,10 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
   const messageSeen = async (id) => {
     try {
       await axios.patch(
-        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-          {
-            id,
-            action: "trackCustomerNewMessage",
-          }
-        )}`
+        `http://localhost:5000/messageRequest?update=${JSON.stringify({
+          id,
+          action: "trackCustomerNewMessage",
+        })}`
       );
     } catch (err) {
       console.log(err, "Error message");

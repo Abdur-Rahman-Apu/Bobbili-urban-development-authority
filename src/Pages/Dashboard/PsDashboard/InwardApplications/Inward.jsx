@@ -34,7 +34,8 @@ const Inward = () => {
     ["allInwardApplications"],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/submitApplications?userId=${userInfoFromLocalStorage()?._id
+        `http://localhost:5000/submitApplications?userId=${
+          userInfoFromLocalStorage()?._id
         }`
       );
       return await response.json();
@@ -58,18 +59,22 @@ const Inward = () => {
     setStoreData(data);
   }, [isError, data]);
 
-
   const onSubmit = (data) => {
     const { search } = data;
 
     if (search?.includes("BUDA/2023")) {
       //  search by application No
       setAllData(
-        storeData?.filter((application) => application?.applicationNo === search)
+        storeData?.filter(
+          (application) => application?.applicationNo === search
+        )
       );
     } else {
       setAllData(
-        storeData?.filter((application) => application?.applicantInfo?.applicantDetails[0]?.name?.toLowerCase() === search?.toLowerCase()
+        storeData?.filter(
+          (application) =>
+            application?.applicantInfo?.applicantDetails[0]?.name?.toLowerCase() ===
+            search?.toLowerCase()
         )
       );
     }

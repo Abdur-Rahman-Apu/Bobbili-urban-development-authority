@@ -36,7 +36,7 @@ const DashboardLayout = () => {
       showLoaderOnConfirm: true,
       preConfirm: async () => {
         try {
-          const url = `https://residential-building.onrender.com/handOveredByPs?id=${JSON.stringify(
+          const url = `http://localhost:5000/handOveredByPs?id=${JSON.stringify(
             id
           )}`;
           const response = await fetch(url, { method: "PATCH" });
@@ -76,7 +76,7 @@ const DashboardLayout = () => {
     // }).then((result) => {
     //   /* Read more about isConfirmed, isDenied below */
     //   if (result.isConfirmed) {
-    //     fetch(`https://residential-building.onrender.com/handOveredByPs?id=${JSON.stringify(id)}`, {
+    //     fetch(`http://localhost:5000/handOveredByPs?id=${JSON.stringify(id)}`, {
     //       method: "PATCH",
     //     })
     //       .then((res) => res.json())

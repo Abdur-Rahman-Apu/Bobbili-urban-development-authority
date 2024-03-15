@@ -8,10 +8,10 @@ import { useOutletContext } from "react-router";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import InputField from "../../../Components/InputField";
-import FloorDetails from "./FloorDetails";
-import SaveData from "./SaveData";
-import PreviousFileModal from "./PreviousFileModal";
 import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
+import FloorDetails from "./FloorDetails";
+import PreviousFileModal from "./PreviousFileModal";
+import SaveData from "./SaveData";
 
 const BuildingInfo = () => {
   const stepperData = useOutletContext();
@@ -168,7 +168,7 @@ const BuildingInfo = () => {
     // console.log(districtData, 'districtData');
 
     // const apiUrl = "../../src/assets/buildingInfo.json";
-    // fetch('https://residential-building.onrender.com/getDistricts')
+    // fetch('http://localhost:5000/getDistricts')
     //   .then((response) => response.json())
     //   .then((result) => {
     //     console.log(result[0], 'result.district');
@@ -183,7 +183,7 @@ const BuildingInfo = () => {
   useEffect(() => {
     (async function () {
       const locationData = await fetchDataFromTheDb(
-        "https://residential-building.onrender.com/getDistricts"
+        "http://localhost:5000/getDistricts"
       );
       console.log(locationData, "LOC");
       const extractsDataFromDB = locationData[0]?.district;
@@ -445,11 +445,15 @@ const BuildingInfo = () => {
     const bpsApprovedElement = document.getElementById("BpsApprovedNo");
     const bpsApprovedNo = bpsApprovedElement ? bpsApprovedElement.value : "";
 
-    const previewsApprovedFileElement = document.getElementById("PreviewsApprovedFileNo");
-    const previewsApprovedFileNo = previewsApprovedFileElement ? previewsApprovedFileElement.value : "";
+    const previewsApprovedFileElement = document.getElementById(
+      "PreviewsApprovedFileNo"
+    );
+    const previewsApprovedFileNo = previewsApprovedFileElement
+      ? previewsApprovedFileElement?.value
+      : "";
 
-    const FileNoElement = document.getElementById("FileNo");
-    const FileNo = FileNoElement ? FileNoElement.value : "";
+    const fileNoElement = document.getElementById("fileNo");
+    const fileNo = fileNoElement ? fileNoElement?.value : "";
 
     const lpNoElement = document.getElementById("LpNo");
     const lpNo = lpNoElement ? lpNoElement.value : "";
@@ -526,7 +530,7 @@ const BuildingInfo = () => {
       village,
       bpsApprovedNoServer: bpsApprovedNo,
       previewsApprovedFileNo,
-      FileNo,
+      fileNo,
       lpNo,
       plotNo,
       lrsNo,
@@ -608,7 +612,7 @@ const BuildingInfo = () => {
     plotNo,
     plotNo2,
     previewsApprovedFileNo,
-    FileNo,
+    fileNo,
     surveyNo,
     gramaPanchayat,
     village,
@@ -642,23 +646,19 @@ const BuildingInfo = () => {
 
   // const { east, west, north, south } = scheduleBoundaries ?? {};
 
-
-
   // File No Input Focus Modal:
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [data, refetch, isError, isLoading, isSuccess] =
+    useGetPageWiseApplication("Approved Applications");
 
-  const [data, refetch, isError, isLoading, isSuccess] = useGetPageWiseApplication("Approved Applications");
-
-  const handleClickModal = () => {
+  const handlePreviousFileModal = () => {
     setIsModalOpen(true);
     // Fetch data when the user clicks on the motion.div
     refetch();
 
-
-    console.log(data, 'useGetPageWiseApplication');
+    console.log(data, "useGetPageWiseApplication");
   };
-
 
   // classes for this component:
   const labelClass = "block mb-1 font-semibold text-gray-600";
@@ -1094,21 +1094,21 @@ const BuildingInfo = () => {
 
               {selectedNatureOfTheSite ===
                 "Plot port of RLP/IPLP but not regularised" && (
-                  <motion.div
-                    initial={{ x: "-100vw" }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <InputField
-                      id="IplpNo"
-                      name="IplpNo"
-                      label="RLP/IPLP no."
-                      placeholder="RLP/IPLP no."
-                      type="number"
-                      ltpDetails={iplpNo}
-                    />
-                  </motion.div>
-                )}
+                <motion.div
+                  initial={{ x: "-100vw" }}
+                  animate={{ x: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <InputField
+                    id="IplpNo"
+                    name="IplpNo"
+                    label="RLP/IPLP no."
+                    placeholder="RLP/IPLP no."
+                    type="number"
+                    ltpDetails={iplpNo}
+                  />
+                </motion.div>
+              )}
               {/*===================== Conditional Input Field End =====================*/}
             </div>
 
@@ -1117,15 +1117,17 @@ const BuildingInfo = () => {
                 // initial={{ x: "-100vw" }}
                 // animate={{ x: 0 }}
                 // transition={{ delay: 0.2 }}
-                onClick={handleClickModal}
+                onClick={handlePreviousFileModal}
               >
                 <InputField
-                  id="FileNo"
-                  name="FileNo"
+                  id="fileNo"
+                  name="fileNo"
                   label="File no."
                   placeholder="Enter your file no."
-                  type="number"
-                // ltpDetails={FileNo}
+                  type="text"
+                  ltpDetails={
+                    dataFromDB?.buildingInfo?.generalInformation?.fileNo ?? ""
+                  }
                 />
               </motion.div>
             )}
@@ -1136,7 +1138,6 @@ const BuildingInfo = () => {
               FileModal={{ setIsModalOpen, isModalOpen, setDataFromDB }}
             />
           ) : null}
-
 
           {/* plot details  */}
           <motion.div
@@ -1258,62 +1259,62 @@ const BuildingInfo = () => {
               <div className="grid grid-cols-1 mx-5 md:mx-10 lg:mx-14 my-10">
                 {selectedNatureOfTheSite ===
                   "Newly Developed/ Built up area" && (
-                    <motion.div
-                      className="flex flex-col md:flex-row font-medium mb-4 text-lg"
-                      initial={{ x: "100vw" }}
-                      animate={{ x: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      <div className="flex items-center mb-3 md:mb-0">
-                        <FaHandPointRight className="me-3 w-5 lg:w-auto text-violetLight" />
-                        <p className="font-bold text-lg">
-                          Whether site abuts any Existing Road?
-                        </p>
-                      </div>
+                  <motion.div
+                    className="flex flex-col md:flex-row font-medium mb-4 text-lg"
+                    initial={{ x: "100vw" }}
+                    animate={{ x: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <div className="flex items-center mb-3 md:mb-0">
+                      <FaHandPointRight className="me-3 w-5 lg:w-auto text-violetLight" />
+                      <p className="font-bold text-lg">
+                        Whether site abuts any Existing Road?
+                      </p>
+                    </div>
 
-                      <div className="radio-button-container ml-3">
-                        <div className="radio-button">
-                          <input
-                            type="radio"
-                            className="radio-button__input"
-                            id="yesRoadExist"
-                            name="yesRoadExist"
-                            value="yes"
-                            checked={radio2 === "yes"}
-                            onChange={handleRadio2}
-                            disabled={isReadOnly}
-                            required
-                          />
-                          <label
-                            className="radio-button__label"
-                            htmlFor="yesRoadExist"
-                          >
-                            <span className="radio-button__custom"></span>
-                            Yes
-                          </label>
-                        </div>
-                        <div className="radio-button">
-                          <input
-                            type="radio"
-                            className="radio-button__input"
-                            id="noRoadExist"
-                            name="yesRoadExist"
-                            value="no"
-                            checked={radio2 === "no"}
-                            onChange={handleRadio2}
-                            disabled={isReadOnly}
-                          />
-                          <label
-                            className="radio-button__label"
-                            htmlFor="noRoadExist"
-                          >
-                            <span className="radio-button__custom"></span>
-                            No
-                          </label>
-                        </div>
+                    <div className="radio-button-container ml-3">
+                      <div className="radio-button">
+                        <input
+                          type="radio"
+                          className="radio-button__input"
+                          id="yesRoadExist"
+                          name="yesRoadExist"
+                          value="yes"
+                          checked={radio2 === "yes"}
+                          onChange={handleRadio2}
+                          disabled={isReadOnly}
+                          required
+                        />
+                        <label
+                          className="radio-button__label"
+                          htmlFor="yesRoadExist"
+                        >
+                          <span className="radio-button__custom"></span>
+                          Yes
+                        </label>
                       </div>
-                    </motion.div>
-                  )}
+                      <div className="radio-button">
+                        <input
+                          type="radio"
+                          className="radio-button__input"
+                          id="noRoadExist"
+                          name="yesRoadExist"
+                          value="no"
+                          checked={radio2 === "no"}
+                          onChange={handleRadio2}
+                          disabled={isReadOnly}
+                        />
+                        <label
+                          className="radio-button__label"
+                          htmlFor="noRoadExist"
+                        >
+                          <span className="radio-button__custom"></span>
+                          No
+                        </label>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
                 <motion.div
                   className="flex flex-col md:flex-row font-medium mb-4 text-lg mt-4"

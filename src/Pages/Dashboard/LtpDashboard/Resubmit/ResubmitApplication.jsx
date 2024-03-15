@@ -43,7 +43,7 @@ const ResubmitApplication = () => {
     setLoading(true);
     setError("");
     fetchDataFromTheDb(
-      `https://residential-building.onrender.com/getSpecificShortfallApplication?appNo=${JSON.stringify(
+      `http://localhost:5000/getSpecificShortfallApplication?appNo=${JSON.stringify(
         appNo
       )}`
     )
@@ -213,7 +213,7 @@ const ResubmitApplication = () => {
           formData.append("file", drawingFiles[file]);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=drawing",
+              "http://localhost:5000/upload?page=drawing",
               formData,
               {
                 headers: {
@@ -256,7 +256,7 @@ const ResubmitApplication = () => {
           formData.append("file", loopTimes[lt][i].imageId);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=document",
+              "http://localhost:5000/upload?page=document",
               formData,
               {
                 headers: {
@@ -360,7 +360,7 @@ const ResubmitApplication = () => {
 
       console.log(mergedData);
 
-      const url = `https://residential-building.onrender.com/storeResubmitApplication?data=${JSON.stringify(
+      const url = `http://localhost:5000/storeResubmitApplication?data=${JSON.stringify(
         { appNo, oldImageFiles: oldImageFilesId }
       )}`;
 

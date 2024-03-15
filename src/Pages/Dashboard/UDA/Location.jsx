@@ -114,7 +114,7 @@ const Location = () => {
 
       console.log(data);
       fetch(
-        `https://residential-building.onrender.com/filterApplications?search=${JSON.stringify(
+        `http://localhost:5000/filterApplications?search=${JSON.stringify(
           data
         )}`
       )
@@ -127,7 +127,7 @@ const Location = () => {
       console.log(data, "Data");
     } else {
       console.log("all");
-      fetch("https://residential-building.onrender.com/totalApplications")
+      fetch("http://localhost:5000/totalApplications")
         .then((res) => res.json())
         .then((result) => {
           console.log(result);
