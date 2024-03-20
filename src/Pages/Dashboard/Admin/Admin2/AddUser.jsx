@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -20,6 +21,8 @@ const AddUser = () => {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const [allLocationData, setAllLocationData] = useState([]);
   const [allDistricts, setAllDistricts] = useState([]);
   const [allMandal, setAllMandal] = useState([]);
@@ -28,6 +31,10 @@ const AddUser = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMandal, setSelectedMandal] = useState("");
   const [selectedPanchayat, setSelectedPanchayat] = useState("");
+
+  const [psSignImg, setPsSignImg] = useState(null);
+
+  let controller = new AbortController();
 
   useEffect(() => {
     (async function () {
@@ -88,8 +95,11 @@ const AddUser = () => {
     setSelectedPanchayat(e.target.value);
   };
 
-  const onSubmit = (data) => {
+  const source = axios.CancelToken.source();
+  const onSubmit = async (data) => {
+    setLoading(true);
     console.log(data, "data");
+
     if (data?.role.toLowerCase().includes("select an option")) {
       toast.error("Please select a role");
     } else {
@@ -119,12 +129,34 @@ const AddUser = () => {
                 gramaPanchayat: selectedPanchayat,
               };
 
-              userInfo = {
-                ...data,
-                ...address,
-                handOver: "false",
-                isLoggedIn: 0,
-              };
+              const formData = new FormData();
+              formData.append("file", psSignImg);
+
+              try {
+                const response = await axios.post(
+                  "http://localhost:5000/upload?page=sign",
+                  formData,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data", // Important for file uploads
+                    },
+                    signal: controller.signal,
+                  }
+                );
+                if (response?.data.msg === "Successfully uploaded") {
+                  const fileId = response.data.fileId;
+                  userInfo = {
+                    ...data,
+                    ...address,
+                    handOver: "false",
+                    signId: fileId,
+                    isLoggedIn: 0,
+                  };
+                }
+              } catch (error) {
+                // Handle errors, e.g., show an error message to the user
+                toast.error("Error to upload documents");
+              }
             } else {
               toast.error("Please select a grama panchayat");
             }
@@ -140,33 +172,34 @@ const AddUser = () => {
 
       console.log(userInfo, "USER INFO");
 
-      if (userInfo) {
-        // store users data in the database
-        fetch("http://localhost:5000/addUser", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(userInfo),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
+      // if (userInfo) {
+      //   // store users data in the database
+      //   fetch("http://localhost:5000/addUser", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-type": "application/json",
+      //     },
+      //     body: JSON.stringify(userInfo),
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       console.log(data);
 
-            if (data.acknowledged) {
-              toast.success("User added successfully");
-              navigate("/dashboard/allUser");
-            }
-            if (data?.result === 0) {
-              console.log(data.message);
-              toast.error(data.message);
-            }
-          })
-          .catch(() => {
-            toast.error("Server is not responded");
-          });
-      }
+      //       if (data.acknowledged) {
+      //         toast.success("User added successfully");
+      //         navigate("/dashboard/allUser");
+      //       }
+      //       if (data?.result === 0) {
+      //         console.log(data.message);
+      //         toast.error(data.message);
+      //       }
+      //     })
+      //     .catch(() => {
+      //       toast.error("Server is not responded");
+      //     });
+      // }
     }
+    setLoading(false);
   };
 
   const handleChangeRole = (e) => {
@@ -434,103 +467,132 @@ const AddUser = () => {
         )}
 
         {userType === "PS" && (
-          <div className="flex justify-between items-center">
-            {/* district  */}
-            <div className="basis-[30%]">
-              <label htmlFor="district" className={inputLabel}>
-                District
-              </label>
-              <select
-                id="district"
-                className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
-                defaultValue={selectedDistrict}
-                onChange={(e) => detectSelectOfDistrict(e)}
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                {allDistricts.map((eachDistrict) => {
-                  return (
-                    <option key={eachDistrict} value={eachDistrict}>
-                      {eachDistrict}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+          <>
+            <div className="flex justify-between items-center">
+              {/* district  */}
+              <div className="basis-[30%]">
+                <label htmlFor="district" className={inputLabel}>
+                  District
+                </label>
+                <select
+                  id="district"
+                  className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+                  defaultValue={selectedDistrict}
+                  onChange={(e) => detectSelectOfDistrict(e)}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {allDistricts.map((eachDistrict) => {
+                    return (
+                      <option key={eachDistrict} value={eachDistrict}>
+                        {eachDistrict}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
-            {/* mandal */}
-            <div className="basis-[30%]">
-              <label htmlFor="mandal" className={inputLabel}>
-                Mandal
-              </label>
-              <select
-                id="mandal"
-                className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
-                defaultValue={selectedMandal}
-                onChange={(e) => detectChangeOfMandals(e)}
-                disabled={allMandal?.length === 0}
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                {allMandal?.map((eachMandal, index) => {
-                  return (
-                    <option key={index} value={eachMandal?.name}>
-                      {eachMandal?.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+              {/* mandal */}
+              <div className="basis-[30%]">
+                <label htmlFor="mandal" className={inputLabel}>
+                  Mandal
+                </label>
+                <select
+                  id="mandal"
+                  className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+                  defaultValue={selectedMandal}
+                  onChange={(e) => detectChangeOfMandals(e)}
+                  disabled={allMandal?.length === 0}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {allMandal?.map((eachMandal, index) => {
+                    return (
+                      <option key={index} value={eachMandal?.name}>
+                        {eachMandal?.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
-            {/* gram panchayat  */}
-            <div className="basis-[30%]">
-              <label htmlFor="panchayat" className={inputLabel}>
-                Grama Panchayat
-              </label>
-              <select
-                id="panchayat"
-                className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
-                defaultValue={selectedPanchayat}
-                disabled={allPanchayat?.length === 0}
-                onChange={(e) => detectChangeOfPanchayat(e)}
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                {allPanchayat?.map((eachPanchayt, index) => {
-                  return <option key={index}>{eachPanchayt}</option>;
-                })}
-              </select>
+              {/* gram panchayat  */}
+              <div className="basis-[30%]">
+                <label htmlFor="panchayat" className={inputLabel}>
+                  Grama Panchayat
+                </label>
+                <select
+                  id="panchayat"
+                  className="w-full px-3 py-[10.5px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+                  defaultValue={selectedPanchayat}
+                  disabled={allPanchayat?.length === 0}
+                  onChange={(e) => detectChangeOfPanchayat(e)}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {allPanchayat?.map((eachPanchayt, index) => {
+                    return <option key={index}>{eachPanchayt}</option>;
+                  })}
+                </select>
+              </div>
             </div>
-          </div>
+            <div className="mt-6 flex flex-col">
+              <label htmlFor="signature" className={inputLabel}>
+                Signature
+              </label>
+              <input
+                type="file"
+                name="signature"
+                accept="image/*"
+                onChange={(e) => setPsSignImg(e.target.files[0])}
+                required
+                className="file-input file-input-bordered w-full max-w-xs "
+              />
+              {console.log(psSignImg)}
+              {psSignImg && (
+                <img
+                  src={URL.createObjectURL(psSignImg)}
+                  className="mt-5 w-96 object-scale-down"
+                />
+              )}
+            </div>
+          </>
         )}
 
         <div className="flex justify-center my-10">
-          <button
-            type="submit"
-            className={`${Style.addButton} bg-gradient-to-b from-[#a29bfe] to-[#6c5ce7]`}
-          >
-            <span className={`${Style.button__text}`}>Add User</span>
-            <span className={`${Style.button__icon}`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                stroke="currentColor"
-                height="24"
-                fill="none"
-                className="svg"
-              >
-                <line y2="19" y1="5" x2="12" x1="12"></line>
-                <line y2="12" y1="12" x2="19" x1="5"></line>
-              </svg>
-            </span>
-          </button>
+          {loading ? (
+            <div>
+              <span className="loading loading-spinner text-lg text-primary"></span>
+              <button onClick={() => controller.abort()}>Cancel</button>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className={`${Style.addButton} bg-gradient-to-b from-[#a29bfe] to-[#6c5ce7]`}
+            >
+              <span className={`${Style.button__text}`}>Add User</span>
+              <span className={`${Style.button__icon}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  stroke="currentColor"
+                  height="24"
+                  fill="none"
+                  className="svg"
+                >
+                  <line y2="19" y1="5" x2="12" x1="12"></line>
+                  <line y2="12" y1="12" x2="19" x1="5"></line>
+                </svg>
+              </span>
+            </button>
+          )}
         </div>
       </form>
     </div>
