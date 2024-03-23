@@ -1,5 +1,6 @@
+import axios from "axios";
 import { motion } from "framer-motion";
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
@@ -13,7 +14,14 @@ const UpdateProfile = () => {
   const { userInfoFromLocalStorage } = useContext(AuthContext);
 
   const role = userInfoFromLocalStorage()?.role;
+
   const [data, refetch] = useGetUser();
+
+  console.log(data, "Data");
+
+  const [loading, setLoading] = useState(false);
+  const [signId, setSignId] = useState(data?.signId ? data?.signId : null);
+  const [userSelectedImg, setUserSelectedImg] = useState(null);
 
   const { register, reset, handleSubmit } = useForm({
     defaultValues: useMemo(() => {
@@ -24,6 +32,7 @@ const UpdateProfile = () => {
         country: "India",
         state: "Andhra Pradesh",
         ...data,
+        signature: "",
       };
     }, [data]),
   });
@@ -32,33 +41,72 @@ const UpdateProfile = () => {
     reset(data);
   }, [data]);
 
-  const onSubmit = (formValue) => {
+  const onSubmit = async (formValue) => {
+    setLoading(true);
     console.log(formValue, "Formvalue");
     delete formValue["_id"];
 
     console.log(formValue, "FOrm r value");
 
-    fetch(
-      `http://localhost:5000/updateUserInfo/${userInfoFromLocalStorage()._id}`,
-      {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(formValue),
-      }
-    )
-      .then((res) => res.json())
-      .then(async (result) => {
-        console.log(result);
-        if (result.acknowledged) {
-          refetch();
-          toast.success("Update successfully");
-        } else {
-          toast.error("Failed to update");
+    let isPsSignUploadSuccess = role.toLowerCase() === "ps" ? 0 : 1;
+
+    if (role.toLowerCase() === "ps" && userSelectedImg) {
+      console.log(userSelectedImg, "user selected img");
+      const formData = new FormData();
+      formData.append("file", userSelectedImg);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/upload?page=sign",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // Important for file uploads
+            },
+          }
+        );
+        if (response?.data.msg === "Successfully uploaded") {
+          const fileId = response.data.fileId;
+          formValue["signId"] = fileId;
+
+          // TODO: need to delete previous signature
+
+          isPsSignUploadSuccess = 1;
         }
-      })
-      .catch(() => {
-        toast.error("Server error");
-      });
+      } catch (error) {
+        // Handle errors, e.g., show an error message to the user
+
+        console.log(error);
+        toast.error("Error to upload documents");
+      }
+    }
+
+    if (isPsSignUploadSuccess) {
+      fetch(
+        `http://localhost:5000/updateUserInfo/${
+          userInfoFromLocalStorage()._id
+        }`,
+        {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(formValue),
+        }
+      )
+        .then((res) => res.json())
+        .then(async (result) => {
+          console.log(result);
+          if (result.acknowledged) {
+            refetch();
+            toast.success("Update successfully");
+          } else {
+            toast.error("Failed to update");
+          }
+        })
+        .catch(() => {
+          toast.error("Server error");
+        });
+    }
+    setLoading(false);
   };
 
   const handleInputPhone = (e) => {
@@ -160,6 +208,37 @@ const UpdateProfile = () => {
               type="text"
               register={register}
             />
+            {role.toLowerCase() === "ps" && (
+              <div className="flex flex-col gap-2">
+                <div className="mt-6 ml-3 flex flex-col">
+                  <label
+                    htmlFor="signature"
+                    className="block mb-1 font-semibold text-gray-600"
+                  >
+                    Signature
+                  </label>
+                  <input
+                    type="file"
+                    name="signature"
+                    accept="image/*"
+                    onChange={(e) => setUserSelectedImg(e.target.files[0])}
+                    className="file-input file-input-bordered w-full max-w-xs border rounded-lg text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+                  />
+
+                  {userSelectedImg ? (
+                    <img
+                      src={URL.createObjectURL(userSelectedImg)}
+                      className="mt-5 w-96 object-scale-down"
+                    />
+                  ) : (
+                    <img
+                      src={`https://drive.google.com/thumbnail?id=${signId}`}
+                      className="mt-5"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -214,11 +293,10 @@ const UpdateProfile = () => {
                 name="mobileNo"
                 type="text"
                 placeholder="Mobile No."
-                {...register("mobileNo", { required: true })}
+                {...register("mobileNo")}
                 className={inputClass}
                 maxLength={10}
                 onInput={handleInputPhone}
-                required
               />
             </motion.div>
 
@@ -245,11 +323,10 @@ const UpdateProfile = () => {
                 name="phone"
                 type="text"
                 placeholder="Phone no."
-                {...register("phone", { required: true })}
+                {...register("phone")}
                 className={inputClass}
                 maxLength={10}
                 onInput={handleInputPhone}
-                required
               />
             </motion.div>
 
@@ -332,11 +409,10 @@ const UpdateProfile = () => {
                 name="aadharNo"
                 type="text"
                 placeholder="Aadhar no."
-                {...register("aadharNo", { required: true })}
+                {...register("aadharNo")}
                 className={inputClass}
                 maxLength={12}
                 onInput={handleInputAadhar}
-                required
               />
             </motion.div>
 
@@ -365,12 +441,16 @@ const UpdateProfile = () => {
           whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
           viewport={{ once: true }}
         >
-          <button
-            type="submit"
-            className="text-white transition-all duration-700 fancy-button bg-normalViolet font-bold rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            Update
-          </button>
+          {loading ? (
+            <span className="loading loading-dots loading-lg text-normalViolet"></span>
+          ) : (
+            <button
+              type="submit"
+              className="text-white transition-all duration-700 fancy-button bg-normalViolet font-bold rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            >
+              Update
+            </button>
+          )}
         </motion.div>
       </form>
     </div>
