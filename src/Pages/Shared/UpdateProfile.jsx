@@ -48,7 +48,8 @@ const UpdateProfile = () => {
 
     console.log(formValue, "FOrm r value");
 
-    let isPsSignUploadSuccess = role.toLowerCase() === "ps" ? 0 : 1;
+    let isPsSignUploadSuccess =
+      role.toLowerCase() === "ps" && userSelectedImg ? 0 : 1;
 
     if (role.toLowerCase() === "ps" && userSelectedImg) {
       console.log(userSelectedImg, "user selected img");
@@ -89,13 +90,19 @@ const UpdateProfile = () => {
         {
           method: "PATCH",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify(formValue),
+          body: JSON.stringify({
+            data: formValue,
+            isPsSigned: isPsSignUploadSuccess,
+            signId,
+          }),
         }
       )
         .then((res) => res.json())
         .then(async (result) => {
           console.log(result);
           if (result.acknowledged) {
+            setSignId(formValue["signId"]);
+            setUserSelectedImg(null);
             refetch();
             toast.success("Update successfully");
           } else {
@@ -233,7 +240,7 @@ const UpdateProfile = () => {
                   ) : (
                     <img
                       src={`https://drive.google.com/thumbnail?id=${signId}`}
-                      className="mt-5"
+                      className="mt-5 w-96 object-fit"
                     />
                   )}
                 </div>
