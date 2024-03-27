@@ -1,9 +1,14 @@
+import { DateTime } from "luxon";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
-
 const ProceedingModal = () => {
   // const { setOpenProceeding, openProceeding, filteredData } = modalProceeding;
-  const { getApplicationData, calculateNoOfFloors } = useContext(AuthContext);
+  const {
+    getApplicationData,
+    calculateNoOfFloors,
+    getUserData,
+    userInfoFromLocalStorage,
+  } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
@@ -11,6 +16,7 @@ const ProceedingModal = () => {
   const [allInfo, setAllInfo] = useState("");
   const [approvedDate, setApprovedDate] = useState([]);
   const [validProceedingDate, setValidProceedingDate] = useState([]);
+  const [psData, setPsData] = useState(null);
 
   // useEffect(() => {
   //   const modal = document.getElementById("proceedingModal");
@@ -18,6 +24,23 @@ const ProceedingModal = () => {
   //     modal.showModal();
   //   }
   // }, [openProceeding]);
+
+  const currentDate = DateTime.local();
+  const formattedDate = currentDate.toFormat("dd-MM-yyyy");
+
+  useEffect(() => {
+    const psData = async () => {
+      const { userId } = userInfoFromLocalStorage();
+
+      const data = await getUserData(userId);
+      console.log(data, "data");
+      if (data?.userInfo) {
+        setPsData(data?.userInfo);
+      }
+    };
+
+    psData();
+  }, []);
 
   useEffect(() => {
     // if (filteredData) {
@@ -85,7 +108,7 @@ const ProceedingModal = () => {
   return (
     <div id="proceedingModal">
       <div
-        className={` relative rounded-lg  py-10 px-12 text-gray-900 w-full max-w-4xl bg-white`}
+        className={` relative rounded-lg  py-10 px-6 text-gray-900 w-full  bg-white`}
       >
         {/* <form className="absolute top-6 right-6 z-50">
           
@@ -729,7 +752,23 @@ const ProceedingModal = () => {
             </li>
           </ol>
         </div>
-        <div className="mt-60 flex flex-col items-end leading-8">
+        <div className="mt-10 w-fit flex flex-col items-center ml-auto leading-8">
+          <div>
+            <img
+              src={`https://drive.google.com/thumbnail?id=${psData?.signId}`}
+              alt="signature"
+              className="w-36"
+            />
+          </div>
+          <div className="text-start min-w-[120px]">
+            <p className="text-lg font-bold text-center">{psData?.name}</p>
+            <p className="text-lg font-bold text-center">
+              {psData?.gramaPanchayat}
+            </p>
+            <p className="text-lg font-bold text-center">
+              Date: {formattedDate}
+            </p>
+          </div>
           <p className="font-semibold">పంచాయితీ కార్యదర్శి</p>
           <p>
             {allInfo?.buildingInfo?.generalInformation?.gramaPanchayat}
