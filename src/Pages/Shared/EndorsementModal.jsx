@@ -31,6 +31,8 @@ const EndorsementModal = () => {
   //   }
   // }, []);
 
+  const [letterNo, setLetterNo] = useState(1);
+
   useEffect(() => {
     const getData = async () => {
       const applicationData = await getApplicationData(applicationNo, cameFrom);
@@ -80,6 +82,14 @@ const EndorsementModal = () => {
 
           return [...extractIdQuestionWithRemarks];
         });
+      }
+
+      const findShortfallSerial = await fetchDataFromTheDb(
+        "http://localhost:5000/getShortfallSerial"
+      );
+
+      if (findShortfallSerial) {
+        setLetterNo(findShortfallSerial?.shortfallSerialNo);
       }
     };
     getData();
@@ -156,7 +166,10 @@ const EndorsementModal = () => {
         <div className="pt-4">
           <h3 className="font-bold text-2xl text-center mb-8">ENDORSEMENT!</h3>
           <div className="flex justify-between font-semibold text-lg">
-            <h4>Letter No: {dataFromDb?.shortfallSerialNo}</h4>
+            <h4>
+              Letter No: {letterNo}
+              {/* {dataFromDb?.shortfallSerialNo} */}
+            </h4>
             <h4>Date: {currentDate}</h4>
           </div>
           <div className="flex flex-col pt-3 text-base">
