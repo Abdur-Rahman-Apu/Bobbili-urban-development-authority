@@ -21,6 +21,7 @@ const SaveData = ({
   isApproved,
   refetch,
   setShowApprovedModal,
+  setShowShortfallModal,
 }) => {
   const {
     userInfoFromLocalStorage,
@@ -105,8 +106,9 @@ const SaveData = ({
           {role === "LTP" &&
             (currentStep !== steps.length - 1 ? (
               <button
-                className={`fancy-button mt-8 ${needToHideElementBasedOnPage() && "hidden"
-                  }`}
+                className={`fancy-button mt-8 ${
+                  needToHideElementBasedOnPage() && "hidden"
+                }`}
                 onClick={() => {
                   path.includes("applicationChecklist") &&
                     confirmAlert(stepperData, collectInputFieldData, {
@@ -118,19 +120,21 @@ const SaveData = ({
               </button>
             ) : (
               <div
-                className={`${needToHideElementBasedOnPage() && "hidden"
-                  } flex ${sentData === 1 ? "justify-between" : "justify-end"
-                  } items-center w-full mt-10`}
+                className={`${
+                  needToHideElementBasedOnPage() && "hidden"
+                } flex ${
+                  sentData === 1 ? "justify-between" : "justify-end"
+                } items-center w-full mt-10`}
               >
                 <button
                   className={`save-btn bg-gradient-to-b from-[#a29bfe] to-[#6c5ce7] mr-4`}
-                // onClick={() => {
-                //   // confirmAlert(undefined, collectInputFieldData, {
-                //   //   page: "payment",
-                //   //   applicationType: page,
-                //   // });
-                //   // setTextOfSentDepartment("Sent to department");
-                // }}
+                  // onClick={() => {
+                  //   // confirmAlert(undefined, collectInputFieldData, {
+                  //   //   page: "payment",
+                  //   //   applicationType: page,
+                  //   // });
+                  //   // setTextOfSentDepartment("Sent to department");
+                  // }}
                 >
                   <span className="flex justify-center items-center">
                     {" "}
@@ -140,15 +144,16 @@ const SaveData = ({
                 </button>
 
                 <button
-                  className={`sent-department ${sentData === 1 ? "" : "hidden"
-                    }`}
-                // disabled={sentData === 0}
-                // onClick={() => {
-                //   sentToPS(
-                //     JSON.parse(localStorage.getItem("CurrentAppNo")),
-                //     navigate
-                //   );
-                // }}
+                  className={`sent-department ${
+                    sentData === 1 ? "" : "hidden"
+                  }`}
+                  // disabled={sentData === 0}
+                  // onClick={() => {
+                  //   sentToPS(
+                  //     JSON.parse(localStorage.getItem("CurrentAppNo")),
+                  //     navigate
+                  //   );
+                  // }}
                 >
                   <span className="span">Sent to Department</span>
                   <span className="second">
@@ -205,10 +210,11 @@ const SaveData = ({
                           "PSDecision",
                           JSON.stringify("shortfall")
                         );
-                        confirmAlert(undefined, sentData, {
-                          page: "siteInspection",
-                          navigate,
-                        });
+                        // confirmAlert(undefined, sentData, {
+                        //   page: "siteInspection",
+                        //   navigate,
+                        // });
+                        setShowShortfallModal(true);
                       }}
                     >
                       <TbFileLike size={25} className="me-1" />

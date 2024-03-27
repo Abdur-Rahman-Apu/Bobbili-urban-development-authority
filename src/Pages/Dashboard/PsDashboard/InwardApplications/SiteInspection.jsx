@@ -12,6 +12,7 @@ import ProceedingModal from "../../../Shared/ProceedingModal";
 import SaveData from "../../LtpDashboard/DraftApplication/SaveData";
 import ApprovedDecisionModal from "./ApprovedDecisionModal";
 import ImageUploadInput from "./ImageUploadInput";
+import ShortfallDecisionModal from "./ShortfallDecisionModal";
 const SiteInspection = () => {
   const {
     confirmAlert,
@@ -647,12 +648,13 @@ const SiteInspection = () => {
           sentPsDecision={sentPsDecision}
         />
       )}
-      {/* {showShortfallModal && (
+
+      {showShortfallModal && (
         <ShortfallDecisionModal
           showShortfallModal={showShortfallModal}
           setShowShortfallModal={setShowShortfallModal}
         />
-      )} */}
+      )}
 
       <div
         className="flex flex-col mx-4 mt-4 text-gray-900"
@@ -1262,6 +1264,7 @@ const SiteInspection = () => {
           isApproved={isApproved}
           refetch={refetch}
           setShowApprovedModal={setShowApprovedModal}
+          setShowShortfallModal={setShowShortfallModal}
         />
       </div>
     </>
