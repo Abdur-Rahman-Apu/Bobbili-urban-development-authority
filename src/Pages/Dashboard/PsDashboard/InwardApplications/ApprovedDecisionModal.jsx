@@ -22,16 +22,19 @@ export default function ApprovedDecisionModal({
   submitting,
   setSubmitting,
   sentPsDecision,
+  onShowOtpModal,
+  // showOtpModal,
+  // setShowOtpModal,
 }) {
   useEffect(() => {
     if (showApprovedModal) {
-      document.getElementById("my_modal_1").showModal();
+      document.getElementById("approvedModal").showModal();
     }
   }, [showApprovedModal]);
 
   return (
     <div>
-      <dialog id="my_modal_1" className="modal">
+      <dialog id="approvedModal" className="modal">
         <div className="modal-box bg-white w-[95%] max-w-full rounded-md">
           {/* <div className="w-full carousel rounded-box">
             <div className="carousel-item w-full">
@@ -53,7 +56,10 @@ export default function ApprovedDecisionModal({
           {/* <ProceedingModal /> */}
         </div>
         <div className="w-1/3 flex justify-between items-center">
-          <button className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base">
+          <button
+            className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
+            onClick={onShowOtpModal}
+          >
             Approved
           </button>
 

@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Loading from "../../../Shared/Loading";
+import OtpModal from "../../../Shared/OtpModal";
 import ProceedingModal from "../../../Shared/ProceedingModal";
 import SaveData from "../../LtpDashboard/DraftApplication/SaveData";
 import ApprovedDecisionModal from "./ApprovedDecisionModal";
@@ -40,6 +41,7 @@ const SiteInspection = () => {
 
   const [showApprovedModal, setShowApprovedModal] = useState(false);
   const [showShortfallModal, setShowShortfallModal] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
   const [whichDecisionButtonClicked, setWhichDecisionButtonClicked] =
     useState(null);
 
@@ -620,7 +622,14 @@ const SiteInspection = () => {
     });
   };
 
+  const handleShowOtpModal = () => {
+    setShowOtpModal(!showOtpModal);
+    // setShowApprovedModal(false);
+    // setShowShortfallModal(false);
+  };
+
   console.log(submitSignedFiles, "submitSignedFiles");
+  console.log(showOtpModal, "show otp");
 
   if (isLoading) {
     return <Loading />;
@@ -646,6 +655,9 @@ const SiteInspection = () => {
           setSubmitting={setSubmitting}
           handleFileChange={handleSignedFileChange}
           sentPsDecision={sentPsDecision}
+          // showOtpModal={showOtpModal}
+          // setShowOtpModal={setShowOtpModal}
+          onShowOtpModal={handleShowOtpModal}
         />
       )}
 
@@ -653,6 +665,15 @@ const SiteInspection = () => {
         <ShortfallDecisionModal
           showShortfallModal={showShortfallModal}
           setShowShortfallModal={setShowShortfallModal}
+          // showOtpModal={showOtpModal}
+          // setShowOtpModal={setShowOtpModal}
+          onShowOtpModal={handleShowOtpModal}
+        />
+      )}
+      {showOtpModal && (
+        <OtpModal
+          showOtpModal={showOtpModal}
+          setShowOtpModal={setShowOtpModal}
         />
       )}
 

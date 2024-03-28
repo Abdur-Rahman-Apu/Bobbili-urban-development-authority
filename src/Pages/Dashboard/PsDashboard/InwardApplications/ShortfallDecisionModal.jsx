@@ -4,16 +4,19 @@ import EndorsementModal from "../../../Shared/EndorsementModal";
 export default function ShortfallDecisionModal({
   showShortfallModal,
   setShowShortfallModal,
+  // setShowOtpModal,
+  // showOtpModal,
+  onShowOtpModal,
 }) {
   useEffect(() => {
     if (showShortfallModal) {
-      document.getElementById("my_modal_1").showModal();
+      document.getElementById("shortfallModal").showModal();
     }
   }, [showShortfallModal]);
 
   return (
     <div>
-      <dialog id="my_modal_1" className="modal">
+      <dialog id="shortfallModal" className="modal">
         <div className="modal-box bg-white w-[95%] max-w-full rounded-md">
           {/* <div className="w-full carousel rounded-box">
             <div className="carousel-item w-full">
@@ -30,7 +33,10 @@ export default function ShortfallDecisionModal({
           {/* <ProceedingModal /> */}
         </div>
         <div className="w-1/3 flex justify-between items-center">
-          <button className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base">
+          <button
+            className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
+            onClick={onShowOtpModal}
+          >
             Sign
           </button>
           -
