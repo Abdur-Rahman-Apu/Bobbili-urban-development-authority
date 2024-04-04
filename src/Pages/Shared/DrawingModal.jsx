@@ -47,7 +47,7 @@ const DrawingModal = () => {
   const formattedDate = currentDate.toFormat("dd-MM-yyyy");
 
   const [pdfUrl, setPdfUrl] = useState("");
-
+  const [psSignImg, setPsSignImg] = useState(null);
   useEffect(() => {
     const getPsData = async () => {
       const { userId } = userInfoFromLocalStorage();
@@ -56,6 +56,16 @@ const DrawingModal = () => {
       console.log(data, "data");
       if (data?.userInfo) {
         setPsData(data?.userInfo);
+        fetch(
+          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+        )
+          .then((res) => {
+            console.log(res);
+            setPsSignImg(res.url);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
     };
 
@@ -105,11 +115,7 @@ const DrawingModal = () => {
 
         <div className="w-fit ml-auto mt-[-130px] mr-[90px] flex flex-col items-center relative z-[1000] ">
           <div>
-            <img
-              src={`https://drive.google.com/thumbnail?id=${psData?.signId}`}
-              alt="signature"
-              className="w-20"
-            />
+            <img src={`${psSignImg}`} alt="signature" className="w-20" />
           </div>
           <div className="text-center">
             <p className="text-xs font-bold text-center">{psData?.name}</p>

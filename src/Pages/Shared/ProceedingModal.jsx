@@ -17,6 +17,7 @@ const ProceedingModal = () => {
   const [approvedDate, setApprovedDate] = useState([]);
   const [validProceedingDate, setValidProceedingDate] = useState([]);
   const [psData, setPsData] = useState(null);
+  const [psSignImg, setPsSignImg] = useState(null);
 
   // useEffect(() => {
   //   const modal = document.getElementById("proceedingModal");
@@ -36,6 +37,16 @@ const ProceedingModal = () => {
       console.log(data, "data");
       if (data?.userInfo) {
         setPsData(data?.userInfo);
+        fetch(
+          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+        )
+          .then((res) => {
+            console.log(res);
+            setPsSignImg(res.url);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
     };
 
@@ -754,11 +765,8 @@ const ProceedingModal = () => {
         </div>
         <div className="mt-10 w-fit flex flex-col items-center ml-auto leading-8">
           <div>
-            <img
-              src={`https://drive.google.com/thumbnail?id=${psData?.signId}`}
-              alt="signature"
-              className="w-36"
-            />
+            {/* `https://drive.google.com/thumbnail?id=${psData?.signId}` */}
+            <img src={psSignImg} alt="signature" className="w-36" />
           </div>
           <div className="text-start min-w-[120px]">
             <p className="text-lg font-bold text-center">{psData?.name}</p>

@@ -9,7 +9,6 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Loading from "../../../Shared/Loading";
 import OtpModal from "../../../Shared/OtpModal";
-import ProceedingModal from "../../../Shared/ProceedingModal";
 import SaveData from "../../LtpDashboard/DraftApplication/SaveData";
 import ApprovedDecisionModal from "./ApprovedDecisionModal";
 import ImageUploadInput from "./ImageUploadInput";
@@ -372,7 +371,7 @@ const SiteInspection = () => {
     setSubmitting(true);
     let fileUploadSuccess = 0;
     // uploadFileInCloudStorage(formData);
-    console.log(submitSignedFiles, "Selected files");
+    // console.log(submitSignedFiles, "Selected files");
 
     const singedFilesId = {};
     for (const file in submitSignedFiles) {
@@ -568,49 +567,105 @@ const SiteInspection = () => {
       filename: `proceeding-${applicationNo}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       pagebreak: { before: ".beforeClass", after: ["#after1", "#after2"] },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS: true, dpi: 192, letterRendering: true },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
-    const fileInfo = JSON.stringify({
-      fileName: "Drawing.pdf",
-      fileId: data?.drawing?.Drawing,
-    });
+    // const fileInfo = JSON.stringify({
+    //   fileName: "Drawing.pdf",
+    //   fileId: data?.drawing?.Drawing,
+    // });
 
-    fetch(`http://localhost:5000/downloadFile?data=${fileInfo}`)
-      .then((res) => {
-        if (res.ok) {
-          // If the response status is OK, it means the file download is successful
-          return res.blob();
-        } else {
-          // If there's an error response, handle it accordingly
-          throw new Error(`Error: ${res.status} - ${res.statusText}`);
-        }
-      })
-      .then((blob) => {
-        // Create a URL for the blob and trigger a download
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `Drawing-${applicationNo}.pdf`; // Set the desired file name and extension
-        document.body.appendChild(a);
-        a.click();
+    // fetch(`http://localhost:5000/downloadFile?data=${fileInfo}`)
+    //   .then((res) => {
+    //     if (res.ok) {
+    //       // If the response status is OK, it means the file download is successful
+    //       return res.blob();
+    //     } else {
+    //       // If there's an error response, handle it accordingly
+    //       throw new Error(`Error: ${res.status} - ${res.statusText}`);
+    //     }
+    //   })
+    //   .then((blob) => {
+    //     // Create a URL for the blob and trigger a download
+    //     const url = window.URL.createObjectURL(blob);
+    //     const a = document.createElement("a");
+    //     a.href = url;
+    //     a.download = `Drawing-${applicationNo}.pdf`; // Set the desired file name and extension
+    //     document.body.appendChild(a);
+    //     a.click();
 
-        // drawing file download
-        window.URL.revokeObjectURL(url);
-        // New Promise-based usage:
+    //     // drawing file download
+    //     window.URL.revokeObjectURL(url);
+    //     // New Promise-based usage:
 
-        // proceeding file download
-        html2pdf().set(opt).from(element).save();
-        setDownloading(false);
-      })
-      .catch((err) => {
-        console.log(err, "err");
-        // setLoading(<i className="fa fa-life-saver" aria-hidden="true"></i>);
-        setDownloading(false);
-        toast.error("Server Error");
+    //     // proceeding file download
+
+    //     setDownloading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, "err");
+    //     // setLoading(<i className="fa fa-life-saver" aria-hidden="true"></i>);
+    //     setDownloading(false);
+    //     toast.error("Server Error");
+    //   });
+
+    // html2pdf().set(opt).from(element).save();
+
+    html2pdf()
+      .from(element)
+      .set(opt)
+      .toPdf()
+      .get("pdf")
+      .then(function (pdf) {
+        // Convert PDF to blob
+        pdf.save("pdf-document.pdf");
+        pdf.output("blob").then(function (pdfBlob) {
+          // Send the blob to the backend
+          sendPDFToBackend(pdfBlob);
+        });
       });
   };
+
+  async function sendPDFToBackend(pdfBlob) {
+    // Create FormData object to send the blob as a file
+    const formData = new FormData();
+    formData.append("pdfFile", pdfBlob);
+
+    // Send the blob to the backend using fetch or Axios
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/upload?page=approvedDocSignedPS",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+          },
+        }
+      );
+      if (response?.data.msg === "Successfully uploaded") {
+        const fileId = response.data.fileId;
+        singedFilesId[file] = fileId;
+        // fileUploadSuccess = 1;
+      }
+    } catch (error) {
+      // Handle errors, e.g., show an error message to the user
+      toast.error("Error to upload documents");
+      // fileUploadSuccess = 0;
+    }
+    // fetch("your-backend-url", {
+    //   method: "POST",
+    //   body: formData,
+    // })
+    //   .then((response) => {
+    //     // Handle response from the backend
+    //     console.log("PDF sent to the backend successfully.");
+    //   })
+    //   .catch((error) => {
+    //     // Handle errors
+    //     console.error("Error sending PDF to the backend:", error);
+    //   });
+  }
 
   const handleSignedFileChange = (e, fileName) => {
     const file = e.target.files[0];
@@ -674,6 +729,7 @@ const SiteInspection = () => {
           setLoading(false);
           if (isApproved) {
             console.log("Approved");
+            convertToPdf();
           } else {
             console.log("Shortfall");
           }
@@ -697,9 +753,9 @@ const SiteInspection = () => {
 
   return (
     <>
-      <div className="hidden">
+      {/* <div className="hidden">
         <ProceedingModal />
-      </div>
+      </div> */}
 
       {showApprovedModal && (
         <ApprovedDecisionModal
