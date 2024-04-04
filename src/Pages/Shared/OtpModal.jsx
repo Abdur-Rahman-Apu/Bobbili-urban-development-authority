@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import OtpUi from "./OtpUi";
 
-export default function OtpModal({ showOtpModal, setShowOtpModal }) {
+export default function OtpModal({
+  showOtpModal,
+  setShowOtpModal,
+  handleOtpMatching,
+}) {
   useEffect(() => {
     if (showOtpModal) {
       document.getElementById("otpModal").showModal();
@@ -20,7 +24,7 @@ export default function OtpModal({ showOtpModal, setShowOtpModal }) {
               ✕
             </button>
           </form>
-          <OtpUi />
+          <OtpUi handleOtpMatching={handleOtpMatching} />
         </div>
       </dialog>
     </div>

@@ -624,14 +624,12 @@ const SiteInspection = () => {
 
   const handleShowOtpModal = () => {
     setShowOtpModal(!showOtpModal);
-    // setShowApprovedModal(false);
-    // setShowShortfallModal(false);
   };
 
   const [loadingForOtpGeneration, setLoadingForOtpGeneration] = useState(false);
   const handleOtpStoreInDb = () => {
     setLoadingForOtpGeneration(true);
-    const otp = 1234;
+    const otp = "1234";
     const data = {
       psId: userInfoFromLocalStorage()._id,
       otp,
@@ -648,12 +646,45 @@ const SiteInspection = () => {
         console.log(result);
         if (result?.acknowledged) {
           setLoadingForOtpGeneration(false);
-          handleShowOtpModal()
+          handleShowOtpModal();
         }
       })
       .catch((err) => {
         setLoadingForOtpGeneration(false);
         toast.error("Something went wrong");
+      });
+  };
+
+  const handleOtpMatching = (otp, setLoading, setError) => {
+    setLoading(true);
+    setError("");
+    console.log(otp, "OTP");
+    const data = {
+      psId: userInfoFromLocalStorage()._id,
+      otp,
+    };
+    fetch(
+      `http://localhost:5000/otpMatchForPsSign?data=${JSON.stringify(data)}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result, "OTP matched");
+        const isApproved = showApprovedModal ? 1 : 0;
+        if (result?.otpMatched) {
+          setLoading(false);
+          if (isApproved) {
+            console.log("Approved");
+          } else {
+            console.log("Shortfall");
+          }
+        } else {
+          setLoading(false);
+          setError("Otp is not correct");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError("Server Error");
       });
   };
 
@@ -706,6 +737,7 @@ const SiteInspection = () => {
         <OtpModal
           showOtpModal={showOtpModal}
           setShowOtpModal={setShowOtpModal}
+          handleOtpMatching={handleOtpMatching}
         />
       )}
 
