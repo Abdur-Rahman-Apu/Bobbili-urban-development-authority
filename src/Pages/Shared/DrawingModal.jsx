@@ -85,11 +85,8 @@ const DrawingModal = () => {
 
   return (
     <div className="dark:bg-white w-full">
-      <div
-        id="drawingModal"
-        className="pt-4 relative w-fit flex-col items-center"
-      >
-        <p className="w-fit ml-auto">B.A. no. {`XXXXXXXX`}</p>
+      <div id="drawingModal" className="pt-4 relative flex-col items-center">
+        <p className="w-fit ml-auto font-bold">B.A. no. {applicationNo}</p>
         {/* <iframe
           src={`https://drive.google.com/file/d/${dataFromDB?.drawing?.Drawing}/preview`}
           width="100%"

@@ -3,6 +3,7 @@ import DrawingModal from "../../../Shared/DrawingModal";
 import ProceedingModal from "../../../Shared/ProceedingModal";
 
 import { pdfjs } from "react-pdf";
+import Loading from "../../../Shared/Loading";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -23,6 +24,8 @@ export default function ApprovedDecisionModal({
   setSubmitting,
   sentPsDecision,
   onShowOtpModal,
+  handleOtpStoreInDb,
+  loadingForOtpGeneration,
   // showOtpModal,
   // setShowOtpModal,
 }) {
@@ -56,33 +59,39 @@ export default function ApprovedDecisionModal({
           {/* <ProceedingModal /> */}
         </div>
         <div className="w-1/3 flex justify-between items-center">
-          <button
-            className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
-            onClick={onShowOtpModal}
-          >
-            Approved
-          </button>
+          {loadingForOtpGeneration ? (
+            <Loading />
+          ) : (
+            <>
+              <button
+                className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
+                onClick={handleOtpStoreInDb}
+              >
+                Approved
+              </button>
 
-          <div className="flex justify-center w-full py-2 gap-2">
-            <a
-              href="#item1"
-              className="btn btn-xs bg-[#15F5BA] hover:bg-[#15F5BA] text-white border-none"
-            >
-              1
-            </a>
-            <a
-              href="#item2"
-              className="btn btn-xs bg-[#211951] hover:bg-[#211951] text-white border-none"
-            >
-              2
-            </a>
-          </div>
-          <button
-            className="bg-[#FCBAAD] text-black p-3 rounded-lg font-bold text-base"
-            onClick={() => setShowApprovedModal(false)}
-          >
-            Close
-          </button>
+              <div className="flex justify-center w-full py-2 gap-2">
+                <a
+                  href="#item1"
+                  className="btn btn-xs bg-[#15F5BA] hover:bg-[#15F5BA] text-white border-none"
+                >
+                  1
+                </a>
+                <a
+                  href="#item2"
+                  className="btn btn-xs bg-[#211951] hover:bg-[#211951] text-white border-none"
+                >
+                  2
+                </a>
+              </div>
+              <button
+                className="bg-[#FCBAAD] text-black p-3 rounded-lg font-bold text-base"
+                onClick={() => setShowApprovedModal(false)}
+              >
+                Close
+              </button>
+            </>
+          )}
         </div>
       </dialog>
     </div>

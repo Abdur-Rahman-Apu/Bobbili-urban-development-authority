@@ -628,6 +628,35 @@ const SiteInspection = () => {
     // setShowShortfallModal(false);
   };
 
+  const [loadingForOtpGeneration, setLoadingForOtpGeneration] = useState(false);
+  const handleOtpStoreInDb = () => {
+    setLoadingForOtpGeneration(true);
+    const otp = 1234;
+    const data = {
+      psId: userInfoFromLocalStorage()._id,
+      otp,
+    };
+    fetch(`http://localhost:5000/storeOtpForPsSign`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        if (result?.acknowledged) {
+          setLoadingForOtpGeneration(false);
+          handleShowOtpModal()
+        }
+      })
+      .catch((err) => {
+        setLoadingForOtpGeneration(false);
+        toast.error("Something went wrong");
+      });
+  };
+
   console.log(submitSignedFiles, "submitSignedFiles");
   console.log(showOtpModal, "show otp");
 
@@ -657,7 +686,9 @@ const SiteInspection = () => {
           sentPsDecision={sentPsDecision}
           // showOtpModal={showOtpModal}
           // setShowOtpModal={setShowOtpModal}
+          loadingForOtpGeneration={loadingForOtpGeneration}
           onShowOtpModal={handleShowOtpModal}
+          handleOtpStoreInDb={handleOtpStoreInDb}
         />
       )}
 
@@ -668,6 +699,7 @@ const SiteInspection = () => {
           // showOtpModal={showOtpModal}
           // setShowOtpModal={setShowOtpModal}
           onShowOtpModal={handleShowOtpModal}
+          handleOtpStoreInDb={handleOtpStoreInDb}
         />
       )}
       {showOtpModal && (
