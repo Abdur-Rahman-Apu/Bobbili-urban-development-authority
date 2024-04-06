@@ -9,8 +9,8 @@ import { RiSecurePaymentLine } from "react-icons/ri";
 import { VscDebugContinue, VscReferences } from "react-icons/vsc";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import DrawingModal from "../../../Shared/DrawingModal";
-import EndorsementModal from "../../../Shared/EndorsementModal";
+import DrawingFileShowed from "../../../Shared/DrawingFileShowed";
+import EndorsementFileShowed from "../../../Shared/EndorsementFileShow";
 import ProceedingModalShowPdf from "../../../Shared/ProceedingModalShowPdf";
 import Application from "./Application";
 
@@ -295,7 +295,7 @@ const DraftApplication = () => {
       )}
       {/* my_modal_2 modal info : */}
       {openEndorsement ? (
-        <EndorsementModal
+        <EndorsementFileShowed
           modalEndorsement={{ setOpenEndorsement, openEndorsement }}
         />
       ) : (
@@ -308,7 +308,7 @@ const DraftApplication = () => {
         ""
       )}
       {openDrawing && (
-        <DrawingModal modalStates={{ openDrawing, setOpenDrawing }} />
+        <DrawingFileShowed modalStates={{ openDrawing, setOpenDrawing }} />
       )}
     </>
   );

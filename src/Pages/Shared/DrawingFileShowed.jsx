@@ -5,8 +5,8 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
-export default function ProceedingModalShowPdf({ modalProceeding }) {
-  const { setOpenProceeding, openProceeding } = modalProceeding;
+export default function DrawingFileShowed({ modalStates }) {
+  const { setOpenDrawing, openDrawing } = modalStates;
   const { getApplicationData } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
@@ -25,11 +25,11 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
   // const [validProceedingDate, setValidProceedingDate] = useState([]);
 
   useEffect(() => {
-    const modal = document.getElementById("proceedingModalPdf");
-    if (openProceeding) {
+    const modal = document.getElementById("drawingFilePdf");
+    if (openDrawing) {
       modal.showModal();
     }
-  }, [openProceeding]);
+  }, [openDrawing]);
 
   const [pdfUrl, setPdfUrl] = useState("");
 
@@ -41,7 +41,7 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
       setAllInfo(applicationData);
       try {
         const response = await fetch(
-          `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
+          `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
         );
         console.log(response, "response");
         const blob = await response.blob();
@@ -110,15 +110,15 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
 
   return (
     <div className="dark:bg-white">
-      <dialog id="proceedingModalPdf" className="modal">
+      <dialog id="drawingFilePdf" className="modal">
         {/* divide-y-2 divide-gray-200 */}
         <div
-          className={`relative overflow-hidden overflow-y-auto rounded-lg modal-box py-10 px-12 bg-white text-gray-900 max-w-[900px]`}
+          className={`relative overflow-hidden overflow-y-auto rounded-lg modal-box py-10 px-12 bg-white text-gray-900 max-w-[1000px]`}
         >
           <form method="dialog" className="absolute top-6 right-6 z-50">
             {/* if there is a button in form, it will close the modal */}
             <button
-              onClick={() => setOpenProceeding(false)}
+              onClick={() => setOpenDrawing(false)}
               className={`outline outline-red-500 outline-offset-4 text-red-500 rounded-full hover:bg-red-500 hover:text-white hover:outline-offset-0 p-[1px] transition-all duration-1000`}
             >
               <RxCross2 className="text-2xl" />
@@ -127,7 +127,7 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
 
           <div className="pt-4">
             <h3 className="font-bold text-2xl text-center mb-8 uppercase">
-              Proceeding File
+              Drawing File
             </h3>
 
             {/* <iframe
@@ -140,6 +140,7 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
             {/* <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
               <Page pageNumber={pageNumber} />
             </Document> */}
+
             <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
               {[...Array(numPages).keys()].map((pageIndex) => (
                 <Page
@@ -153,7 +154,7 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
         </div>
 
         <form method="dialog" className="modal-backdrop">
-          <button onClick={() => setOpenProceeding(false)}>close</button>
+          <button onClick={() => setOpenDrawing(false)}>close</button>
         </form>
       </dialog>
     </div>
