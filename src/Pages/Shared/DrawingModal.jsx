@@ -19,6 +19,7 @@ const DrawingModal = () => {
 
   // const { openDrawing, setOpenDrawing, filteredData } = modalStates;
   const [dataFromDB, setDataFromDB] = useState({});
+  const [pdfUrl, setPdfUrl] = useState("");
   // console.log(modalStates, "Modal states");
   useEffect(() => {
     // const modal = document.getElementById("drawingModal");
@@ -29,11 +30,25 @@ const DrawingModal = () => {
     // if (filteredData) {
     //   setDataFromDB(filteredData);
     // } else {
+
     const getData = async () => {
       const applicationData = await getApplicationData(applicationNo, cameFrom);
       console.log(applicationData, "All info ApplicationData");
       if (Object.keys(applicationData)?.length) {
         setDataFromDB(applicationData);
+        try {
+          const response = await fetch(
+            `http://localhost:5000/pdf?fileId=${applicationData?.drawing?.Drawing}`
+          );
+          console.log(response, "response");
+          const blob = await response.blob();
+          console.log(blob, "blob");
+          const pdfUrl = URL.createObjectURL(blob);
+          console.log(pdfUrl, "pdfurl");
+          setPdfUrl(pdfUrl);
+        } catch (error) {
+          console.error("Error fetching PDF:", error);
+        }
       }
     };
     getData();
@@ -46,7 +61,6 @@ const DrawingModal = () => {
   const currentDate = DateTime.local();
   const formattedDate = currentDate.toFormat("dd-MM-yyyy");
 
-  const [pdfUrl, setPdfUrl] = useState("");
   const [psSignImg, setPsSignImg] = useState(null);
   useEffect(() => {
     const getPsData = async () => {
@@ -70,27 +84,6 @@ const DrawingModal = () => {
     };
 
     getPsData();
-  }, []);
-
-  useEffect(() => {
-    // Fetch the PDF file from the proxy server
-    const fetchPdf = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:5000/pdf?fileId=1Mque_-OWf28RiubAdE5Ll5CFWBnMPvUf"
-        );
-        console.log(response, "response");
-        const blob = await response.blob();
-        console.log(blob, "blob");
-        const pdfUrl = URL.createObjectURL(blob);
-        console.log(pdfUrl, "pdfurl");
-        setPdfUrl(pdfUrl);
-      } catch (error) {
-        console.error("Error fetching PDF:", error);
-      }
-    };
-
-    fetchPdf();
   }, []);
 
   return (

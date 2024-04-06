@@ -839,7 +839,7 @@ const SiteInspection = () => {
 
               console.log(isDrawingFileUploaded, "Drawing file uploaded");
               if (isDrawingFileUploaded !== 0) {
-                // sentPsDecision(storage);
+                sentPsDecision(storage);
                 setLoading(false);
               } else {
                 setLoading(false);
@@ -867,7 +867,7 @@ const SiteInspection = () => {
             console.log(isEndorsementFileUploaded, "Endorsement file uploaded");
 
             if (isEndorsementFileUploaded) {
-              // sentPsDecision(storage);
+              sentPsDecision(storage);
               setLoading(false);
             } else {
               setLoading(false);
