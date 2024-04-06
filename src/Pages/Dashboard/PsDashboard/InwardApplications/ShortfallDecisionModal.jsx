@@ -6,7 +6,9 @@ export default function ShortfallDecisionModal({
   setShowShortfallModal,
   // setShowOtpModal,
   // showOtpModal,
+  loadingForOtpGeneration,
   onShowOtpModal,
+  handleOtpStoreInDb,
 }) {
   useEffect(() => {
     if (showShortfallModal) {
@@ -32,20 +34,26 @@ export default function ShortfallDecisionModal({
 
           {/* <ProceedingModal /> */}
         </div>
-        <div className="w-1/3 flex justify-between items-center">
-          <button
-            className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
-            onClick={onShowOtpModal}
-          >
-            Sign
-          </button>
-          -
-          <button
-            className="bg-[#FCBAAD] text-black p-3 rounded-lg font-bold text-base"
-            onClick={() => setShowShortfallModal(false)}
-          >
-            Close
-          </button>
+        <div className="w-1/3 flex justify-center space-x-40 items-center">
+          {loadingForOtpGeneration ? (
+            <p className="loading loading-dots loading-lg text-[#ffffff]"></p>
+          ) : (
+            <>
+              <button
+                className="bg-[#FFE7C1] text-black p-3 rounded-lg font-bold text-base"
+                onClick={handleOtpStoreInDb}
+              >
+                Sign
+              </button>
+              -
+              <button
+                className="bg-[#FCBAAD] text-black p-3 rounded-lg font-bold text-base"
+                onClick={() => setShowShortfallModal(false)}
+              >
+                Close
+              </button>
+            </>
+          )}
         </div>
       </dialog>
     </div>

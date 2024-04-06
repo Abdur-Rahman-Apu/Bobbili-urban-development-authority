@@ -3,7 +3,6 @@ import DrawingModal from "../../../Shared/DrawingModal";
 import ProceedingModal from "../../../Shared/ProceedingModal";
 
 import { pdfjs } from "react-pdf";
-import Loading from "../../../Shared/Loading";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -58,9 +57,9 @@ export default function ApprovedDecisionModal({
 
           {/* <ProceedingModal /> */}
         </div>
-        <div className="w-1/3 flex justify-between items-center">
+        <div className="w-1/3 flex justify-center items-center">
           {loadingForOtpGeneration ? (
-            <Loading />
+            <p className="loading loading-dots loading-lg text-[#ffffff]"></p>
           ) : (
             <>
               <button

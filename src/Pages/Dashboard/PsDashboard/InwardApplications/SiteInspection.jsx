@@ -367,95 +367,133 @@ const SiteInspection = () => {
   //   submitSignedFiles ? { ...submitSignedFiles } : null
   // );
 
-  const sentPsDecision = async (url) => {
-    setSubmitting(true);
-    let fileUploadSuccess = 0;
-    // uploadFileInCloudStorage(formData);
-    // console.log(submitSignedFiles, "Selected files");
+  const sentPsDecision = async (storage) => {
+    // setSubmitting(true);
+    // let fileUploadSuccess = 0;
+    // // uploadFileInCloudStorage(formData);
+    // // console.log(submitSignedFiles, "Selected files");
 
-    const singedFilesId = {};
-    for (const file in submitSignedFiles) {
-      console.log(submitSignedFiles[file]);
+    // const singedFilesId = {};
+    // for (const file in submitSignedFiles) {
+    //   console.log(submitSignedFiles[file]);
 
-      if (submitSignedFiles[file] instanceof File) {
-        const formData = new FormData();
-        if (submitSignedFiles[file]) {
-          formData.append("file", submitSignedFiles[file]);
-          try {
-            const response = await axios.post(
-              "http://localhost:5000/upload?page=approvedDocSignedPS",
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data", // Important for file uploads
-                },
-              }
-            );
-            if (response?.data.msg === "Successfully uploaded") {
-              const fileId = response.data.fileId;
+    //   if (submitSignedFiles[file] instanceof File) {
+    //     const formData = new FormData();
+    //     if (submitSignedFiles[file]) {
+    //       formData.append("file", submitSignedFiles[file]);
+    //       try {
+    //         const response = await axios.post(
+    //           "http://localhost:5000/upload?page=approvedDocSignedPS",
+    //           formData,
+    //           {
+    //             headers: {
+    //               "Content-Type": "multipart/form-data", // Important for file uploads
+    //             },
+    //           }
+    //         );
+    //         if (response?.data.msg === "Successfully uploaded") {
+    //           const fileId = response.data.fileId;
 
-              singedFilesId[file] = fileId;
-              fileUploadSuccess = 1;
-            }
-          } catch (error) {
-            // Handle errors, e.g., show an error message to the user
-            toast.error("Error to upload documents");
-            fileUploadSuccess = 0;
-          }
-        }
-      } else {
-        fileUploadSuccess = 1;
-      }
-    }
+    //           singedFilesId[file] = fileId;
+    //           fileUploadSuccess = 1;
+    //         }
+    //       } catch (error) {
+    //         // Handle errors, e.g., show an error message to the user
+    //         toast.error("Error to upload documents");
+    //         fileUploadSuccess = 0;
+    //       }
+    //     }
+    //   } else {
+    //     fileUploadSuccess = 1;
+    //   }
+    // }
 
-    console.log(fileUploadSuccess, "File upload success");
-    if (fileUploadSuccess) {
-      console.log(fileUploadSuccess);
-      const psSignedPdf = {
-        proceeding: singedFilesId["proceeding"],
-        drawing: singedFilesId["drawing"],
-      };
+    // console.log(fileUploadSuccess, "File upload success");
+    // if (fileUploadSuccess) {
+    //   console.log(fileUploadSuccess);
+    //   const psSignedPdf = {
+    //     proceeding: singedFilesId["proceeding"],
+    //     drawing: singedFilesId["drawing"],
+    //   };
 
-      console.log(psSignedPdf, "psSignedPdf");
+    //   console.log(psSignedPdf, "psSignedPdf");
 
-      const trackPSAction = JSON.parse(localStorage.getItem("PSDecision"));
+    //   const trackPSAction = JSON.parse(localStorage.getItem("PSDecision"));
 
-      const data = {
-        psId: userInfoFromLocalStorage()?._id,
-        applicationNo,
-        trackPSAction,
-        psSignedFiles: psSignedPdf,
-      };
-      url = `http://localhost:5000/decisionOfPs?data=${JSON.stringify(data)}`;
-      console.log(url);
+    //   const data = {
+    //     psId: userInfoFromLocalStorage()?._id,
+    //     applicationNo,
+    //     trackPSAction,
+    //     psSignedFiles: psSignedPdf,
+    //   };
+    //   url = `http://localhost:5000/decisionOfPs?data=${JSON.stringify(data)}`;
+    //   console.log(url);
 
-      const config = {
-        method: "DELETE",
-      };
+    //   const config = {
+    //     method: "DELETE",
+    //   };
 
-      try {
-        const response = await fetch(url, config);
-        const result = await response.json();
+    //   try {
+    //     const response = await fetch(url, config);
+    //     const result = await response.json();
 
-        console.log(result, "result");
-        if (result?.acknowledged) {
-          setSubmitting(false);
+    //     console.log(result, "result");
+    //     if (result?.acknowledged) {
+    //       setSubmitting(false);
+    //       toast.success("Your file is saved");
+    //       localStorage.removeItem("PSDecision");
+    //       navigate("/dashboard/outWard");
+    //     } else {
+    //       setSubmitting(false);
+    //       toast.error("Server Error");
+    //     }
+    //   } catch (err) {
+    //     setSubmitting(false);
+    //     toast.error("Server Error");
+    //   }
+    //   // return await sendUserDataIntoDB(url, "PATCH", {
+    //   //   applicationNo,
+    //   //   drawing,
+    //   //   prevSavedState: stepCompleted,
+    //   // });
+    // }
+
+    const trackPSAction = JSON.parse(localStorage.getItem("PSDecision"));
+
+    const data = {
+      psId: userInfoFromLocalStorage()?._id,
+      applicationNo,
+      trackPSAction,
+      psSignedFiles: storage,
+    };
+    const url = `http://localhost:5000/decisionOfPs?data=${JSON.stringify(
+      data
+    )}`;
+    console.log(url);
+
+    const config = {
+      method: "DELETE",
+    };
+
+    try {
+      const response = await fetch(url, config);
+      const result = await response.json();
+
+      console.log(result, "result");
+      if (result?.acknowledged) {
+        // setSubmitting(false);
+        localStorage.removeItem("PSDecision");
+        navigate("/dashboard/outWard");
+        setTimeout(() => {
           toast.success("Your file is saved");
-          localStorage.removeItem("PSDecision");
-          navigate("/dashboard/outWard");
-        } else {
-          setSubmitting(false);
-          toast.error("Server Error");
-        }
-      } catch (err) {
-        setSubmitting(false);
-        toast.error("Server Error");
+        }, 2000);
+      } else {
+        // setSubmitting(false);
+        setError("Server Error");
       }
-      // return await sendUserDataIntoDB(url, "PATCH", {
-      //   applicationNo,
-      //   drawing,
-      //   prevSavedState: stepCompleted,
-      // });
+    } catch (err) {
+      // setSubmitting(false);
+      setError("Server Error");
     }
   };
 
@@ -558,17 +596,63 @@ const SiteInspection = () => {
     "block w-full h-12 bg-white hover:bg-white pl-4 focus:outline-0";
   const inputTableDataClass = "break-words border-r border-neutral-500";
 
-  const convertToPdf = () => {
-    setDownloading(true);
-    const element = document.getElementById("proceedingModal");
+  const handleSignedFileChange = (e, fileName) => {
+    const file = e.target.files[0];
+    setSubmitSignedFiles((prev) => {
+      const cloneObj = { ...prev };
+      cloneObj[fileName] = file;
+
+      return cloneObj;
+    });
+  };
+
+  const handleShowOtpModal = () => {
+    setShowOtpModal(!showOtpModal);
+  };
+
+  const [loadingForOtpGeneration, setLoadingForOtpGeneration] = useState(false);
+  const handleOtpStoreInDb = () => {
+    setLoadingForOtpGeneration(true);
+    const otp = "1235";
+    const data = {
+      psId: userInfoFromLocalStorage()._id,
+      otp,
+    };
+    fetch(`http://localhost:5000/storeOtpForPsSign`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result, "result");
+        if (result?.acknowledged) {
+          setLoadingForOtpGeneration(false);
+          handleShowOtpModal();
+        }
+      })
+      .catch((err) => {
+        setLoadingForOtpGeneration(false);
+        toast.error("Something went wrong");
+      });
+  };
+
+  const convertToPdf = async (id, jsPDF, uploadURL, storage, key) => {
+    const element = document.getElementById(id);
 
     var opt = {
       margin: [0.3, 0, 0.3, 0],
       filename: `proceeding-${applicationNo}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
-      pagebreak: { before: ".beforeClass", after: ["#after1", "#after2"] },
+      pagebreak: {
+        mode: "avoid-all",
+        before: ".beforeClass",
+        after: ["#after1", "#after2"],
+      },
       html2canvas: { scale: 2, useCORS: true, dpi: 192, letterRendering: true },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      jsPDF,
     };
 
     // const fileInfo = JSON.stringify({
@@ -611,46 +695,88 @@ const SiteInspection = () => {
     //   });
 
     // html2pdf().set(opt).from(element).save();
+    let fileUploadSuccess = 0;
 
-    html2pdf()
-      .from(element)
-      .set(opt)
-      .toPdf()
-      .get("pdf")
-      .then(function (pdf) {
-        // Convert PDF to blob
-        pdf.save("pdf-document.pdf");
-        pdf.output("blob").then(function (pdfBlob) {
-          // Send the blob to the backend
-          sendPDFToBackend(pdfBlob);
-        });
-      });
+    const savePdf = async () => {
+      console.log(element);
+      try {
+        const pdf = await html2pdf().from(element).set(opt).outputPdf();
+
+        // Convert PDF to base64
+        const newPdf = btoa(pdf);
+        console.log(newPdf);
+
+        // Send PDF to backend and wait for response
+        fileUploadSuccess = await sendPDFToBackend(
+          newPdf,
+          uploadURL,
+          storage,
+          key
+        );
+      } catch (error) {
+        console.error(
+          "Error occurred while generating or uploading PDF:",
+          error
+        );
+      }
+    };
+
+    await savePdf();
+
+    return fileUploadSuccess;
+
+    // html2pdf()
+    //   .from(element)
+    //   .set(opt)
+    //   .toPdf()
+    //   .get("pdf")
+    //   .then(function (pdf) {
+    //     // Convert PDF to blob
+    //     // pdf.save("pdf-document.pdf");
+    //     pdf.output("blob").then(function (pdfBlob) {
+    //       console.log(pdfBlob, "Pdf blob", "generated-pdf.pdf");
+    //       // Send the blob to the backend
+    //       sendPDFToBackend(pdfBlob);
+    //     });
+    //   });
   };
 
-  async function sendPDFToBackend(pdfBlob) {
+  async function sendPDFToBackend(pdfBlob, uploadURL, storage, key) {
+    const decodedData = atob(pdfBlob);
+
+    // Convert binary data to Uint8Array
+    const dataArray = new Uint8Array(decodedData.length);
+    for (let i = 0; i < decodedData.length; i++) {
+      dataArray[i] = decodedData.charCodeAt(i);
+    }
+
+    // Create a PDF document from the Uint8Array
+    const pdfDoc = new Blob([dataArray], { type: "application/pdf" });
+    // console.log(pdfBlob, "Pdf blob");
     // Create FormData object to send the blob as a file
+    console.log("object");
     const formData = new FormData();
-    formData.append("pdfFile", pdfBlob);
+    formData.append("file", pdfDoc, `${applicationNo}-${key}.pdf`);
 
     // Send the blob to the backend using fetch or Axios
     try {
-      const response = await axios.post(
-        "http://localhost:5000/upload?page=approvedDocSignedPS",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Important for file uploads
-          },
-        }
-      );
+      const response = await axios.post(uploadURL, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important for file uploads
+        },
+      });
       if (response?.data.msg === "Successfully uploaded") {
         const fileId = response.data.fileId;
-        singedFilesId[file] = fileId;
+        storage[key] = fileId;
+        return 1;
+        // singedFilesId[file] = fileId;
         // fileUploadSuccess = 1;
       }
     } catch (error) {
       // Handle errors, e.g., show an error message to the user
-      toast.error("Error to upload documents");
+      // toast.error("Error to upload documents");
+      console.error(error);
+      return 0;
       // fileUploadSuccess = 0;
     }
     // fetch("your-backend-url", {
@@ -667,49 +793,6 @@ const SiteInspection = () => {
     //   });
   }
 
-  const handleSignedFileChange = (e, fileName) => {
-    const file = e.target.files[0];
-    setSubmitSignedFiles((prev) => {
-      const cloneObj = { ...prev };
-      cloneObj[fileName] = file;
-
-      return cloneObj;
-    });
-  };
-
-  const handleShowOtpModal = () => {
-    setShowOtpModal(!showOtpModal);
-  };
-
-  const [loadingForOtpGeneration, setLoadingForOtpGeneration] = useState(false);
-  const handleOtpStoreInDb = () => {
-    setLoadingForOtpGeneration(true);
-    const otp = "1234";
-    const data = {
-      psId: userInfoFromLocalStorage()._id,
-      otp,
-    };
-    fetch(`http://localhost:5000/storeOtpForPsSign`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        if (result?.acknowledged) {
-          setLoadingForOtpGeneration(false);
-          handleShowOtpModal();
-        }
-      })
-      .catch((err) => {
-        setLoadingForOtpGeneration(false);
-        toast.error("Something went wrong");
-      });
-  };
-
   const handleOtpMatching = (otp, setLoading, setError) => {
     setLoading(true);
     setError("");
@@ -722,16 +805,74 @@ const SiteInspection = () => {
       `http://localhost:5000/otpMatchForPsSign?data=${JSON.stringify(data)}`
     )
       .then((res) => res.json())
-      .then((result) => {
+      .then(async (result) => {
         console.log(result, "OTP matched");
         const isApproved = showApprovedModal ? 1 : 0;
         if (result?.otpMatched) {
-          setLoading(false);
+          // setLoading(false);
           if (isApproved) {
             console.log("Approved");
-            convertToPdf();
+            const storage = { proceedingFile: "", drawingFile: "" };
+
+            const isProcessingFileUploaded = await convertToPdf(
+              "proceedingModal",
+              {
+                unit: "in",
+                format: "letter",
+                orientation: "portrait",
+              },
+              "http://localhost:5000/upload?page=approvedDocSignedPS",
+              storage,
+              "proceedingFile"
+            );
+
+            console.log(isProcessingFileUploaded, "Processing file upload");
+
+            if (isProcessingFileUploaded !== 0) {
+              const isDrawingFileUploaded = await convertToPdf(
+                "drawingModal",
+                { unit: "px", format: [1200, 900], orientation: "landscape" },
+                "http://localhost:5000/upload?page=approvedDocSignedPS",
+                storage,
+                "drawingFile"
+              );
+
+              console.log(isDrawingFileUploaded, "Drawing file uploaded");
+              if (isDrawingFileUploaded !== 0) {
+                // sentPsDecision(storage);
+                setLoading(false);
+              } else {
+                setLoading(false);
+                setError("Server Error");
+              }
+            } else {
+              setLoading(false);
+              setError("Server Error");
+            }
           } else {
+            const storage = { endorsementFile: "" };
             console.log("Shortfall");
+            const isEndorsementFileUploaded = await convertToPdf(
+              "endorsementModal",
+              {
+                unit: "in",
+                format: "letter",
+                orientation: "portrait",
+              },
+              "http://localhost:5000/upload?page=shortfallDocSignedPS",
+              storage,
+              "endorsementFile"
+            );
+
+            console.log(isEndorsementFileUploaded, "Endorsement file uploaded");
+
+            if (isEndorsementFileUploaded) {
+              // sentPsDecision(storage);
+              setLoading(false);
+            } else {
+              setLoading(false);
+              setError("Server Error");
+            }
           }
         } else {
           setLoading(false);
@@ -785,6 +926,7 @@ const SiteInspection = () => {
           setShowShortfallModal={setShowShortfallModal}
           // showOtpModal={showOtpModal}
           // setShowOtpModal={setShowOtpModal}
+          loadingForOtpGeneration={loadingForOtpGeneration}
           onShowOtpModal={handleShowOtpModal}
           handleOtpStoreInDb={handleOtpStoreInDb}
         />

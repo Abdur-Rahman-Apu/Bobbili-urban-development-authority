@@ -32,6 +32,7 @@ const EndorsementModal = () => {
   // }, []);
 
   const [letterNo, setLetterNo] = useState(1);
+  const [psSignImg, setPsSignImg] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -143,6 +144,16 @@ const EndorsementModal = () => {
       ).then((result) => {
         console.log(result, "PS");
         setPsInfo(result);
+        fetch(
+          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${result?.signId}`
+        )
+          .then((res) => {
+            console.log(res);
+            setPsSignImg(res.url);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       });
     }
   }, [dataFromDb]);
@@ -294,7 +305,7 @@ const EndorsementModal = () => {
             </table>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 ">
             <p className="font-bold">
               Inspection Remarks and Recommendation : Shortfall
             </p>
@@ -310,11 +321,7 @@ const EndorsementModal = () => {
 
           <div className="mt-10 w-fit flex flex-col items-center ml-auto leading-8">
             <div>
-              <img
-                src={`https://drive.google.com/thumbnail?id=${psInfo?.signId}`}
-                alt="signature"
-                className="w-36"
-              />
+              <img src={`${psSignImg}`} alt="signature" className="w-36" />
             </div>
             <div className="text-start min-w-[120px]">
               <p className="text-lg font-bold text-center">{psInfo?.name}</p>

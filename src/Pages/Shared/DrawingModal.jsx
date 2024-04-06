@@ -94,8 +94,8 @@ const DrawingModal = () => {
   }, []);
 
   return (
-    <div className="dark:bg-white w-full">
-      <div id="drawingModal" className="pt-4 relative flex-col items-center">
+    <div className="dark:bg-white w-full " id="drawingModal">
+      <div className="pt-4 relative flex-col items-center">
         <p className="w-fit ml-auto font-bold">B.A. no. {applicationNo}</p>
         {/* <iframe
           src={`https://drive.google.com/file/d/${dataFromDB?.drawing?.Drawing}/preview`}
