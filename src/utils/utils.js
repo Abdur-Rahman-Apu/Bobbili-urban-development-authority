@@ -94,3 +94,16 @@ export async function URLtoFile(url) {
   console.log(file);
 }
 // getDataBlob(your_url);
+
+export const otpGenerator = () => {
+  const randomNumb = () => {
+    return Math.floor(Math.random() * 10).toString();
+  };
+
+  let otp = "";
+  for (let i = 0; i < 4; i++) {
+    otp += randomNumb();
+  }
+
+  return otp;
+};

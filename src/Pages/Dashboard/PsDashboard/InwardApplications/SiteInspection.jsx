@@ -351,6 +351,7 @@ const SiteInspection = () => {
         return await sendUserDataIntoDB(url, "PATCH", {
           applicationNo,
           siteInspection,
+          psId: userInfoFromLocalStorage()._id,
         });
       }
     } else {
@@ -619,7 +620,7 @@ const SiteInspection = () => {
       otp,
     };
     fetch(`http://localhost:5000/storeOtpForPsSign`, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },

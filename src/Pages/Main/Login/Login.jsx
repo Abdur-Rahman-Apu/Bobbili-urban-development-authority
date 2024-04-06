@@ -8,7 +8,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import LoginCSS from "../../../Style/Login.module.css";
 
-const Login = () => {
+const Login = ({ onShowForgotPassModal }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { getUserData } = useContext(AuthContext);
@@ -253,23 +253,30 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="flex items-center pt-2 pb-3">
-            <div className="flex items-center h-5">
-              <input
-                id="remember"
-                type="checkbox"
-                {...register("checkbox")}
-                className="nm_Inset checkbox checked:border-none w-5 h-5 checked:checkbox-primary"
-              />
+          <div className="flex justify-between items-center">
+            <div className="flex items-center pt-2 pb-3">
+              <div className="flex items-center h-5">
+                <input
+                  id="remember"
+                  type="checkbox"
+                  {...register("checkbox")}
+                  className="nm_Inset checkbox checked:border-none w-5 h-5 checked:checkbox-primary"
+                />
+              </div>
+              <label
+                htmlFor="remember"
+                className={`ml-2 text-sm text-gray-900 font-bold font-sans`}
+              >
+                Remember me
+              </label>
             </div>
-            <label
-              htmlFor="remember"
-              className={`ml-2 text-sm text-gray-900 font-bold font-sans`}
+            <p
+              className="text-sm font-bold text-normalViolet cursor-pointer hover:underline"
+              onClick={onShowForgotPassModal}
             >
-              Remember me
-            </label>
+              Forgot password?
+            </p>
           </div>
-
           <div className="flex justify-center">
             {loading ? (
               <BeatLoader
