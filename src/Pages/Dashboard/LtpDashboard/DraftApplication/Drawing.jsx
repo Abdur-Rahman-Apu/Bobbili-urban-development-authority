@@ -156,7 +156,7 @@ const Drawing = () => {
       return await sendUserDataIntoDB(url, "PATCH", {
         applicationNo,
         drawing,
-        prevSavedState: stepCompleted,
+        prevSavedState: stepCompleted.current,
       });
     }
   };

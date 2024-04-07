@@ -7,6 +7,7 @@ import { HiCurrencyRupee } from "react-icons/hi2";
 import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
 import { useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import InputField from "../../../Components/InputField";
 import SendIcon from "../../../Components/SendIcon";
@@ -645,6 +646,27 @@ const Payment = () => {
     });
   };
 
+  const confirmMessageForPayment = () => {
+    Swal.fire({
+      title: "Do you want to pay?",
+      // showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      // denyButtonText: `Don't save`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5001/initiateJuspayPayment`)
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+          });
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
+  };
+
   console.log(sentData, "Sent data");
 
   return (
@@ -750,21 +772,24 @@ const Payment = () => {
               type="number"
               ltpDetails={calculatedData?.UDATotalCharged}
             />
-            {role === "LTP" && cameFrom === "approved" && (
+            {role === "LTP" && (
               <motion.div
                 className="flex ms-5 items-center mt-[16px] pay-btn-container"
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
                 viewport={{ once: true }}
               >
-                <button className="pay-btn mt-3">
+                <div
+                  className="pay-btn mt-3"
+                  onClick={confirmMessageForPayment}
+                >
                   <div className="svg-wrapper-1">
                     <div className="svg-wrapper">
                       <SendIcon />
                     </div>
                   </div>
                   <span>Pay now</span>
-                </button>
+                </div>
               </motion.div>
             )}
             {role === "PS" && (

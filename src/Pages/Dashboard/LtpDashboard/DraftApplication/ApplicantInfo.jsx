@@ -36,6 +36,8 @@ const ApplicantInfo = () => {
 
   const [ltpPhone, setLtpPhone] = useState("");
 
+  const [ltpType, setLtpType] = useState("");
+
   const [totalApplicant, setTotalApplicant] = useState(["Owner1"]);
 
   const increaseApplicantNo = () => {
@@ -46,6 +48,14 @@ const ApplicantInfo = () => {
   const decreaseApplicationNo = () => {
     totalApplicant.pop();
     setTotalApplicant([...totalApplicant]);
+  };
+
+  const handleLtpType = (e) => {
+    const value = e.target.value;
+
+    if (!value?.includes("Select")) {
+      setLtpType(value);
+    }
   };
 
   const setPhoneNoLimit = (e, setPhoneNo) => {
@@ -63,7 +73,7 @@ const ApplicantInfo = () => {
 
   const handleApplicantInfoData = async (url) => {
     // ====================LTP’s Details
-    const ltpType = document.getElementById("ltpType").value;
+
     const ltpName = document.getElementById("ltpName").value;
     const licenseNo = document.getElementById("licenseNo").value;
     const validity = document.getElementById("validity").value;
@@ -116,25 +126,33 @@ const ApplicantInfo = () => {
   }, []);
 
   useEffect(() => {
+    if (data && Object.keys(data)?.length) {
+      setLtpDetails(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
     const getData = async () => {
       const applicationData = await getApplicationData(applicationNo, cameFrom);
       const ltpDetailsData = applicationData?.applicantInfo?.ltpDetails;
       const applicantDetailsData =
         applicationData.applicantInfo.applicantDetails;
 
-      setLtpDetails(ltpDetailsData);
       setApplicantDetails(applicantDetailsData);
+      setLtpType(ltpDetailsData?.type);
       setLtpPhone(ltpDetailsData?.phoneNo);
-      setIsDataGet((prev) => prev + 1);
     };
     getData();
   }, []);
 
-  useEffect(() => {
-    if (role === "LTP" && isDataGet) {
-      setLtpDetails(data);
-    }
-  }, [isDataGet]);
+  console.log(data, "user data");
+  console.log(ltpType, "ltp type");
+
+  // useEffect(() => {
+  //   if (role === "LTP" && isDataGet) {
+  //     setLtpDetails(data);
+  //   }
+  // }, [isDataGet]);
 
   useEffect(() => {
     if (applicantDetails?.length) {
@@ -149,7 +167,7 @@ const ApplicantInfo = () => {
     }
   }, [applicantDetails]);
 
-  const { type, name, email, licenseNo, phone, validity, address } =
+  const { designation, name, email, licenseNo, phone, validity, address } =
     ltpDetails || {};
 
   // Classes for this component :
@@ -189,14 +207,48 @@ const ApplicantInfo = () => {
 
           <div className="lg:flex -mt-2">
             <div className="grid grid-cols-2 lg:grid-cols-3 basis-[75%]">
-              <InputField
+              {/* <InputField
                 id="ltpType"
                 name="ltpType"
                 label="LTP Type"
                 placeholder="Licensed Engineer"
-                ltpDetails={type}
+                ltpDetails={designation}
                 isAlwaysHide={1}
-              />
+              /> */}
+
+              <motion.div
+                className="my-4 mx-3 flex flex-col justify-between"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
+                viewport={{ once: true }}
+              >
+                <label
+                  htmlFor="ltpType"
+                  className="block mb-1 font-semibold text-gray-600"
+                >
+                  LTP Type
+                </label>
+                <select
+                  id="caseType"
+                  className={inputClass}
+                  value={ltpType}
+                  onChange={handleLtpType}
+                  disabled={isReadOnly}
+                  required
+                >
+                  <option disabled value="">
+                    Select LTP type
+                  </option>
+                  <option value="Surveyor">Surveyor</option>
+                  <option value="Engineer">Engineer</option>
+                  <option value="Structural Engineer">
+                    Structural Engineer
+                  </option>
+                  <option value="Architecture">Architecture</option>
+                  <option value="Town Planner">Town Planner</option>
+                </select>
+              </motion.div>
+
               <InputField
                 id="ltpName"
                 name="ltpName"
@@ -219,7 +271,7 @@ const ApplicantInfo = () => {
                 id="validity"
                 name="validity"
                 label="Validity"
-                type="date"
+                type="text"
                 ltpDetails={validity}
                 isAlwaysHide={1}
               />
