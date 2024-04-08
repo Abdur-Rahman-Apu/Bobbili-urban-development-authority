@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import HomeCss from "../../../Style/Home.module.css";
 import Loading from "../../Shared/Loading";
+import NoApplicationFound from "../../Shared/NoApplicationFound";
 
 const ListOfLTP = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -153,11 +154,7 @@ const ListOfLTP = () => {
                 })}
               </tbody>
             </table>
-            {filteredData?.length === 0 && (
-              <p className="text-center my-5 text-xl font-bold text-red-400">
-                No data found
-              </p>
-            )}
+            {filteredData?.length === 0 && <NoApplicationFound />}
           </div>
         </div>
       </div>

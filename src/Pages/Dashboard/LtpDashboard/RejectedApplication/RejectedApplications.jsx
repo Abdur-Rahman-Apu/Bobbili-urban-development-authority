@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import TableLayout from "../../../Components/TableLayout";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowAllRejectedApplications from "./ShowAllRejectedApplications";
 
 const RejectedApplications = () => {
@@ -53,11 +54,7 @@ const RejectedApplications = () => {
         tableData={tableData}
         Component={ShowAllRejectedApplications}
       />
-      {data?.length === 0 && (
-        <p className="text-lg text-center my-4 font-bold text-error">
-          No Application Found
-        </p>
-      )}
+      {data?.length === 0 && <NoApplicationFound />}
     </div>
   );
 };

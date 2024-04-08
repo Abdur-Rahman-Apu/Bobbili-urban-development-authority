@@ -11,6 +11,7 @@ import unknownImg from "../../../../../../assets/images/unknown.png";
 import socket from "../../../../../Common/socket";
 import TableLayout from "../../../../../Components/TableLayout";
 import Loading from "../../../../../Shared/Loading";
+import NoApplicationFound from "../../../../../Shared/NoApplicationFound";
 import ShowMissedRequest from "./ShowMissedRequest";
 
 const MissedRequest = () => {
@@ -186,11 +187,7 @@ const MissedRequest = () => {
               </dialog>
             )}
 
-            {allData?.length === 0 && (
-              <p className="text-center font-bold text-lg text-normalViolet">
-                No Request Found
-              </p>
-            )}
+            {allData?.length === 0 && <NoApplicationFound />}
 
             {/* {isLoading && <p>Loading...</p>} */}
           </>

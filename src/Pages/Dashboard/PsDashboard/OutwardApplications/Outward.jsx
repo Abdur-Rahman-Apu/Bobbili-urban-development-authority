@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../assets/ServerError.json";
 import Loading from "../../../Shared/Loading";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
 
 function Outward() {
   const [error, setError] = useState("");
@@ -226,11 +227,7 @@ function Outward() {
                   </tbody>
                 </table>
 
-                {allData?.length === 0 && (
-                  <p className="text-center flex justify-center items-center my-4 font-bold text-xl text-black">
-                    No application Found
-                  </p>
-                )}
+                {allData?.length === 0 && <NoApplicationFound />}
                 {error && (
                   <p className="text-lg text-center my-4 font-bold text-error">
                     {error}

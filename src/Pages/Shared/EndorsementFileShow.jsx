@@ -126,10 +126,6 @@ export default function EndorsementFileShowed({ modalEndorsement }) {
           </form>
 
           <div className="pt-4">
-            <h3 className="font-bold text-2xl text-center mb-8 uppercase">
-              Endorsement File
-            </h3>
-
             {/* <iframe
               src={`https://drive.google.com/file/d/${allInfo?.psSignedFiles?.proceeding}/preview`}
               width="100%"

@@ -7,6 +7,7 @@ import ErrorAnimation from "../../../../../../assets/ServerError.json";
 import socket from "../../../../../Common/socket";
 import TableLayout from "../../../../../Components/TableLayout";
 import Loading from "../../../../../Shared/Loading";
+import NoApplicationFound from "../../../../../Shared/NoApplicationFound";
 import ShowNewMessages from "./ShowNewMessages";
 
 const NewMessage = () => {
@@ -154,11 +155,7 @@ const NewMessage = () => {
               tableComponentProps={tableComponentProps}
             />
 
-            {allData?.length === 0 && (
-              <p className="text-center  font-bold text-lg text-normalViolet">
-                No Request Found
-              </p>
-            )}
+            {allData?.length === 0 && <NoApplicationFound />}
 
             {/* {isLoading && <p>Loading...</p>} */}
           </>

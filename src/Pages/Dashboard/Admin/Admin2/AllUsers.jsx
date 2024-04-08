@@ -8,6 +8,7 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../../Style/Home.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
 import Loading from "../../../Shared/Loading";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import IndividualUser from "./IndividualUser";
 
 const AllUsers = () => {
@@ -341,11 +342,7 @@ const AllUsers = () => {
               </div>
             </div>
 
-            {records?.length === 0 && (
-              <p className="font-roboto font-bold text-red-500 text-xl mt-7 text-center">
-                No data found
-              </p>
-            )}
+            {records?.length === 0 && <NoApplicationFound />}
 
             {/* dialog box for update User  */}
             {/* Open the modal using document.getElementById('ID').showModal() method */}

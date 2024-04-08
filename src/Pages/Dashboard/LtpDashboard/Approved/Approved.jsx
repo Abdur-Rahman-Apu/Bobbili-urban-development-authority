@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import { useQuery } from "react-query";
-import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
-import ShowAllApprovedApplications from "./ShowAllApprovedApplications";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import TableLayout from "../../../Components/TableLayout";
+import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
+import ShowAllApprovedApplications from "./ShowAllApprovedApplications";
 
 const Approved = () => {
   const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
@@ -42,6 +42,7 @@ const Approved = () => {
   const [tableComponentProps, setTableComponentProps] = useState({});
 
   useEffect(() => {
+    setError("");
     setTableData((prev) => {
       const newValue = {
         tableHeader,
@@ -61,7 +62,6 @@ const Approved = () => {
     });
   }, []);
 
-
   return (
     <>
       <TableLayout
@@ -70,11 +70,7 @@ const Approved = () => {
         tableComponentProps={tableComponentProps}
       />
 
-      {data?.length === 0 && (
-        <p className="text-lg text-center my-4 font-bold text-error">
-          No Application Found
-        </p>
-      )}
+      {data?.length === 0 && <NoApplicationFound />}
 
       {error && (
         <p className="text-lg text-center my-4 font-bold text-error">{error}</p>

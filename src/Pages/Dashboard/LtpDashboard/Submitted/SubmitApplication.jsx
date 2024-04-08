@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import ShowSubmittedApplication from "./ShowSubmittedApplication";
-import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import TableLayout from "../../../Components/TableLayout";
+import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
+import ShowSubmittedApplication from "./ShowSubmittedApplication";
 
 const SubmitApplication = () => {
   const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
@@ -69,11 +69,7 @@ const SubmitApplication = () => {
         tableComponentProps={tableComponentProps}
       />
 
-      {data?.length === 0 && (
-        <p className="text-lg text-center my-4 font-bold text-error">
-          No Application Found
-        </p>
-      )}
+      {data?.length === 0 && <NoApplicationFound />}
 
       {error && (
         <p className="text-lg text-center my-4 font-bold text-error">{error}</p>

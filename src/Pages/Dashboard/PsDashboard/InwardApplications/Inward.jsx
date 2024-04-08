@@ -7,11 +7,15 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../assets/ServerError.json";
 import TableLayout from "../../../Components/TableLayout";
 import Loading from "../../../Shared/Loading";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowSubmittedApplication from "../../LtpDashboard/Submitted/ShowSubmittedApplication";
 
 const Inward = () => {
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
-    useContext(AuthContext);
+  const {
+    userInfoFromLocalStorage,
+    showPageBasedOnApplicationType,
+    fetchDataFromTheDb,
+  } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [allData, setAllData] = useState([]);
 
@@ -59,25 +63,34 @@ const Inward = () => {
     setStoreData(data);
   }, [isError, data]);
 
+  // TODO: owner name search pending
+
   const onSubmit = (data) => {
     const { search } = data;
 
-    if (search?.includes("BUDA/2023")) {
-      //  search by application No
-      setAllData(
-        storeData?.filter(
-          (application) => application?.applicationNo === search
-        )
-      );
-    } else {
-      setAllData(
-        storeData?.filter(
-          (application) =>
-            application?.applicantInfo?.applicantDetails[0]?.name?.toLowerCase() ===
-            search?.toLowerCase()
-        )
-      );
-    }
+    fetchDataFromTheDb(
+      `http://localhost:5000/getSearchedApplication?search=${search}`
+    ).then((data) => {
+      console.log(data);
+      setAllData(data?.result);
+    });
+
+    // if (search?.includes("BUDA/2023")) {
+    //   //  search by application No
+    //   setAllData(
+    //     storeData?.filter(
+    //       (application) => application?.applicationNo === search
+    //     )
+    //   );
+    // } else {
+    //   setAllData(
+    //     storeData?.filter(
+    //       (application) =>
+    //         application?.applicantInfo?.applicantDetails[0]?.name?.toLowerCase() ===
+    //         search?.toLowerCase()
+    //     )
+    //   );
+    // }
   };
 
   const tableHeader = [
@@ -187,11 +200,7 @@ const Inward = () => {
               tableComponentProps={tableComponentProps}
             />
 
-            {allData?.length === 0 && (
-              <p className="text-center font-bold text-xl text-black">
-                No application Found
-              </p>
-            )}
+            {(allData?.length === 0 || !allData) && <NoApplicationFound />}
           </>
         </div>
       )}

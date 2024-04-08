@@ -10,6 +10,7 @@ import ErrorAnimation from "../../../../assets/ServerError.json";
 import StarIcon from "../../../Components/StarIcon";
 import TableLayout from "../../../Components/TableLayout";
 import Loading from "../../../Shared/Loading";
+import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import AllDraftApplication from "./AllDraftApplication";
 
 const NewApplication = () => {
@@ -272,11 +273,7 @@ const NewApplication = () => {
             tableComponentProps={tableComponentProps}
           />
 
-          {data?.length === 0 && (
-            <p className="text-lg text-center my-4 font-bold text-error">
-              No Application Found
-            </p>
-          )}
+          {data?.length === 0 && <NoApplicationFound />}
 
           {error && (
             <p className="text-lg text-center my-4 font-bold text-error">
