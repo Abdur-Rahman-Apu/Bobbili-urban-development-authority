@@ -651,7 +651,7 @@ const Payment = () => {
       title: "Do you want to pay?",
       // showDenyButton: true,
       showCancelButton: true,
-      confirmButtonText: "Save",
+      confirmButtonText: "Yes",
       // denyButtonText: `Don't save`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
@@ -661,8 +661,6 @@ const Payment = () => {
           .then((result) => {
             console.log(result);
           });
-      } else if (result.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
       }
     });
   };

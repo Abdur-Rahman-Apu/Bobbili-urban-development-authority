@@ -5,6 +5,7 @@ import { BsHouses } from "react-icons/bs";
 import { VscDebugContinue } from "react-icons/vsc";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
+import useDebounce from "../../CustomHook/useDebounce";
 import Application from "../../Dashboard/LtpDashboard/DraftApplication/Application";
 import DrawingModal from "../../Shared/DrawingModal";
 import ProceedingModal from "../../Shared/ProceedingModal";
@@ -22,45 +23,56 @@ const ApplicationSearch = () => {
 
   const { fetchDataFromTheDb } = useContext(AuthContext);
 
-  useEffect(() => {
-    fetchDataFromTheDb("http://localhost:5000/allApplications").then((data) => {
+  // useEffect(() => {
+  //   fetchDataFromTheDb("http://localhost:5000/allApplications").then((data) => {
+  //     console.log(data);
+  //     setApplicationData(data);
+  //   });
+  // }, []);
+
+  const doSearch = useDebounce((searchValue) => {
+    fetchDataFromTheDb(
+      `http://localhost:5000/getSearchedApplication?search=${searchValue}`
+    ).then((data) => {
       console.log(data);
-      setApplicationData(data);
+      // setApplicationData(data);
     });
-  }, []);
+  }, 3000);
 
   //   console.log(applicationData, "APPLICATION DATA");
   const searchApplicationData = (e) => {
-    const value = e.target.value;
+    const value = e.target.value.trim();
 
-    console.log(value, "FILTER DATA");
-
-    if (value.includes("BUDA/2023")) {
-      //  search by application No
-      setFilteredData(
-        applicationData.find((data) => data.applicationNo === value)
-      );
-    } else if (value?.length) {
-      console.log("Asci");
-
-      setFilteredData(
-        applicationData.find(
-          (data) =>
-            data?.applicantInfo?.applicantDetails[0]?.name.toLowerCase() ===
-            value.toLowerCase()
-        )
-      );
-
-      console.log(
-        applicationData.find(
-          (data) => data?.applicantInfo?.applicantDetails[0]?.name === value
-        )
-      );
+    if (value?.length) {
+      doSearch(value);
     }
 
-    if (value?.length === 0) {
-      setFilteredData(null);
-    }
+    // if (value.includes("BUDA/2023")) {
+    //   //  search by application No
+    //   setFilteredData(
+    //     applicationData.find((data) => data.applicationNo === value)
+    //   );
+    // } else if (value?.length) {
+    //   console.log("Asci");
+
+    //   setFilteredData(
+    //     applicationData.find(
+    //       (data) =>
+    //         data?.applicantInfo?.applicantDetails[0]?.name.toLowerCase() ===
+    //         value.toLowerCase()
+    //     )
+    //   );
+
+    //   console.log(
+    //     applicationData.find(
+    //       (data) => data?.applicantInfo?.applicantDetails[0]?.name === value
+    //     )
+    //   );
+    // }
+
+    // if (value?.length === 0) {
+    //   setFilteredData(null);
+    // }
   };
 
   useEffect(() => {

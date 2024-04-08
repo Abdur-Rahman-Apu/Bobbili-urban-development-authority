@@ -5,8 +5,8 @@ import { MdOutlineLogout, MdOutlineMenuOpen } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../AuthProvider/AuthProvider";
-import userFemaleImg from "../assets/images/femaleAvatar.png";
-import userMaleImg from "../assets/images/maleAvatar.png";
+import userFemaleImg from "../assets/images/femaleCorporate.png";
+import userMaleImg from "../assets/images/maleCorporate.png";
 import nonUser from "../assets/images/nonUser.png";
 // import { FaRegEdit } from "react-icons/fa";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
@@ -146,7 +146,7 @@ const DashboardLayout = () => {
               {/* <LuSettings size={20} className="text-black cursor-pointer" /> */}
               <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="block w-20 btn-circle avatar ">
-                  <div className="cursor-pointer mx-auto mt-3 rounded-full nm_Container">
+                  <div className="cursor-pointer mx-auto mt-3 rounded-full nm_Container bg-sky-200">
                     <img
                       src={
                         gender === undefined
@@ -155,6 +155,7 @@ const DashboardLayout = () => {
                           ? userMaleImg
                           : userFemaleImg
                       }
+                      // src={userFemaleImg}
                       alt="An image of user icon"
                     />
 
