@@ -1,11 +1,11 @@
 import React from "react";
 
-function ApplicationHeader() {
+function ApplicationHeader({ applicationNo }) {
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Adding 1 because months are zero-indexed
   const year = currentDate.getFullYear();
-  const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
+
   return (
     <div className="my-5">
       <div className="text-center font-extrabold">

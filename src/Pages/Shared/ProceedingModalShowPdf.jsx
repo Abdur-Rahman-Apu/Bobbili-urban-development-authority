@@ -5,7 +5,11 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
-export default function ProceedingModalShowPdf({ modalProceeding }) {
+export default function ProceedingModalShowPdf({
+  modalProceeding,
+  searchAppData,
+}) {
+  console.log(searchAppData, "SearchAPp data");
   const { setOpenProceeding, openProceeding } = modalProceeding;
   const { getApplicationData } = useContext(AuthContext);
 
@@ -33,27 +37,36 @@ export default function ProceedingModalShowPdf({ modalProceeding }) {
 
   const [pdfUrl, setPdfUrl] = useState("");
 
+  const getPsSignedFiles = async (applicationData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
+      );
+      console.log(response, "response");
+      const blob = await response.blob();
+      console.log(blob, "blob");
+      const pdfUrl = URL.createObjectURL(blob);
+      console.log(pdfUrl, "pdfurl");
+      setPdfUrl(pdfUrl);
+    } catch (error) {
+      console.error("Error fetching PDF:", error);
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       const applicationData = await getApplicationData(applicationNo, cameFrom);
       // console.log(applicationData, "All info ApplicationData");
 
       setAllInfo(applicationData);
-      try {
-        const response = await fetch(
-          `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
-        );
-        console.log(response, "response");
-        const blob = await response.blob();
-        console.log(blob, "blob");
-        const pdfUrl = URL.createObjectURL(blob);
-        console.log(pdfUrl, "pdfurl");
-        setPdfUrl(pdfUrl);
-      } catch (error) {
-        console.error("Error fetching PDF:", error);
-      }
+      getPsSignedFiles(applicationData);
     };
-    getData();
+    if (searchAppData) {
+      setAllInfo(searchAppData);
+      getPsSignedFiles(searchAppData);
+    } else {
+      getData();
+    }
   }, []);
 
   console.log(numPages, "num pages");

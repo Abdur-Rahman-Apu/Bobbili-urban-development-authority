@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineFileDone } from "react-icons/ai";
 import { BsHouses } from "react-icons/bs";
 import { VscDebugContinue } from "react-icons/vsc";
@@ -7,35 +7,25 @@ import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
 import useDebounce from "../../CustomHook/useDebounce";
 import Application from "../../Dashboard/LtpDashboard/DraftApplication/Application";
-import DrawingModal from "../../Shared/DrawingModal";
-import ProceedingModal from "../../Shared/ProceedingModal";
+import DrawingFileShowed from "../../Shared/DrawingFileShowed";
+import ProceedingModalShowPdf from "../../Shared/ProceedingModalShowPdf";
 import MainPageInput from "../MainPageInput";
 
 const ApplicationSearch = () => {
   const [applicationData, setApplicationData] = useState([]);
-  const [filteredData, setFilteredData] = useState(null);
-  const [status, setStatus] = useState(null);
   const [openApplication, setOpenApplication] = useState(false);
   const [openProceeding, setOpenProceeding] = useState(false);
   const [openDrawing, setOpenDrawing] = useState(false);
 
-  // console.log(filteredData, 'filteredData');
-
   const { fetchDataFromTheDb } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   fetchDataFromTheDb("http://localhost:5000/allApplications").then((data) => {
-  //     console.log(data);
-  //     setApplicationData(data);
-  //   });
-  // }, []);
-
+  // TODO: owner name search pending
   const doSearch = useDebounce((searchValue) => {
     fetchDataFromTheDb(
       `http://localhost:5000/getSearchedApplication?search=${searchValue}`
     ).then((data) => {
       console.log(data);
-      // setApplicationData(data);
+      setApplicationData(data?.result);
     });
   }, 3000);
 
@@ -74,14 +64,6 @@ const ApplicationSearch = () => {
     //   setFilteredData(null);
     // }
   };
-
-  useEffect(() => {
-    setStatus(filteredData?.status?.toLowerCase());
-  }, []);
-
-  // console.log(accept);
-  // console.log(filteredData?.status?.toLowerCase().includes("approved"));
-  // console.log(filteredData, "filteredData");
 
   const titleClass = "basis-[50%] text-lg pl-3 font-semibold text-gray-900";
 
@@ -158,7 +140,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.surveyNo
+                applicationData?.buildingInfo?.generalInformation?.surveyNo
               }
             />
             <MainPageInput
@@ -167,7 +149,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.village
+                applicationData?.buildingInfo?.generalInformation?.village
               }
             />
             <MainPageInput
@@ -176,7 +158,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.mandal
+                applicationData?.buildingInfo?.generalInformation?.mandal
               }
             />
             <MainPageInput
@@ -185,7 +167,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.district
+                applicationData?.buildingInfo?.generalInformation?.district
               }
             />
           </div>
@@ -197,7 +179,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.plotDetails?.netPlotAreaCal
+                applicationData?.buildingInfo?.plotDetails?.netPlotAreaCal
               }
             />
             <MainPageInput
@@ -206,7 +188,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.plotDetails?.floorDetails?.length
+                applicationData?.buildingInfo?.plotDetails?.floorDetails?.length
               }
             />
             <MainPageInput
@@ -214,7 +196,7 @@ const ApplicationSearch = () => {
               id="noOfUnits"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={filteredData?.buildingInfo?.plotDetails?.noOfUnits}
+              ltpDetails={applicationData?.buildingInfo?.plotDetails?.noOfUnits}
             />
             <MainPageInput
               label="Total built up area :"
@@ -222,7 +204,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.buildingInfo?.plotDetails?.totalBuiltUpArea
+                applicationData?.buildingInfo?.plotDetails?.totalBuiltUpArea
               }
             />
           </div>
@@ -262,7 +244,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.applicantInfo?.applicantDetails?.[0]?.name
+                applicationData?.applicantInfo?.applicantDetails?.[0]?.name
               }
             />
             <MainPageInput
@@ -271,7 +253,8 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.applicantInfo?.applicantDetails?.[0]?.ownerDoorNo
+                applicationData?.applicantInfo?.applicantDetails?.[0]
+                  ?.ownerDoorNo
               }
             />
             <MainPageInput
@@ -280,7 +263,7 @@ const ApplicationSearch = () => {
               type="text"
               placeholder="xxxxxxx"
               ltpDetails={
-                filteredData?.applicantInfo?.applicantDetails?.[0]
+                applicationData?.applicantInfo?.applicantDetails?.[0]
                   ?.ownerStreetNo
               }
             />
@@ -292,14 +275,14 @@ const ApplicationSearch = () => {
               id="name2"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={filteredData?.applicantInfo?.ltpDetails?.name}
+              ltpDetails={applicationData?.applicantInfo?.ltpDetails?.name}
             />
             <MainPageInput
               label="Address :"
               id="address2"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={filteredData?.applicantInfo?.ltpDetails?.address}
+              ltpDetails={applicationData?.applicantInfo?.ltpDetails?.address}
             />
           </div>
         </div>
@@ -309,7 +292,7 @@ const ApplicationSearch = () => {
         <motion.button
           className="btn3D w-[100px] h-[75px] flex flex-col justify-center items-center"
           onClick={() => setOpenApplication(true)}
-          disabled={filteredData === null}
+          disabled={applicationData === null}
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
           viewport={{ once: true }}
@@ -322,9 +305,10 @@ const ApplicationSearch = () => {
 
         <motion.button
           className="btn3D w-[100px] h-[75px] flex flex-col justify-center items-center"
+          onClick={() => setOpenDrawing(true)}
           disabled={
-            filteredData === null ||
-            filteredData?.status?.toLowerCase() !== "approved"
+            applicationData === null ||
+            applicationData?.status?.toLowerCase() !== "approved"
           }
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
@@ -342,8 +326,8 @@ const ApplicationSearch = () => {
             setOpenProceeding(true);
           }}
           disabled={
-            filteredData === null ||
-            filteredData?.status?.toLowerCase() !== "approved"
+            applicationData === null ||
+            applicationData?.status?.toLowerCase() !== "approved"
           }
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
@@ -357,26 +341,31 @@ const ApplicationSearch = () => {
       </div>
 
       {/* Application Modal */}
-      {openApplication && filteredData ? (
+      {openApplication && applicationData ? (
         <Application
           setOpenApplication={setOpenApplication}
-          filteredData={filteredData}
+          filteredData={applicationData}
         />
       ) : (
         ""
       )}
 
       {/* proceedingModal modal info  */}
-      {openProceeding && filteredData ? (
-        <ProceedingModal
-          modalProceeding={{ setOpenProceeding, openProceeding, filteredData }}
+      {openProceeding && applicationData ? (
+        <ProceedingModalShowPdf
+          modalProceeding={{
+            setOpenProceeding,
+            openProceeding,
+          }}
+          searchAppData={applicationData}
         />
       ) : null}
 
       {/* drawing modal  */}
-      {openDrawing && filteredData && (
-        <DrawingModal
-          modalStates={{ openDrawing, setOpenDrawing, filteredData }}
+      {openDrawing && applicationData && (
+        <DrawingFileShowed
+          modalStates={{ openDrawing, setOpenDrawing }}
+          searchAppData={applicationData}
         />
       )}
     </div>

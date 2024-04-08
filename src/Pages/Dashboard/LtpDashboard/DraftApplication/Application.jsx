@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import ApplicationHeader from "./ApplicationHeader";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import { RxCross2 } from "react-icons/rx";
+import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import ApplicationHeader from "./ApplicationHeader";
 
 function Application({ setOpenApplication, filteredData }) {
   const { getApplicationData, ownerNamePattern, calculateNoOfFloors } =
     useContext(AuthContext);
-  const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
+  const applicationNo = filteredData
+    ? filteredData?.applicationNo
+    : JSON.parse(localStorage.getItem("CurrentAppNo"));
   const page = JSON.parse(localStorage.getItem("page"));
   const [generalInformation, setGeneralInformation] = useState({});
   const [plotDetails, setPlotDetails] = useState({});
@@ -91,15 +93,17 @@ function Application({ setOpenApplication, filteredData }) {
     if (isArray) {
       return (
         <td
-          className={`p-3 border-t border-black text-sm ${type === "keys" && "w-1/3"
-            } p-0`}
+          className={`p-3 border-t border-black text-sm ${
+            type === "keys" && "w-1/3"
+          } p-0`}
         >
           <div className="flex">
             {data?.map((e, i) => (
               <p
                 key={i}
-                className={`flex items-center p-2 border-l border-black h-12 ${i === 0 && "w-1/2 border-l-0 bg-white font-bold"
-                  }`}
+                className={`flex items-center p-2 border-l border-black h-12 ${
+                  i === 0 && "w-1/2 border-l-0 bg-white font-bold"
+                }`}
               >
                 {(keys ? Object.keys(data[i]) : Object.values(data[i])) || e}
               </p>
@@ -110,8 +114,9 @@ function Application({ setOpenApplication, filteredData }) {
     } else {
       return (
         <td
-          className={` border-t border-black text-sm ${type === "keys" && "w-1/3"
-            } p-0 font-bold bg-white`}
+          className={` border-t border-black text-sm ${
+            type === "keys" && "w-1/3"
+          } p-0 font-bold bg-white`}
         >
           <p className="h-12 p-2 flex items-center border-l border-black">
             {keys ? Object.keys(data) : Object.values(data)}
@@ -140,9 +145,8 @@ function Application({ setOpenApplication, filteredData }) {
 
           <div className="z-[10]">
             {/* Header */}
-            <ApplicationHeader />
+            <ApplicationHeader applicationNo={applicationNo} />
             <div>
-              {/* Part01 */}
               <div>
                 <div className="container mx-auto px-4 font-roboto ">
                   <div className="py-4">
