@@ -9,11 +9,15 @@ function Application({ setOpenApplication, filteredData }) {
   const applicationNo = filteredData
     ? filteredData?.applicationNo
     : JSON.parse(localStorage.getItem("CurrentAppNo"));
+  console.log("*******************APPLICATION*****************");
+  console.log(applicationNo, "APplication");
   const page = JSON.parse(localStorage.getItem("page"));
   const [generalInformation, setGeneralInformation] = useState({});
   const [plotDetails, setPlotDetails] = useState({});
   const [ltpDetailsData, setLtpDetailsData] = useState({});
   const [applicantDetailsData, setApplicantDetailsData] = useState([]);
+
+  console.log(applicationNo, "Application no");
 
   useEffect(() => {
     // Opening the modal when the component mounts

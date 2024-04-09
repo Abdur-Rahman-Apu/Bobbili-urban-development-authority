@@ -1,6 +1,7 @@
 import React from "react";
 
 function ApplicationHeader({ applicationNo }) {
+  console.log(applicationNo, "App head");
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Adding 1 because months are zero-indexed
