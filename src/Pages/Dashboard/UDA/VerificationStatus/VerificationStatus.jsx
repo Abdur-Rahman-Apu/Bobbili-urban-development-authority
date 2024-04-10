@@ -4,7 +4,7 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Style from "../../../../Style/TableDownloadBtn.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
-import Loading from "../../../Shared/Loading";
+import SearchUserLoading from "../../../Shared/SearchUserLoading";
 
 const VerificationStatus = () => {
   const { fetchDataFromTheDb } = useContext(AuthContext);
@@ -49,9 +49,9 @@ const VerificationStatus = () => {
       });
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <SearchUserLoading />;
+  // }
   return (
     <>
       {error?.length !== 0 ? (
@@ -96,19 +96,19 @@ const VerificationStatus = () => {
                     <thead className="bg-normalViolet">
                       <tr className="hidden md:table-row">
                         <th
-                          className={`p-3 border-2 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-gray-200 text-white text-sm font-semibold uppercase tracking-wider `}
                           rowSpan={2}
                         >
                           Staff Name
                         </th>
                         <th
-                          className={`p-3 border-2 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-gray-200  text-white  text-sm font-semibold uppercase tracking-wider `}
                           rowSpan={2}
                         >
                           Cantact no.
                         </th>
                         <th
-                          className={`p-3 border-2 border-r-0 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-r-0 border-gray-200  text-white  text-sm font-semibold uppercase tracking-wider `}
                           colSpan={3}
                         >
                           No. of Files
@@ -116,17 +116,17 @@ const VerificationStatus = () => {
                       </tr>
                       <tr className="hidden md:table-row">
                         <th
-                          className={`p-3 border-2 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-gray-200  text-white  text-sm font-semibold uppercase tracking-wider `}
                         >
                           Assigned
                         </th>
                         <th
-                          className={`p-3 border-2 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-gray-200  text-white  text-sm font-semibold uppercase tracking-wider `}
                         >
                           Verified
                         </th>
                         <th
-                          className={`p-3 border-2 border-r-0 border-gray-200  text-white  text-xs font-semibold uppercase tracking-wider `}
+                          className={`p-3 border-2 border-r-0 border-gray-200  text-white  text-sm font-semibold uppercase tracking-wider `}
                         >
                           Pending
                         </th>
@@ -134,11 +134,12 @@ const VerificationStatus = () => {
                     </thead>
                     <tbody>
                       {data?.length !== 0 &&
+                        !loading &&
                         data?.map((item, index) => {
                           return (
                             <tr
                               key={index}
-                              className="border-b border-gray-200 dark:text-black hidden md:table-row"
+                              className="border-b border-gray-200 dark:text-black hidden md:table-row font-bold"
                             >
                               <td className="p-3 text-sm">
                                 <p className="text-gray-900 ">{item?.psName}</p>
@@ -168,6 +169,12 @@ const VerificationStatus = () => {
                         })}
                     </tbody>
                   </table>
+
+                  {loading && (
+                    <div className="flex justify-center items-center py-5">
+                      <SearchUserLoading />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
