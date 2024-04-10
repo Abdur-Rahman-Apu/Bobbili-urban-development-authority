@@ -1,4 +1,5 @@
 import axios from "axios";
+import DOMPurify from "dompurify";
 import Lottie from "lottie-react";
 import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -168,7 +169,7 @@ const MissedRequest = () => {
                     </p>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: query?.noResponse?.query,
+                        __html: DOMPurify.sanitize(query?.noResponse?.query),
                       }}
                     />
                   </div>
