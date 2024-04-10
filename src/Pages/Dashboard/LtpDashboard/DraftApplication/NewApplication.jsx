@@ -9,8 +9,8 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../assets/ServerError.json";
 import StarIcon from "../../../Components/StarIcon";
 import TableLayout from "../../../Components/TableLayout";
-import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
+import SearchApplicationLoading from "../../../Shared/SearchApplicationLoading";
 import AllDraftApplication from "./AllDraftApplication";
 
 const NewApplication = () => {
@@ -220,10 +220,6 @@ const NewApplication = () => {
     });
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <div className=" my-3 transition-all duration-700">
       <div className="flex justify-end mt-10 mr-10">
@@ -282,6 +278,7 @@ const NewApplication = () => {
           )}
         </div>
       )}
+      {loading && <SearchApplicationLoading />}
     </div>
   );
 };

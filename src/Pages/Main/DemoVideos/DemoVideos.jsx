@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ComingSoon from "../../Shared/ComingSoon";
 
 const DemoVideos = () => {
   const videos = [
@@ -64,7 +65,9 @@ const DemoVideos = () => {
           ))}
         </div>
       </div> */}
-      <p className="text-center text-black">Coming Soon....</p>
+      {/* <p className="text-center text-black">Coming Soon....</p>
+       */}
+      <ComingSoon />
     </div>
   );
 };
