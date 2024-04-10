@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
-
-import userIcon from "../../../../assets/images/man.png";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import { RiDeleteBin5Fill } from "react-icons/ri";
 import { GrUpdate } from "react-icons/gr";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import undefinedImg from "../../../../assets/images/man.png";
 
 const IndividualUser = ({ user, deleteUser, updateUser }) => {
   const { userInfoFromLocalStorage } = useContext(AuthContext);
+
+  const imgSrc =
+    user?.gender?.toLowerCase() === "male"
+      ? "https://avatar.iran.liara.run/public/boy"
+      : "https://avatar.iran.liara.run/public/girl";
 
   const userType = userInfoFromLocalStorage().role;
   // console.log(user, "user");
@@ -30,10 +34,10 @@ const IndividualUser = ({ user, deleteUser, updateUser }) => {
           </div> */}
 
           <div className="flex">
-            <div className="flex-shrink-0 w-10 h-10">
+            <div className="flex-shrink-0 w-10 h-10 nm_Container rounded-full">
               <img
                 className="w-full h-full rounded-full"
-                src={userIcon}
+                src={imgSrc ?? undefinedImg}
                 alt="An avatar image"
               />
             </div>
