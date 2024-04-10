@@ -524,7 +524,8 @@ const AuthProvider = ({ children }) => {
   const needToHideElementBasedOnPage = () => {
     const page = JSON.parse(localStorage.getItem("page"));
 
-    const hideBtnPageWise = page === "submit" || page === "shortfall";
+    const hideBtnPageWise =
+      page === "submit" || page === "shortfall" || page === "approved";
 
     return hideBtnPageWise;
   };
