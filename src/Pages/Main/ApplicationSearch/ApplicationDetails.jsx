@@ -19,14 +19,48 @@ export default function ApplicationDetails({
   const titleClass = "basis-[50%] text-lg pl-3 font-semibold text-gray-900";
   return (
     <>
-      {totalApplications > 1 && (
-        <p className="mt-7 mb-8 ml-3 font-bold text-lg text-black ">
-          Application no :{" "}
-          <span className="text-normalViolet">
-            {applicationData?.applicationNo}
-          </span>
-        </p>
-      )}
+      <div className="flex justify-between items-center">
+        {totalApplications > 1 && (
+          <p className="mt-7 mb-8 ml-3 font-bold text-lg text-black ">
+            Application no :{" "}
+            <span className="text-normalViolet">
+              {applicationData?.applicationNo}
+            </span>
+          </p>
+        )}
+
+        {totalApplications > 0 && (
+          <div>
+            <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+              <span
+                aria-hidden
+                className={`absolute inset-0  ${
+                  ((applicationData?.status
+                    ?.toLowerCase()
+                    ?.includes("pending") ||
+                    applicationData?.status === undefined) &&
+                    "bg-violet-400") ||
+                  (applicationData?.status
+                    ?.toLowerCase()
+                    ?.includes("approved") &&
+                    "bg-green-400") ||
+                  (applicationData?.status
+                    ?.toLowerCase()
+                    ?.includes("shortfall") &&
+                    "bg-[#fad390]") ||
+                  (applicationData?.status
+                    ?.toLowerCase()
+                    ?.includes("rejected") &&
+                    "bg-red-400")
+                } opacity-50 rounded-full nm_Container`}
+              ></span>
+              <span className="relative capitalize text-sm">
+                {applicationData?.status?.split(" ")[0] ?? "Pending"}
+              </span>
+            </span>
+          </div>
+        )}
+      </div>
       {/* Location details  */}
       <div className="mt-7">
         <div className="flex -mb-3">

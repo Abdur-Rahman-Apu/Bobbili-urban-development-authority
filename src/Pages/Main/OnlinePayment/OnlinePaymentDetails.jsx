@@ -9,14 +9,28 @@ export default function OnlinePaymentDetails({
 }) {
   return (
     <div>
-      {totalApplications > 1 && (
-        <p className="mt-7 mb-8 ml-3 font-bold text-lg text-black ">
-          Application no :{" "}
-          <span className="text-normalViolet">
-            {applicationData?.applicationNo}
-          </span>
-        </p>
-      )}
+      <div className="flex justify-between items-center">
+        {totalApplications > 1 && (
+          <p className="mt-7 mb-8 ml-3 font-bold text-lg text-black ">
+            Application no :{" "}
+            <span className="text-normalViolet">
+              {applicationData?.applicationNo}
+            </span>
+          </p>
+        )}
+
+        {totalApplications > 0 && (
+          <div>
+            <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+              <span
+                aria-hidden
+                className={`absolute inset-0 bg-violet-400 opacity-50 rounded-full nm_Container`}
+              ></span>
+              <span className="relative capitalize text-sm">pending</span>
+            </span>
+          </div>
+        )}
+      </div>
       {/* Application details  */}
       <div className="mt-7">
         <div className="-mb-3">
