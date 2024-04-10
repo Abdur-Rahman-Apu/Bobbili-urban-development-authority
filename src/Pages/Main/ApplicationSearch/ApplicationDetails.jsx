@@ -246,7 +246,7 @@ export default function ApplicationDetails({
         <motion.button
           className="btn3D w-[100px] h-[75px] flex flex-col justify-center items-center"
           onClick={() => setOpenApplication(true)}
-          disabled={applicationData === null}
+          disabled={applicationData.length === 0}
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
           viewport={{ once: true }}
