@@ -3,8 +3,8 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
 import useDebounce from "../../CustomHook/useDebounce";
-import Loading from "../../Shared/Loading";
 import NetworkError from "../../Shared/NetworkError";
+import SearchApplicationLoading from "../../Shared/SearchApplicationLoading";
 import ApplicationDetails from "./ApplicationDetails";
 
 const ApplicationSearch = () => {
@@ -15,13 +15,15 @@ const ApplicationSearch = () => {
 
   const { fetchDataFromTheDb } = useContext(AuthContext);
 
-  // TODO: owner name search pending
   const doSearch = useDebounce((searchValue, searchType) => {
     setLoading(true);
     setError("");
-    fetchDataFromTheDb(
-      `http://localhost:5000/${searchType}?search=${searchValue}`
-    )
+
+    const query = JSON.stringify({
+      searchValue,
+      page: "applicationSearch",
+    });
+    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
       .then((data) => {
         setLoading(false);
         console.log(data);
@@ -87,7 +89,7 @@ const ApplicationSearch = () => {
         </svg>
       </motion.div>
 
-      {loading && <Loading />}
+      {loading && <SearchApplicationLoading />}
 
       {error && <NetworkError errMsg={error} />}
       {applicationData?.length === 0 && !loading && !error && (

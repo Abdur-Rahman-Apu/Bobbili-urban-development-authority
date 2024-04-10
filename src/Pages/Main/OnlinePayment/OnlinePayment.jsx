@@ -1,76 +1,66 @@
-import React, { useContext, useEffect, useState } from "react";
-import MainPageInput from "../MainPageInput";
-import { GiMoneyStack } from "react-icons/gi";
-import { IoIosSend, IoMdSend } from "react-icons/io";
+import { motion } from "framer-motion";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
-import { motion } from "framer-motion";
+import useDebounce from "../../CustomHook/useDebounce";
+import NetworkError from "../../Shared/NetworkError";
+import SearchApplicationLoading from "../../Shared/SearchApplicationLoading";
+import OnlinePaymentDetails from "./OnlinePaymentDetails";
 
 const OnlinePayment = () => {
   const [applicationData, setApplicationData] = useState([]);
   const [filteredData, setFilteredData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { fetchDataFromTheDb, textTypingAnimation } = useContext(AuthContext);
 
-  const { getAllDraftApplicationData, textTypingAnimation } =
-    useContext(AuthContext);
+  // useEffect(() => {
+  //   getAllDraftApplicationData().then((data) => {
+  //     console.log(data);
+  //     setApplicationData(data);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    getAllDraftApplicationData().then((data) => {
-      console.log(data);
-      setApplicationData(data);
+  const doSearch = useDebounce((searchValue, searchType) => {
+    setLoading(true);
+    setError("");
+
+    const query = JSON.stringify({
+      searchValue,
+      page: "onlinePayment",
     });
-  }, []);
+    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
+      .then((data) => {
+        setLoading(false);
+        console.log(data);
+        setApplicationData(data?.result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError("Network Error");
+      });
+  }, 2000);
 
-  //   console.log(applicationData, "APPLICATION DATA");
   const searchApplicationData = (e) => {
     const value = e.target.value;
 
     console.log(value, "FILTER DATA");
 
-    if (value.includes("BUDA/2023")) {
-      //  search by application No
-      setFilteredData(
-        applicationData.find((data) => data.applicationNo === value)
-      );
+    setLoading(true);
+    if (value?.length) {
+      value?.includes("BUDA")
+        ? doSearch(value, "getSearchedApplicationByAppNo")
+        : doSearch(value, "getSearchedApplicationByOwnerName");
     } else {
-      console.log("Asci");
-
-      setFilteredData(
-        applicationData.find(
-          (data) =>
-            data?.applicantInfo?.applicantDetails[0]?.name.toLowerCase() ===
-            value.toLowerCase()
-        )
-      );
-
-      console.log(
-        applicationData.find(
-          (data) => data?.applicantInfo?.applicantDetails[0]?.name === value
-        )
-      );
+      setApplicationData([]);
+      setLoading(false);
     }
   };
 
-  // const textTypingAnimation = (text) => {
-  //   return text.map((el, i) => (
-  //     <motion.span
-  //       initial={{ opacity: 0 }}
-  //       animate={{ opacity: 1 }}
-  //       transition={{
-  //         duration: 0.25,
-  //         delay: i / 6,
-  //       }}
-  //       key={i}
-  //     >
-  //       {el}{" "}
-  //     </motion.span>
-  //   ));
-  // };
-  console.log(filteredData, "FILTERED DATA");
-
-
   return (
     <div className="h-full font-roboto w-full px-2 mt-5 bg-[#E8EAEC]">
-      <motion.div className={`${HomeCss.searchInputContainer} mx-2`}
+      <motion.div
+        className={`${HomeCss.searchInputContainer} mx-2`}
         // initial={{ opacity: 0, x: -40, y: -40 }}
         // whileInView={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.5 } }}
         // viewport={{ once: true }}
@@ -110,172 +100,30 @@ const OnlinePayment = () => {
         </svg>
       </motion.div>
 
-      {/* Application details  */}
-      <div className="mt-7">
-        <div className="-mb-3">
-          <motion.h3
-            className="w-fit basis-[50%] text-black text-lg  pl-3 font-semibold"
-            initial={{ opacity: 0, x: -70 }}
-            whileInView={{ opacity: 1, x: 0, transition: { duration: 0.5 } }}
-            viewport={{ once: true }}
-          >
-            Application details:
-          </motion.h3>
-        </div>
+      {loading && <SearchApplicationLoading />}
 
-        <div className="px-2">
-          <hr className="w-full h-[1px] inline-block bg-gray-400" />
-        </div>
+      {error && <NetworkError errMsg={error} />}
 
-        <div className="flex -mt-2">
-          <div className="basis-[50%]">
-            <MainPageInput
-              label="File no :"
-              id="fileNo"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={filteredData?.applicationNo}
-            />
-            <MainPageInput
-              label="Owner name :"
-              id="applicantName"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.applicantInfo?.applicantDetails?.[0].name
-              }
-            />
-            <MainPageInput
-              label="Mandal :"
-              id="mandal2"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.mandal
-              }
-            />
-          </div>
+      {/* TODO: MOVE TO ONLINE DETAIL PAGE  */}
+      {applicationData?.length === 0 && !loading && !error && (
+        <OnlinePaymentDetails
+          applicationData={applicationData}
+          textTypingAnimation={textTypingAnimation}
+        />
+      )}
 
-          <div className="basis-[50%]">
-            <MainPageInput
-              label="Case Type :"
-              id="caseType"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.caseType
-              }
+      {applicationData?.length > 0 && (
+        <>
+          {applicationData?.map((application) => (
+            <OnlinePaymentDetails
+              key={application?._id}
+              totalApplications={applicationData?.length}
+              applicationData={application}
+              textTypingAnimation={textTypingAnimation}
             />
-            <MainPageInput
-              label="Village name :"
-              id="villageName"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.village
-              }
-            />
-            <MainPageInput
-              label="District :"
-              id="district2"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.buildingInfo?.generalInformation?.district
-              }
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Fees details  */}
-      <div className="mt-12">
-        <div className="flex -mb-3">
-          <motion.h3
-            className="basis-[50%] text-lg pl-3 font-semibold text-gray-900"
-            initial={{ opacity: 0, x: -70 }}
-            whileInView={{ opacity: 1, x: 0, transition: { duration: 0.5 } }}
-            viewport={{ once: true }}
-          >
-            Fees details:
-          </motion.h3>
-        </div>
-
-        <div className="px-2">
-          <hr className="w-full h-[1px] inline-block bg-gray-400" />
-        </div>
-
-        <div className="flex -mt-2">
-          <div className="basis-[70%]">
-            <MainPageInput
-              label="UDA charges :"
-              id="udaCharges"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={filteredData?.payment?.udaCharge?.UDATotalCharged}
-            />
-            <MainPageInput
-              label="Grama Panchayat fee :"
-              id="gramaPanchayatFee"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.payment?.gramaPanchayatFee
-                  ?.GramaPanchayetTotalCharged
-              }
-            />
-            <MainPageInput
-              label="Labour cess charge :"
-              id="labourCessCharge"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={
-                filteredData?.payment?.labourCessCharge?.labourCessOne
-              }
-            />
-            <MainPageInput
-              label="Green fee charge :"
-              id="greenFeeCharge"
-              type="text"
-              placeholder="xxxxxxx"
-              ltpDetails={filteredData?.payment?.greenFeeCharge?.greenFee}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center items-center px-3 mt-5 text-gray-600">
-        <motion.h3
-          className="text-base font-semibold"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
-          viewport={{ once: true }}
-        >
-          {textTypingAnimation(
-            `For UDA charge you can pay only Rs.
-          ${filteredData?.payment?.udaCharge?.UDATotalCharged
-                ? filteredData?.payment?.udaCharge?.UDATotalCharged
-                : "xxxxxxx"
-              }
-          /= fee online, remaining all fee DD/Challan can be attached in LTP
-          login only.`.split(" ")
-          )}
-        </motion.h3>
-      </div>
-
-      <motion.div
-        className="flex justify-end px-3 pb-6"
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
-        viewport={{ once: true }}
-      >
-        <button
-          className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center`}
-        >
-          <IoIosSend size={20} />
-          <span className="ml-1 ">pay now</span>
-        </button>
-      </motion.div>
+          ))}
+        </>
+      )}
     </div>
   );
 };
