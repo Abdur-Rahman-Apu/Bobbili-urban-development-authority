@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import HomeCss from "../../../Style/Home.module.css";
-import Loading from "../../Shared/Loading";
 import NoApplicationFound from "../../Shared/NoApplicationFound";
+import SearchUserLoading from "../../Shared/SearchUserLoading";
 
 const ListOfLTP = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -42,12 +42,10 @@ const ListOfLTP = () => {
     }
   };
 
-  const gradientColor = "bg-gradient-to-r from-violet-500 to-fuchsia-500";
-
   console.log(filteredData, "FILTERED DATA");
 
   if (loading) {
-    return <Loading />;
+    return <SearchUserLoading />;
   }
 
   return (
