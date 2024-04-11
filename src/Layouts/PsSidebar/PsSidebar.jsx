@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 function PsSidebar() {
-  const path = useLocation().pathname;
+  const path = useLocation()?.pathname;
   console.log(path, "Path from the sidebar");
 
   const {
@@ -100,7 +100,7 @@ function PsSidebar() {
           findWhichMenuIsActiveForPsSideBar(
             path,
             "/dashboard/searchApplication",
-            "submit",
+            "searchApplicationByPs",
             role,
             "search"
           ) && activeColor
@@ -113,7 +113,10 @@ function PsSidebar() {
           className={`p-[10px] font-medium `}
           to="/dashboard/searchApplication"
           onClick={() => {
-            localStorage.setItem("page", JSON.stringify("submit"));
+            localStorage.setItem(
+              "page",
+              JSON.stringify("searchApplicationByPs")
+            );
             localStorage.setItem("psMenu", JSON.stringify("search"));
           }}
         >

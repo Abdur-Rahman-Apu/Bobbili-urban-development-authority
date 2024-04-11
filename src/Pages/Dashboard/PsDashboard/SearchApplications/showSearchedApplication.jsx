@@ -1,31 +1,23 @@
-import React, { useContext, useState } from "react";
-import { AiFillPlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-import { RiDeleteBin5Fill } from "react-icons/ri";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import DeleteIcon from "../../../Components/DeleteIcon";
+import React, { useState } from "react";
 
-const AllDraftApplication = ({
+export default function showSearchedApplication({
   serialNo,
   applicationData,
   tableComponentProps,
   screenSize,
-}) => {
-  const { alertToConfirmDelete } = useContext(AuthContext);
+}) {
+  const [tableInfo, setTableInfo] = useState(false);
+  const { showPageBasedOnApplicationType, navigate } = tableComponentProps;
 
-  const { showPageBasedOnApplicationType, removeDraftApplication, navigate } =
-    tableComponentProps;
-
-  const { applicationNo, buildingInfo, applicantInfo, createdDate } =
+  const { applicationNo, buildingInfo, applicantInfo, submitDate, status } =
     applicationData;
 
   const { generalInformation } = buildingInfo;
   const { applicantDetails } = applicantInfo;
 
-  const [tableInfo, setTableInfo] = useState(false);
   const handleTableInfo = () => {
     tableInfo ? setTableInfo(false) : setTableInfo(true);
   };
-
   return (
     <>
       {screenSize > 1024 ? (
@@ -33,15 +25,17 @@ const AllDraftApplication = ({
           <td className="p-3 text-sm">
             <p className="text-gray-900 break-words">{serialNo + 1}</p>
           </td>
-          <td className="p-3 text-sm">
-            <button
-              className="hover:underline"
-              onClick={() =>
-                showPageBasedOnApplicationType(applicationNo, navigate, "draft")
-              }
-            >
-              <p className="text-gray-900 break-words">{applicationNo}</p>
-            </button>
+          <td
+            className="hover:underline cursor-pointer border-b border-gray-200 text-sm"
+            onClick={() =>
+              showPageBasedOnApplicationType(
+                applicationNo,
+                navigate,
+                "searchApplicationByPs"
+              )
+            }
+          >
+            <p className="text-gray-900 break-words">{applicationNo}</p>
           </td>
           <td className="p-3 text-sm">
             <p className="text-gray-900 break-words">
@@ -75,17 +69,25 @@ const AllDraftApplication = ({
             </p>
           </td>
           <td className="p-3 text-sm">
-            <p className="text-gray-900 break-words">{createdDate ?? "N/A"}</p>
+            <p className="text-gray-900 break-words">{submitDate ?? "N/A"}</p>
           </td>
-          <td className="px-3 py-[7px] text-sm ">
-            <button
-              className={`delete-btn`}
-              onClick={() =>
-                alertToConfirmDelete(applicationNo, removeDraftApplication)
-              }
-            >
-              <DeleteIcon />
-            </button>
+          <td className="p-3 border-b border-gray-200 text-sm">
+            <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+              <span
+                aria-hidden
+                className={`absolute inset-0  ${
+                  ((status?.toLowerCase()?.includes("pending") ||
+                    status === undefined) &&
+                    "bg-violet-400") ||
+                  (status?.toLowerCase()?.includes("approved") &&
+                    "bg-green-400") ||
+                  (status?.toLowerCase()?.includes("shortfall") &&
+                    "bg-[#fad390]") ||
+                  (status?.toLowerCase()?.includes("rejected") && "bg-red-400")
+                } opacity-50 rounded-full nm_Container`}
+              ></span>
+              <span className="relative ">{status.split(" ")[0] ?? "N/A"}</span>
+            </span>
           </td>
         </tr>
       ) : (
@@ -127,15 +129,16 @@ const AllDraftApplication = ({
                 </p>
               </button>
             </div>
-            <div className="p-3 border-b border-gray-200 bg-[#ffd7d7] hover:bg-[#f6c7c7] rounded-full text-sm flex">
-              <button
-                className={`text-red-400 hover:text-red-500 bg-transparent`}
-                onClick={() =>
-                  alertToConfirmDelete(applicationNo, removeDraftApplication)
-                }
-              >
-                <RiDeleteBin5Fill size={19} />
-              </button>
+            <div className="p-3 border-b border-gray-200 text-sm flex justify-start">
+              <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                <span
+                  aria-hidden
+                  className={`absolute inset-0 bg-violet-400 font-white opacity-50 rounded-full nm_Container`}
+                ></span>
+                <span className="relative ">
+                  {status.split(" ")[0] ?? "N/A"}
+                </span>
+              </span>
             </div>
           </summary>
 
@@ -191,17 +194,13 @@ const AllDraftApplication = ({
 
             <div className="p-3 border-b border-gray-200 text-sm flex justify-start">
               <span className="font-semibold mr-2 text-gray-900">
-                Created date:{" "}
+                Submitted date:{" "}
               </span>
-              <p className="text-gray-900 break-words">
-                {createdDate ?? "N/A"}
-              </p>
+              <p className="text-gray-900 break-words">{submitDate ?? "N/A"}</p>
             </div>
           </div>
         </details>
       )}
     </>
   );
-};
-
-export default AllDraftApplication;
+}

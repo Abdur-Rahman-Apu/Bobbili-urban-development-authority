@@ -1,6 +1,5 @@
 import Lottie from "lottie-react";
 import React, { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
@@ -8,7 +7,7 @@ import ErrorAnimation from "../../../../assets/ServerError.json";
 import TableLayout from "../../../Components/TableLayout";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
-import ShowSubmittedApplication from "../../LtpDashboard/Submitted/ShowSubmittedApplication";
+import showSearchedApplication from "../SearchApplications/showSearchedApplication";
 
 const Inward = () => {
   const {
@@ -25,13 +24,6 @@ const Inward = () => {
   const navigate = useNavigate();
 
   const path = useLocation().pathname;
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
 
   // get all applications which are submitted already
   const { data, refetch, isLoading, isError, isSuccess } = useQuery(
@@ -64,34 +56,6 @@ const Inward = () => {
   }, [isError, data]);
 
   // TODO: owner name search pending
-
-  const onSubmit = (data) => {
-    const { search } = data;
-
-    fetchDataFromTheDb(
-      `http://localhost:5000/getSearchedApplication?search=${search}`
-    ).then((data) => {
-      console.log(data);
-      setAllData(data?.result);
-    });
-
-    // if (search?.includes("BUDA/2023")) {
-    //   //  search by application No
-    //   setAllData(
-    //     storeData?.filter(
-    //       (application) => application?.applicationNo === search
-    //     )
-    //   );
-    // } else {
-    //   setAllData(
-    //     storeData?.filter(
-    //       (application) =>
-    //         application?.applicantInfo?.applicantDetails[0]?.name?.toLowerCase() ===
-    //         search?.toLowerCase()
-    //     )
-    //   );
-    // }
-  };
 
   const tableHeader = [
     "Sl.no.",
@@ -128,12 +92,6 @@ const Inward = () => {
     });
   }, []);
 
-  const detectChange = (e) => {
-    if (!e.target.value.length) {
-      setAllData(storeData);
-    }
-  };
-
   if (loading) {
     return <Loading />;
   }
@@ -153,55 +111,13 @@ const Inward = () => {
         </div>
       ) : (
         <div>
-          {path.includes("searchApplication") && (
-            <form
-              className="max-w-lg mt-10 ml-6 mb-[-10px] px-3"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="search-box">
-                <button
-                  className="btn-search bg-normalViolet flex justify-center items-center"
-                  type="submit"
-                >
-                  <svg
-                    className="w-4 h-4 text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
-                </button>
-                <input
-                  type="text"
-                  // className="input-search"
-                  id="default-search"
-                  {...register("search")}
-                  onChange={detectChange}
-                  className="input-search font-roboto"
-                  placeholder="Application no. or owner name"
-                  required
-                />
-              </div>
-            </form>
-          )}
+          <TableLayout
+            tableData={tableData}
+            Component={showSearchedApplication}
+            tableComponentProps={tableComponentProps}
+          />
 
-          <>
-            <TableLayout
-              tableData={tableData}
-              Component={ShowSubmittedApplication}
-              tableComponentProps={tableComponentProps}
-            />
-
-            {(allData?.length === 0 || !allData) && <NoApplicationFound />}
-          </>
+          {(allData?.length === 0 || !allData) && <NoApplicationFound />}
         </div>
       )}
     </>
