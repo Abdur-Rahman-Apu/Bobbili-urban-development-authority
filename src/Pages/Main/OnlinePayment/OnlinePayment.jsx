@@ -112,7 +112,7 @@ const OnlinePayment = () => {
         />
       )}
 
-      {applicationData?.length > 0 && (
+      {applicationData?.length > 0 && !loading && !error && (
         <>
           {applicationData?.map((application) => (
             <OnlinePaymentDetails
