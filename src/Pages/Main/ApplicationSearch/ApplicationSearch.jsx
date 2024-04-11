@@ -96,7 +96,7 @@ const ApplicationSearch = () => {
         <ApplicationDetails applicationData={applicationData} />
       )}
 
-      {applicationData?.length > 0 && (
+      {applicationData?.length > 0 && !loading && !error && (
         <>
           {applicationData?.map((application) => (
             <ApplicationDetails

@@ -19,7 +19,11 @@ export default function ApplicationDetails({
   const titleClass = "basis-[50%] text-lg pl-3 font-semibold text-gray-900";
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div
+        className={`flex ${
+          totalApplications > 1 ? "justify-between" : "justify-end"
+        } items-center`}
+      >
         {totalApplications > 1 && (
           <p className="mt-7 mb-8 ml-3 font-bold text-lg text-black ">
             Application no :{" "}
