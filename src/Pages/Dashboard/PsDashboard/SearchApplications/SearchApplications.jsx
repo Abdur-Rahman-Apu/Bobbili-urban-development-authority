@@ -3,15 +3,21 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import TableLayout from "../../../Components/TableLayout";
+import useDebounce from "../../../CustomHook/useDebounce";
+import NetworkError from "../../../Shared/NetworkError";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
+import SearchApplicationLoading from "../../../Shared/SearchApplicationLoading";
 import showSearchedApplication from "./showSearchedApplication";
 
 function SearchApplications() {
   localStorage.setItem("page", JSON.stringify("searchApplicationByPs"));
   const navigate = useNavigate();
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
-    useContext(AuthContext);
-  const [filteredData, setFilteredData] = useState([]);
+  const {
+    userInfoFromLocalStorage,
+    showPageBasedOnApplicationType,
+    fetchDataFromTheDb,
+  } = useContext(AuthContext);
+  const [storeData, setStoreData] = useState([]);
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState({});
@@ -47,31 +53,65 @@ function SearchApplications() {
         console.log(data, "Search application");
         setLoading(false);
         setAllData(data?.result);
-        setFilteredData(data?.result);
-        setTableData((prev) => {
-          const newValue = {
-            tableHeader,
-            data: data?.result,
-          };
-          return { ...prev, ...newValue };
-        });
-        setTableComponentProps((prev) => {
-          const newValue = {
-            showPageBasedOnApplicationType,
-            navigate,
-          };
-          return { ...prev, ...newValue };
-        });
+        setStoreData(data?.result);
       })
       .catch((err) => {
         setLoading(false);
       });
   }, []);
 
+  useEffect(() => {
+    if (allData?.length) {
+      setTableData((prev) => {
+        const newValue = {
+          tableHeader,
+          data: allData,
+        };
+        return { ...prev, ...newValue };
+      });
+
+      setTableComponentProps((prev) => {
+        const newValue = {
+          showPageBasedOnApplicationType,
+          navigate,
+        };
+        return { ...prev, ...newValue };
+      });
+    }
+  }, [allData]);
+  const doSearch = useDebounce((searchValue, searchType) => {
+    setLoading(true);
+    setError("");
+
+    const query = JSON.stringify({
+      searchValue,
+      gramaPanchayat: userInfoFromLocalStorage().gramaPanchayat,
+    });
+
+    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
+      .then((data) => {
+        setLoading(false);
+        console.log(data, "After search");
+        setAllData(data?.result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError("Network Error");
+      });
+  }, 2000);
+
   const onSubmit = (data) => {
     const { search } = data;
 
     console.log(search, "Search");
+
+    if (search?.trim()?.length) {
+      search?.includes("BUDA")
+        ? doSearch(search, "getSearchedApplicationForPsByAppNo")
+        : doSearch(search, "getSearchedApplicationForPsByOwnerName");
+    } else {
+      setAllData(storeData);
+    }
 
     // fetchDataFromTheDb(
     //   `http://localhost:5000/getSearchedApplication?search=${search}`
@@ -142,12 +182,16 @@ function SearchApplications() {
           />
         </div>
       </form>
-      <TableLayout
-        tableData={tableData}
-        Component={showSearchedApplication}
-        tableComponentProps={tableComponentProps}
-      />
+      {loading && <SearchApplicationLoading />}
 
+      {!loading && error.length === 0 && (
+        <TableLayout
+          tableData={tableData}
+          Component={showSearchedApplication}
+          tableComponentProps={tableComponentProps}
+        />
+      )}
+      {error && <NetworkError errMsg={error} />}
       {(allData?.length === 0 || !allData) && <NoApplicationFound />}
     </>
   );
