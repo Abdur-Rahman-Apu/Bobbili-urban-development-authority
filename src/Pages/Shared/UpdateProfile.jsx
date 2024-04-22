@@ -20,7 +20,9 @@ const UpdateProfile = () => {
   console.log(data, "Data");
 
   const [loading, setLoading] = useState(false);
-  const [signId, setSignId] = useState(data?.signId ? data?.signId : null);
+  const [signId, setSignId] = useState(
+    data?.signId?.length ? data?.signId : null
+  );
   const [userSelectedImg, setUserSelectedImg] = useState(null);
 
   const { register, reset, handleSubmit } = useForm({
@@ -83,6 +85,7 @@ const UpdateProfile = () => {
     }
 
     if (isPsSignUploadSuccess) {
+      console.log(formValue, "form value");
       fetch(
         `http://localhost:5000/updateUserInfo/${
           userInfoFromLocalStorage()._id
@@ -182,71 +185,99 @@ const UpdateProfile = () => {
             </h3>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 px-2 nm_Container pb-3">
-            <UpdateProfileInput
-              id="department"
-              name="department"
-              label="Department"
-              placeholder="Department"
-              type="text"
-              register={register}
-            />
-            <UpdateProfileInput
-              id="designation"
-              name="designation"
-              label="Designation"
-              placeholder="Designation"
-              type="text"
-              register={register}
-            />
-            <UpdateProfileInput
-              id="registrationNo"
-              name="registrationNo"
-              label="Registration No"
-              placeholder="Registration No"
-              type="text"
-              register={register}
-            />
-            <UpdateProfileInput
-              id="qualification"
-              name="qualification"
-              label="Qualification"
-              placeholder="Qualification"
-              type="text"
-              register={register}
-            />
-            {role.toLowerCase() === "ps" && (
-              <div className="flex flex-col gap-2">
-                <div className="mt-6 ml-3 flex flex-col">
-                  <label
-                    htmlFor="signature"
-                    className="block mb-1 font-semibold text-gray-600"
-                  >
-                    Signature
-                  </label>
-                  <input
-                    type="file"
-                    name="signature"
-                    accept="image/*"
-                    onChange={(e) => setUserSelectedImg(e.target.files[0])}
-                    className="file-input file-input-bordered w-full max-w-xs border rounded-lg text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
-                  />
-
+          {role?.toLowerCase() === "ps" ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 px-2 nm_Container pb-3">
+              <UpdateProfileInput
+                id="department"
+                name="department"
+                label="Department"
+                placeholder="Department"
+                type="text"
+                register={register}
+              />
+              <UpdateProfileInput
+                id="designation"
+                name="designation"
+                label="Designation"
+                placeholder="Designation"
+                type="text"
+                register={register}
+              />
+              <UpdateProfileInput
+                id="registrationNo"
+                name="registrationNo"
+                label="Registration No"
+                placeholder="Registration No"
+                type="text"
+                register={register}
+              />
+              <UpdateProfileInput
+                id="qualification"
+                name="qualification"
+                label="Qualification"
+                placeholder="Qualification"
+                type="text"
+                register={register}
+              />
+              {role.toLowerCase() === "ps" && (
+                <div className="flex gap-6 col-span-4">
+                  <div className="mt-6 ml-3">
+                    <label
+                      htmlFor="signature"
+                      className="block mb-1 font-semibold text-gray-600"
+                    >
+                      Signature
+                    </label>
+                    <input
+                      type="file"
+                      name="signature"
+                      accept="image/*"
+                      onChange={(e) => setUserSelectedImg(e.target.files[0])}
+                      className="file-input file-input-bordered w-full max-w-xs border rounded-lg text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+                    />
+                  </div>
                   {userSelectedImg ? (
                     <img
                       src={URL.createObjectURL(userSelectedImg)}
-                      className="mt-5 w-96 object-scale-down"
+                      className="mt-5 w-44 object-scale-down"
                     />
                   ) : (
                     <img
                       src={`https://drive.google.com/thumbnail?id=${signId}`}
-                      className="mt-5 w-96 object-fit"
+                      className="mt-5 w-44 object-fit"
                     />
                   )}
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 px-2 nm_Container pb-3">
+              <UpdateProfileInput
+                id="licenseType"
+                name="licenseType"
+                label="License Type"
+                placeholder="License Type"
+                type="text"
+                register={register}
+              />
+              <UpdateProfileInput
+                id="licenseNo"
+                name="licenseNo"
+                label="License No"
+                placeholder="License No"
+                type="text"
+                register={register}
+              />
+              <UpdateProfileInput
+                id="validity"
+                name="validity"
+                label="Validity"
+                placeholder="Validity"
+                type="text"
+                register={register}
+              />
+            </div>
+          )}
         </motion.div>
 
         {/* Contact Information  */}
@@ -270,6 +301,14 @@ const UpdateProfile = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 px-5 nm_Container pb-3">
+            <UpdateProfileInput
+              id="name"
+              name="name"
+              label="Name"
+              placeholder="Name"
+              type="text"
+              register={register}
+            />
             <UpdateProfileInput
               id="contactEmail"
               name="contactEmail"
@@ -336,15 +375,6 @@ const UpdateProfile = () => {
                 onInput={handleInputPhone}
               />
             </motion.div>
-
-            <UpdateProfileInput
-              id="fax"
-              name="fax"
-              label="Fax"
-              placeholder="Fax"
-              type="text"
-              register={register}
-            />
           </div>
         </motion.div>
 

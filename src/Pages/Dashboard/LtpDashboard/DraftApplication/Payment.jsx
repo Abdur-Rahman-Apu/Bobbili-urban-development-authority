@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { FaCcAmazonPay, FaMoneyCheckAlt } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
-import { useNavigate, useOutletContext } from "react-router";
+import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
@@ -15,20 +15,25 @@ import Modal from "./Modal";
 import SaveData from "./SaveData";
 
 const Payment = () => {
-  const [viewChallan, setViewChallan] = useState(false);
-  const [Newly_Developed_Condition, setNewlyDevelopedCondition] =
-    useState(false);
-  const [RLP_IPLP_Condition, setRLP_IPLP_Condition] = useState(false);
-  const stepperData = useOutletContext();
-  const navigate = useNavigate();
   const {
     getApplicationData,
     confirmAlert,
     alertToTransferDataIntoDepartment,
     sendUserDataIntoDB,
     userInfoFromLocalStorage,
+    getUserData,
     stepCompleted,
   } = useContext(AuthContext);
+
+  const [ltpInfo, setLtpInfo] = useState([]);
+  const [viewChallan, setViewChallan] = useState(false);
+  const [Newly_Developed_Condition, setNewlyDevelopedCondition] =
+    useState(false);
+  const [RLP_IPLP_Condition, setRLP_IPLP_Condition] = useState(false);
+  const stepperData = useOutletContext();
+  const pathname = useLocation().pathname;
+
+  const navigate = useNavigate();
   const [isStepperVisible, currentStep, steps, handleStepClick] = stepperData;
   const [applicationData, setApplicationData] = useState({});
   const [condition, setCondition] = useState("");
@@ -55,6 +60,17 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
+    fetch(
+      `http://localhost:5000/userInformation?id=${
+        userInfoFromLocalStorage()?.userId
+      }`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result, "result");
+        setLtpInfo(result);
+      });
+
     getApplicationData(applicationNo, cameFrom).then((appData) => {
       console.log(appData, "APP DATA");
       setApplicationData(appData);
@@ -649,17 +665,45 @@ const Payment = () => {
   const confirmMessageForPayment = () => {
     Swal.fire({
       title: "Do you want to pay?",
-      // showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: "Yes",
-      // denyButtonText: `Don't save`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        fetch(`http://localhost:5001/initiateJuspayPayment`)
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
+        // make a order
+
+        const data = {
+          amount: 20,
+          customer_email: ltpInfo?.email,
+          customer_phone: ltpInfo?.mobileNo,
+          first_name: ltpInfo?.name,
+          description: `Pay UDA fees`,
+          applicationNo: JSON.parse(localStorage.getItem("CurrentAppNo")),
+          userId: userInfoFromLocalStorage()._id,
+        };
+        fetch("http://localhost:5000/initiateJuspayPayment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP status code: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data, "DATA");
+            if (data.status === "NEW") {
+              const url = data.payment_links.web;
+              window.location.href = url;
+            } else {
+              toast.error(data.message);
+            }
+          })
+          .catch((error) => {
+            toast.error(error.message);
           });
       }
     });

@@ -14,6 +14,7 @@ import DraftApplication from "../Pages/Dashboard/LtpDashboard/DraftApplication/D
 import Drawing from "../Pages/Dashboard/LtpDashboard/DraftApplication/Drawing";
 import NewApplication from "../Pages/Dashboard/LtpDashboard/DraftApplication/NewApplication";
 import Payment from "../Pages/Dashboard/LtpDashboard/DraftApplication/Payment";
+import PaymentStatus from "../Pages/Dashboard/LtpDashboard/DraftApplication/Payment/PaymentStatus";
 import RejectedApplications from "../Pages/Dashboard/LtpDashboard/RejectedApplication/RejectedApplications";
 import ResubmitApplication from "../Pages/Dashboard/LtpDashboard/Resubmit/ResubmitApplication";
 import Shortfall from "../Pages/Dashboard/LtpDashboard/Shortfall/Shortfall";
@@ -200,6 +201,20 @@ const router = createBrowserRouter([
                 <Payment />
               </BothUserRoute>
             ),
+          },
+          {
+            path: "/dashboard/draftApplication/paymentStatus/:orderId",
+            element: (
+              <LtpRoute>
+                {" "}
+                <PaymentStatus />{" "}
+              </LtpRoute>
+            ),
+            loader: async ({ request, params }) => {
+              return fetch(
+                `http://localhost:5000/paymentStatus?orderId=${params.orderId}`
+              );
+            },
           },
           {
             path: "/dashboard/draftApplication/siteInspection",
