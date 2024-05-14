@@ -64,6 +64,18 @@ const router = createBrowserRouter([
             element: <OnlinePayment />,
           },
           {
+            path: "/onlinePayment/paymentStatus/:orderId",
+            element: <PaymentStatus />,
+            loader: async ({ request, params }) => {
+              // return fetch(
+              //   `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
+              // );
+              return fetch(
+                `http://localhost:5000/paymentStatus?orderId=${params.orderId}`
+              );
+            },
+          },
+          {
             path: "/listOfLTP",
             element: <ListOfLTP />,
           },
@@ -211,8 +223,11 @@ const router = createBrowserRouter([
               </LtpRoute>
             ),
             loader: async ({ request, params }) => {
+              // return fetch(
+              //   `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
+              // );
               return fetch(
-                `http://localhost:5000/paymentStatus?orderId=${params.orderId}`
+                `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
               );
             },
           },

@@ -37,7 +37,7 @@ export default function DrawingFileShowed({ modalStates, searchAppData }) {
   const getPsSignedFiles = async (applicationData) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
+        `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
       );
       console.log(response, "response");
       const blob = await response.blob();

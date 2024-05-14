@@ -513,7 +513,9 @@ input {
   font-size: 16px;
   background: linear-gradient(to bottom, #a29bfe 0%, #6c5ce7 100%);
   color: white;
-  padding: 0.6rem 1.2rem;
+  /* padding: 0.6rem 1.2rem; */
+  width: 127px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -521,19 +523,20 @@ input {
   border-radius: 50px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 .pay-btn:hover {
-  transform: translateY(-3px);
+  /* transform: translateY(-3px); */
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
-  padding: 0em;
+  /* padding: 0em; */
   background: linear-gradient(to bottom, #a29bfe 0%, #6c5ce7 100%);
   cursor: pointer;
 }
 
 .pay-btn-container:hover .pay-btn {
   transform: scale(0.95);
-  padding: 0;
+  /* padding: 0; */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -547,7 +550,6 @@ input {
   scale: 0;
   font-size: 0%;
   opacity: 0;
-  /* transition: all 0.5s; */
 }
 
 .pay-btn svg {
@@ -568,17 +570,33 @@ input {
   transition: all 0.3s;
 }
 
-.pay-btn-container:hover .svg-wrapper {
+/* .pay-btn-container:hover .svg-wrapper {
   background: linear-gradient(to bottom, #a29bfe 0%, #6c5ce7 100%);
   width: 54px;
   height: 54px;
-}
+} */
 
 .pay-btn-container:hover svg {
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   margin-right: 5px;
   transform: rotate(45deg);
+  animation-name: pay;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pay {
+  30% {
+    transform: translateX(20px);
+  }
+  60% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* sent to department button  */
@@ -1344,7 +1362,7 @@ ol > li:before {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #8073EF;
+  background: #8073ef;
   border-radius: 5px;
 }
 
@@ -1465,5 +1483,3 @@ ol > li:before {
   border-bottom: 4px solid #751fdd;
   border-bottom: 4px solid #781bc5;
 }
-
-

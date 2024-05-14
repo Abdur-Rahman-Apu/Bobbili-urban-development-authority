@@ -13,7 +13,7 @@ const useGetPageWiseApplication = (searchApplicationName) => {
         searchApplicationName,
       };
       const response = await fetch(
-        `http://localhost:5000/allPageWiseApplications?data=${JSON.stringify(
+        `https://residential-building.onrender.com/allPageWiseApplications?data=${JSON.stringify(
           query
         )}`
       );

@@ -38,7 +38,7 @@ const DrawingModal = () => {
         setDataFromDB(applicationData);
         try {
           const response = await fetch(
-            `http://localhost:5000/pdf?fileId=${applicationData?.drawing?.Drawing}`
+            `https://residential-building.onrender.com/pdf?fileId=${applicationData?.drawing?.Drawing}`
           );
           console.log(response, "response");
           const blob = await response.blob();
@@ -71,7 +71,7 @@ const DrawingModal = () => {
       if (data?.userInfo) {
         setPsData(data?.userInfo);
         fetch(
-          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
         )
           .then((res) => {
             console.log(res);

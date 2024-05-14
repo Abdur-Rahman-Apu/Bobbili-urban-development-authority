@@ -28,7 +28,7 @@
 // export async function getBase64Url(url) {
 //   try {
 //     const response = await fetch(
-//       `http://localhost:5000/get-image?url=${encodeURIComponent(url)}`
+//       `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(url)}`
 //     );
 //     if (!response.ok) {
 //       throw new Error("Failed to fetch image");
@@ -63,7 +63,9 @@ async function parseURI(d) {
 
 export async function getDataBlob(url) {
   const res = await fetch(
-    `http://localhost:5000/get-image?url=${encodeURIComponent(url)}`
+    `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(
+      url
+    )}`
   );
   //   var res = await fetch(url);
   var blob = await res.blob();
@@ -75,7 +77,9 @@ export async function getDataBlob(url) {
 
 export async function URLtoFile(url) {
   const res = await fetch(
-    `http://localhost:5000/get-image?url=${encodeURIComponent(url)}`
+    `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(
+      url
+    )}`
   );
   const blob = await res.blob();
   // Gets URL data and read to blob

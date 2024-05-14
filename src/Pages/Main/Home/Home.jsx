@@ -91,13 +91,16 @@ const Home = () => {
       userId: resetData?.id,
       otp,
     };
-    fetch(`http://localhost:5000/storeOtpForForgotPassword`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
+    fetch(
+      `https://residential-building.onrender.com/storeOtpForForgotPassword`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    )
       .then((res) => res.json())
       .then((result) => {
         console.log(result, "result");
@@ -123,7 +126,7 @@ const Home = () => {
       password: resetPassFormData?.password,
     };
     fetch(
-      `http://localhost:5000/otpMatchForForgotPassword?data=${JSON.stringify(
+      `https://residential-building.onrender.com/otpMatchForForgotPassword?data=${JSON.stringify(
         data
       )}`
     )

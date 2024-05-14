@@ -29,7 +29,10 @@ const OnlinePayment = () => {
       searchValue,
       page: "onlinePayment",
     });
-    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
+    fetchDataFromTheDb(
+      `https://residential-building.onrender.com/${searchType}?search=${query}`
+      // `http://localhost:5000/${searchType}?search=${query}`
+    )
       .then((data) => {
         setLoading(false);
         console.log(data);
@@ -48,9 +51,11 @@ const OnlinePayment = () => {
 
     setLoading(true);
     if (value?.length) {
-      value?.includes("BUDA")
-        ? doSearch(value, "getSearchedApplicationByAppNo")
-        : doSearch(value, "getSearchedApplicationByOwnerName");
+      doSearch(value, "getSearchedApplicationByAppNo");
+
+      // value?.includes("BUDA")
+      //   ? doSearch(value, "getSearchedApplicationByAppNo")
+      //   : doSearch(value, "getSearchedApplicationByOwnerName");
     } else {
       setApplicationData([]);
       setLoading(false);

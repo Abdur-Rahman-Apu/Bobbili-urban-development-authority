@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
 
   // update user info
   const updateUserInfoInLocalStorage = (id) => {
-    fetch(`http://localhost:5000/getUser?id=${id}`)
+    fetch(`https://residential-building.onrender.com/getUser?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status) {
@@ -52,7 +52,9 @@ const AuthProvider = ({ children }) => {
   const getUserData = async (id) => {
     console.log(id, "AUTH ID");
 
-    const response = await fetch(`http://localhost:5000/getUser?id=${id}`);
+    const response = await fetch(
+      `https://residential-building.onrender.com/getUser?id=${id}`
+    );
     const data = await response.json();
     console.log(data, "raian2");
     return data;
@@ -64,7 +66,7 @@ const AuthProvider = ({ children }) => {
 
     const data = { userId: userInfoFromLocalStorage()._id, applicationNo };
 
-    const url = `http://localhost:5000/deleteApplication?data=${JSON.stringify(
+    const url = `https://residential-building.onrender.com/deleteApplication?data=${JSON.stringify(
       data
     )}`;
     Swal.fire({
@@ -130,10 +132,10 @@ const AuthProvider = ({ children }) => {
     });
 
     role === "LTP" &&
-      (url = `http://localhost:5000/updateDraftApplicationData?filterData=${filterDataForLtp}`);
+      (url = `https://residential-building.onrender.com/updateDraftApplicationData?filterData=${filterDataForLtp}`);
 
     role === "PS" &&
-      (url = `http://localhost:5000/recommendDataOfPs?appNo=${applicationNo}`);
+      (url = `https://residential-building.onrender.com/recommendDataOfPs?appNo=${applicationNo}`);
 
     // console.log(url, "url here");
 
@@ -228,7 +230,7 @@ const AuthProvider = ({ children }) => {
       });
 
       const response = await fetch(
-        `http://localhost:5000/getApplicationData?data=${query}`
+        `https://residential-building.onrender.com/getApplicationData?data=${query}`
       );
 
       return await response.json();
@@ -247,7 +249,7 @@ const AuthProvider = ({ children }) => {
       console.log(query, "query");
 
       const response = await fetch(
-        `http://localhost:5000/getSubmitDataOfPs?appNo=${query}`
+        `https://residential-building.onrender.com/getSubmitDataOfPs?appNo=${query}`
       );
 
       return await response.json();
@@ -260,7 +262,7 @@ const AuthProvider = ({ children }) => {
   const getAllDraftApplicationData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/allDraftApplicationData`
+        `https://residential-building.onrender.com/allDraftApplicationData`
       );
 
       return await response.json();
@@ -274,7 +276,7 @@ const AuthProvider = ({ children }) => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
     console.log(loggedUser, "Logged user");
     fetch(
-      `http://localhost:5000/reverseLoggedInFlag?userId=${JSON.stringify(
+      `https://residential-building.onrender.com/reverseLoggedInFlag?userId=${JSON.stringify(
         loggedUser._id
       )}`,
       {
@@ -375,7 +377,9 @@ const AuthProvider = ({ children }) => {
         appNo: applicationNo,
       });
 
-      fetch(`http://localhost:5000/getApplicationData?data=${searchData}`)
+      fetch(
+        `https://residential-building.onrender.com/getApplicationData?data=${searchData}`
+      )
         .then((res) => res.json())
         .then((data) => {
           const prevState = data?.prevSavedState;
@@ -394,7 +398,7 @@ const AuthProvider = ({ children }) => {
       //     appNo: applicationNo,
       //   });
       //   const data = await fetchDataFromTheDb(
-      //     `http://localhost:5000/getApplicationData?data=${searchData}`
+      //     `https://residential-building.onrender.com/getApplicationData?data=${searchData}`
       //   );
       // })();
 
@@ -428,6 +432,7 @@ const AuthProvider = ({ children }) => {
         path === "/dashboard/draftApplication/documents" ||
         path === "/dashboard/draftApplication/drawing" ||
         path === "/dashboard/draftApplication/payment" ||
+        path.includes("/dashboard/draftApplication/paymentStatus") ||
         (role === "PS" &&
           path === "/dashboard/draftApplication/siteInspection")) &&
       page === cameFrom;

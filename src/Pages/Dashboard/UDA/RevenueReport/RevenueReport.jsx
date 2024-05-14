@@ -55,7 +55,7 @@ const RevenueReport = () => {
     (async function () {
       try {
         const applicationData = await fetchDataFromTheDb(
-          "http://localhost:5000/totalApplications"
+          "https://residential-building.onrender.com/totalApplications"
         );
         console.log(applicationData, "AD");
         if (Object.keys(applicationData)?.length) {

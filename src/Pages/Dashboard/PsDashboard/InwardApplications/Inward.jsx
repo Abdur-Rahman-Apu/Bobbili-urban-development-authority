@@ -30,7 +30,7 @@ const Inward = () => {
     ["allInwardApplications"],
     async () => {
       const response = await fetch(
-        `http://localhost:5000/submitApplications?userId=${
+        `https://residential-building.onrender.com/submitApplications?userId=${
           userInfoFromLocalStorage()?._id
         }`
       );

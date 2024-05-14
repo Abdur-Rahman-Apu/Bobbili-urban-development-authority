@@ -44,7 +44,7 @@ function SearchApplications() {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `http://localhost:5000/getPsApplications?gramaPanchayat=${JSON.stringify(
+      `https://residential-building.onrender.com/getPsApplications?gramaPanchayat=${JSON.stringify(
         userInfoFromLocalStorage()?.gramaPanchayat
       )}`
     )
@@ -88,7 +88,9 @@ function SearchApplications() {
       gramaPanchayat: userInfoFromLocalStorage().gramaPanchayat,
     });
 
-    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
+    fetchDataFromTheDb(
+      `https://residential-building.onrender.com/${searchType}?search=${query}`
+    )
       .then((data) => {
         setLoading(false);
         console.log(data, "After search");
@@ -114,7 +116,7 @@ function SearchApplications() {
     }
 
     // fetchDataFromTheDb(
-    //   `http://localhost:5000/getSearchedApplication?search=${search}`
+    //   `https://residential-building.onrender.com/getSearchedApplication?search=${search}`
     // ).then((data) => {
     //   console.log(data);
     //   setAllData(data?.result);

@@ -92,7 +92,7 @@ const MessagePage = ({ props }) => {
           setTimeout(true);
           // clearInterval(countDownInterval);
           // axios.patch(
-          //   `http://localhost:5000/messageRequest?update=${JSON.stringify({
+          //   `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify({
           //     id: userInfo.uniqueId,
           //     senderId: data.senderId,
           //     action: "sendId",
@@ -173,10 +173,12 @@ const MessagePage = ({ props }) => {
       socket.off("check-accept-message");
       console.log("Counter inside");
       fetch(
-        `http://localhost:5000/messageRequest?update=${JSON.stringify({
-          id: userInfo.uniqueId,
-          action: "timeUp",
-        })}`,
+        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
+          {
+            id: userInfo.uniqueId,
+            action: "timeUp",
+          }
+        )}`,
         {
           method: "PATCH",
         }
@@ -199,10 +201,12 @@ const MessagePage = ({ props }) => {
     setLoading(true);
     try {
       const { data } = await axios.patch(
-        `http://localhost:5000/messageRequest?update=${JSON.stringify({
-          id: userInfo.uniqueId,
-          action: "requestAgain",
-        })}`
+        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
+          {
+            id: userInfo.uniqueId,
+            action: "requestAgain",
+          }
+        )}`
       );
 
       console.log(data, "UPDATE REQ");
@@ -237,11 +241,13 @@ const MessagePage = ({ props }) => {
     });
     setMessages((prevMessages) => [...prevMessages, { ...messageData }]);
     await axios.patch(
-      `http://localhost:5000/messageRequest?update=${JSON.stringify({
-        id: userInfo.uniqueId,
-        action: "text",
-        message: { userId: userInfo?.name, message: messageData?.message },
-      })}`
+      `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
+        {
+          id: userInfo.uniqueId,
+          action: "text",
+          message: { userId: userInfo?.name, message: messageData?.message },
+        }
+      )}`
     );
 
     resetField("message");
@@ -262,11 +268,13 @@ const MessagePage = ({ props }) => {
 
       try {
         const { data } = await axios.patch(
-          `http://localhost:5000/messageRequest?update=${JSON.stringify({
-            id: userInfo.uniqueId,
-            message: editorContent,
-            action: "leaveMessage",
-          })}`
+          `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
+            {
+              id: userInfo.uniqueId,
+              message: editorContent,
+              action: "leaveMessage",
+            }
+          )}`
         );
 
         if (data?.acknowledged) {

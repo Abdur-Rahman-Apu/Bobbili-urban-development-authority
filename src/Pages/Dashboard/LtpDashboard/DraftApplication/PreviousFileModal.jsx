@@ -31,7 +31,7 @@ const PreviousFileModal = ({ FileModal }) => {
 
     const searchData = { appNo: formData.value, page: "approved" };
     fetch(
-      `http://localhost:5000/getApplicationData?data=${JSON.stringify(
+      `https://residential-building.onrender.com/getApplicationData?data=${JSON.stringify(
         searchData
       )}`
     )
@@ -101,7 +101,7 @@ const PreviousFileModal = ({ FileModal }) => {
         };
 
         const result = await sendUserDataIntoDB(
-          `http://localhost:5000/updateDraftApplicationData?filterData=${JSON.stringify(
+          `https://residential-building.onrender.com/updateDraftApplicationData?filterData=${JSON.stringify(
             filterDataForLtp
           )}`,
           "PATCH",

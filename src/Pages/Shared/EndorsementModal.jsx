@@ -86,7 +86,7 @@ const EndorsementModal = () => {
       }
 
       const findShortfallSerial = await fetchDataFromTheDb(
-        "http://localhost:5000/getShortfallSerial"
+        "https://residential-building.onrender.com/getShortfallSerial"
       );
 
       if (findShortfallSerial) {
@@ -138,14 +138,14 @@ const EndorsementModal = () => {
   useEffect(() => {
     if (dataFromDb && Object.keys(dataFromDb)?.length) {
       fetchDataFromTheDb(
-        `http://localhost:5000/userInformation?id=${
+        `https://residential-building.onrender.com/userInformation?id=${
           userInfoFromLocalStorage().userId
         }`
       ).then((result) => {
         console.log(result, "PS");
         setPsInfo(result);
         fetch(
-          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${result?.signId}`
+          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${result?.signId}`
         )
           .then((res) => {
             console.log(res);

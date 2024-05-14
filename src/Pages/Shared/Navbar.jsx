@@ -53,7 +53,9 @@ const Navbar = () => {
 
   const onSubmit = (formValue) => {
     fetch(
-      `http://localhost:5000/updateUserInfo/${userInfoFromLocalStorage()._id}`,
+      `https://residential-building.onrender.com/updateUserInfo/${
+        userInfoFromLocalStorage()._id
+      }`,
       {
         method: "PATCH",
         headers: { "content-type": "application/json" },

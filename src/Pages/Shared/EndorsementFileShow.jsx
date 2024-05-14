@@ -41,7 +41,7 @@ export default function EndorsementFileShowed({ modalEndorsement }) {
       setAllInfo(applicationData);
       try {
         const response = await fetch(
-          `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.endorsementFile}`
+          `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.endorsementFile}`
         );
         console.log(response, "response");
         const blob = await response.blob();

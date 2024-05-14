@@ -38,7 +38,7 @@ const ProceedingModal = () => {
       if (data?.userInfo) {
         setPsData(data?.userInfo);
         fetch(
-          `http://localhost:5000/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
         )
           .then((res) => {
             console.log(res);

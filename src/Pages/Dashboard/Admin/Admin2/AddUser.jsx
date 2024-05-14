@@ -39,7 +39,7 @@ const AddUser = () => {
   useEffect(() => {
     (async function () {
       const locationData = await fetchDataFromTheDb(
-        "http://localhost:5000/getDistricts"
+        "https://residential-building.onrender.com/getDistricts"
       );
       console.log(locationData, "LOC");
       const extractsDataFromDB = locationData[0]?.district;
@@ -134,7 +134,7 @@ const AddUser = () => {
 
               try {
                 const response = await axios.post(
-                  "http://localhost:5000/upload?page=sign",
+                  "https://residential-building.onrender.com/upload?page=sign",
                   formData,
                   {
                     headers: {
@@ -174,7 +174,7 @@ const AddUser = () => {
 
       // if (userInfo) {
       //   // store users data in the database
-      //   fetch("http://localhost:5000/addUser", {
+      //   fetch("https://residential-building.onrender.com/addUser", {
       //     method: "POST",
       //     headers: {
       //       "Content-type": "application/json",

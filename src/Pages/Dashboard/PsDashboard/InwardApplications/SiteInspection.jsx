@@ -92,7 +92,7 @@ const SiteInspection = () => {
       console.log(query, "query");
 
       const response = await fetch(
-        `http://localhost:5000/getApplicationData?data=${query}`
+        `https://residential-building.onrender.com/getApplicationData?data=${query}`
       );
 
       return await response.json();
@@ -194,7 +194,7 @@ const SiteInspection = () => {
           console.log(...formData, "FORM DATA");
           try {
             const response = await axios.post(
-              "http://localhost:5000/upload?page=siteInspection",
+              "https://residential-building.onrender.com/upload?page=siteInspection",
               formData,
               {
                 headers: {
@@ -331,7 +331,7 @@ const SiteInspection = () => {
 
         console.log(siteInspection, "SITE INSPECTION");
 
-        // fetch(`http://localhost:5000/recommendDataOfPs?appNo=${applicationNo}`, {
+        // fetch(`https://residential-building.onrender.com/recommendDataOfPs?appNo=${applicationNo}`, {
         //     method: "PATCH",
         //     headers: {
         //         "content-type": "application/json",
@@ -384,7 +384,7 @@ const SiteInspection = () => {
     //       formData.append("file", submitSignedFiles[file]);
     //       try {
     //         const response = await axios.post(
-    //           "http://localhost:5000/upload?page=approvedDocSignedPS",
+    //           "https://residential-building.onrender.com/upload?page=approvedDocSignedPS",
     //           formData,
     //           {
     //             headers: {
@@ -427,7 +427,7 @@ const SiteInspection = () => {
     //     trackPSAction,
     //     psSignedFiles: psSignedPdf,
     //   };
-    //   url = `http://localhost:5000/decisionOfPs?data=${JSON.stringify(data)}`;
+    //   url = `https://residential-building.onrender.com/decisionOfPs?data=${JSON.stringify(data)}`;
     //   console.log(url);
 
     //   const config = {
@@ -467,7 +467,7 @@ const SiteInspection = () => {
       trackPSAction,
       psSignedFiles: storage,
     };
-    const url = `http://localhost:5000/decisionOfPs?data=${JSON.stringify(
+    const url = `https://residential-building.onrender.com/decisionOfPs?data=${JSON.stringify(
       data
     )}`;
     console.log(url);
@@ -619,7 +619,7 @@ const SiteInspection = () => {
       psId: userInfoFromLocalStorage()._id,
       otp,
     };
-    fetch(`http://localhost:5000/storeOtpForPsSign`, {
+    fetch(`https://residential-building.onrender.com/storeOtpForPsSign`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -661,7 +661,7 @@ const SiteInspection = () => {
     //   fileId: data?.drawing?.Drawing,
     // });
 
-    // fetch(`http://localhost:5000/downloadFile?data=${fileInfo}`)
+    // fetch(`https://residential-building.onrender.com/downloadFile?data=${fileInfo}`)
     //   .then((res) => {
     //     if (res.ok) {
     //       // If the response status is OK, it means the file download is successful
@@ -803,7 +803,9 @@ const SiteInspection = () => {
       otp,
     };
     fetch(
-      `http://localhost:5000/otpMatchForPsSign?data=${JSON.stringify(data)}`
+      `https://residential-building.onrender.com/otpMatchForPsSign?data=${JSON.stringify(
+        data
+      )}`
     )
       .then((res) => res.json())
       .then(async (result) => {
@@ -822,7 +824,7 @@ const SiteInspection = () => {
                 format: "letter",
                 orientation: "portrait",
               },
-              "http://localhost:5000/upload?page=approvedDocSignedPS",
+              "https://residential-building.onrender.com/upload?page=approvedDocSignedPS",
               storage,
               "proceedingFile"
             );
@@ -833,7 +835,7 @@ const SiteInspection = () => {
               const isDrawingFileUploaded = await convertToPdf(
                 "drawingModal",
                 { unit: "px", format: [1200, 900], orientation: "landscape" },
-                "http://localhost:5000/upload?page=approvedDocSignedPS",
+                "https://residential-building.onrender.com/upload?page=approvedDocSignedPS",
                 storage,
                 "drawingFile"
               );
@@ -860,7 +862,7 @@ const SiteInspection = () => {
                 format: "letter",
                 orientation: "portrait",
               },
-              "http://localhost:5000/upload?page=shortfallDocSignedPS",
+              "https://residential-building.onrender.com/upload?page=shortfallDocSignedPS",
               storage,
               "endorsementFile"
             );

@@ -28,10 +28,13 @@ const AllUsers = () => {
   const { data, refetch, isLoading, isSuccess } = useQuery({
     queryKey: ["allUser"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:5000/allUser", {
-        method: "GET",
-        headers: { authorization: getToken },
-      });
+      const response = await fetch(
+        "https://residential-building.onrender.com/allUser",
+        {
+          method: "GET",
+          headers: { authorization: getToken },
+        }
+      );
       const data = await response.json();
       return data;
     },
@@ -79,7 +82,7 @@ const AllUsers = () => {
   const deleteUser = (id) => {
     console.log(id);
 
-    fetch(`http://localhost:5000/deleteUser/${id}`, {
+    fetch(`https://residential-building.onrender.com/deleteUser/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -123,7 +126,7 @@ const AllUsers = () => {
     console.log(data);
 
     const updateDataIntoDB = (id, data) => {
-      fetch(`http://localhost:5000/updateUserInfo/${id}`, {
+      fetch(`https://residential-building.onrender.com/updateUserInfo/${id}`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",

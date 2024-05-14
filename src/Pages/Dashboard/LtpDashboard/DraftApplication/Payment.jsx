@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaCcAmazonPay, FaMoneyCheckAlt } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
+import { IoReceipt } from "react-icons/io5";
 import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
 import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
@@ -61,7 +62,7 @@ const Payment = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:5000/userInformation?id=${
+      `https://residential-building.onrender.com/userInformation?id=${
         userInfoFromLocalStorage()?.userId
       }`
     )
@@ -518,7 +519,7 @@ const Payment = () => {
         console.log(...formData);
         try {
           const response = await axios.post(
-            "http://localhost:5000/upload?page=payment",
+            "https://residential-building.onrender.com/upload?page=payment",
             formData,
             {
               headers: {
@@ -671,40 +672,51 @@ const Payment = () => {
       if (result.isConfirmed) {
         // make a order
 
-        const data = {
-          amount: 20,
-          customer_email: ltpInfo?.email,
-          customer_phone: ltpInfo?.mobileNo,
-          first_name: ltpInfo?.name,
-          description: `Pay UDA fees`,
-          applicationNo: JSON.parse(localStorage.getItem("CurrentAppNo")),
-          userId: userInfoFromLocalStorage()._id,
-        };
-        fetch("http://localhost:5000/initiateJuspayPayment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP status code: ${response.status}`);
+        const amount = document.getElementById("UDATestCharge").value;
+        console.log(amount, "amount");
+        if (amount > 0) {
+          const data = {
+            amount: amount,
+            customer_email: ltpInfo?.email,
+            customer_phone: ltpInfo?.mobileNo,
+            first_name: ltpInfo?.name,
+            description: `Pay UDA fees`,
+            applicationNo: JSON.parse(localStorage.getItem("CurrentAppNo")),
+            userId: userInfoFromLocalStorage()._id,
+            page: "dashboard",
+          };
+          fetch(
+            "https://residential-building.onrender.com/initiateJuspayPayment",
+            // "http://localhost:5000/initiateJuspayPayment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
             }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data, "DATA");
-            if (data.status === "NEW") {
-              const url = data.payment_links.web;
-              window.location.href = url;
-            } else {
-              toast.error(data.message);
-            }
-          })
-          .catch((error) => {
-            toast.error(error.message);
-          });
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP status code: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data, "DATA");
+              if (data.status === "NEW") {
+                const url = data.payment_links.web;
+                window.location.href = url;
+              } else {
+                toast.error(data.message);
+              }
+            })
+            .catch((error) => {
+              toast.error(error.message);
+            });
+        } else {
+          toast.error("Please enter a valid amount");
+        }
       }
     });
   };
@@ -814,25 +826,50 @@ const Payment = () => {
               type="number"
               ltpDetails={calculatedData?.UDATotalCharged}
             />
+            <InputField
+              id="UDATestCharge"
+              name="UDATestCharged"
+              label="Pay Online"
+              placeholder="000"
+              type="number"
+            />
             {role === "LTP" && cameFrom?.toLowerCase() === "draft" && (
-              <motion.div
-                className="flex ms-5 items-center mt-[16px] pay-btn-container"
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
-                viewport={{ once: true }}
-              >
-                <div
-                  className="pay-btn mt-3"
-                  onClick={confirmMessageForPayment}
-                >
-                  <div className="svg-wrapper-1">
-                    <div className="svg-wrapper">
-                      <SendIcon />
-                    </div>
+              <>
+                {applicationData?.onlinePaymentStatus?.order_id ? (
+                  <div className="flex gap-2 items-end ms-5 mt-[16px]">
+                    <Link
+                      to={`/dashboard/draftApplication/paymentStatus/${applicationData?.onlinePaymentStatus?.order_id}`}
+                      className="bg-gradient-to-b from-normalViolet to-normalViolet text-white w-fit px-4 py-3 rounded-full capitalize font-roboto flex gap-2 items-center shadow-lg"
+                    >
+                      <IoReceipt size={15} className="mr-1" />
+                      Payment Receipt
+                    </Link>
                   </div>
-                  <span>Pay now</span>
-                </div>
-              </motion.div>
+                ) : (
+                  <motion.div
+                    className="flex ms-5 items-center mt-[16px] pay-btn-container"
+                    initial={{ opacity: 0, x: 40 }}
+                    whileInView={{
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 1 },
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    <div
+                      className="pay-btn mt-3"
+                      onClick={confirmMessageForPayment}
+                    >
+                      <div className="svg-wrapper-1">
+                        <div className="svg-wrapper">
+                          <SendIcon />
+                        </div>
+                      </div>
+                      <span>Pay now</span>
+                    </div>
+                  </motion.div>
+                )}
+              </>
             )}
             {role === "PS" && (
               <>

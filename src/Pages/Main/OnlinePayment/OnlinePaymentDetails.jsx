@@ -1,12 +1,73 @@
 import { motion } from "framer-motion";
 import React from "react";
+import toast from "react-hot-toast";
 import { IoIosSend } from "react-icons/io";
+import Swal from "sweetalert2";
 import MainPageInput from "../MainPageInput";
 export default function OnlinePaymentDetails({
   totalApplications,
   applicationData,
   textTypingAnimation,
 }) {
+  const { applicationNo, applicantInfo, userId } = applicationData;
+
+  const confirmMessageForPayment = () => {
+    Swal.fire({
+      title: "Do you want to pay?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // make a order
+
+        const amount = document.getElementById("OnlinePay")?.value;
+        console.log(amount, "amount");
+        if (amount > 0) {
+          const data = {
+            amount: amount,
+            customer_email: applicantInfo?.ltpDetails?.email,
+            customer_phone: applicantInfo?.ltpDetails?.phoneNo,
+            first_name: applicantInfo?.ltpDetails?.name,
+            description: `Pay UDA fees`,
+            applicationNo,
+            userId,
+            page: "home",
+          };
+          fetch(
+            "https://residential-building.onrender.com/initiateJuspayPayment",
+            // "http://localhost:5000/initiateJuspayPayment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP status code: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data, "DATA");
+              if (data.status === "NEW") {
+                const url = data.payment_links.web;
+                window.location.href = url;
+              } else {
+                toast.error(data.message);
+              }
+            })
+            .catch((error) => {
+              toast.error(error.message);
+            });
+        } else {
+          toast.error("Please enter a valid amount");
+        }
+      }
+    });
+  };
   return (
     <div>
       <div
@@ -165,6 +226,13 @@ export default function OnlinePaymentDetails({
               placeholder="xxxxxxx"
               ltpDetails={applicationData?.payment?.greenFeeCharge?.greenFee}
             />
+            <MainPageInput
+              label="Online Pay :"
+              id={`OnlinePay`}
+              type="number"
+              placeholder="xxxxxxx"
+              // ltpDetails={applicationData?.payment?.greenFeeCharge?.greenFee}
+            />
           </div>
         </div>
       </div>
@@ -189,19 +257,32 @@ export default function OnlinePaymentDetails({
         </motion.h3>
       </div>
 
-      <motion.div
-        className="flex justify-end px-3 pb-6"
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
-        viewport={{ once: true }}
-      >
-        <button
-          className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center`}
+      {applicationData?.onlinePaymentStatus?.order_id ? (
+        <div className="flex justify-end">
+          <button
+            className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center mt-3 mb-3`}
+          >
+            <IoIosSend size={20} />
+            <span className="ml-1 ">paid</span>
+          </button>
+        </div>
+      ) : (
+        <motion.div
+          className="flex justify-end px-3 pb-6"
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0, transition: { duration: 1 } }}
+          viewport={{ once: true }}
         >
-          <IoIosSend size={20} />
-          <span className="ml-1 ">pay now</span>
-        </button>
-      </motion.div>
+          <button
+            className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center`}
+            onClick={confirmMessageForPayment}
+            disabled={applicationData?.length === 0}
+          >
+            <IoIosSend size={20} />
+            <span className="ml-1 ">pay now</span>
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 }

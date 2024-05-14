@@ -60,7 +60,7 @@ const UpdateProfile = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/upload?page=sign",
+          "https://residential-building.onrender.com/upload?page=sign",
           formData,
           {
             headers: {
@@ -87,7 +87,7 @@ const UpdateProfile = () => {
     if (isPsSignUploadSuccess) {
       console.log(formValue, "form value");
       fetch(
-        `http://localhost:5000/updateUserInfo/${
+        `https://residential-building.onrender.com/updateUserInfo/${
           userInfoFromLocalStorage()._id
         }`,
         {

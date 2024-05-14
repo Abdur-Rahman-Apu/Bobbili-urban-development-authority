@@ -11,7 +11,7 @@ const useGetUser = () => {
     [`specificUserInfo`],
     async () => {
       const response = await fetch(
-        `http://localhost:5000/userInformation?id=${
+        `https://residential-building.onrender.com/userInformation?id=${
           userInfoFromLocalStorage()?.userId
         }`
       );

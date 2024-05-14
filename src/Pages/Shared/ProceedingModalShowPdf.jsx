@@ -40,7 +40,7 @@ export default function ProceedingModalShowPdf({
   const getPsSignedFiles = async (applicationData) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
+        `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
       );
       console.log(response, "response");
       const blob = await response.blob();

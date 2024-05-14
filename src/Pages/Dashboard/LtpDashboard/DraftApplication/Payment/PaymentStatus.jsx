@@ -1,7 +1,12 @@
 import axios from "axios";
 import Lottie from "lottie-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
 import pendingAnimation from "../../../../../assets/Payment/Payment-Pending.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
@@ -9,6 +14,8 @@ export default function PaymentStatus() {
   const params = useParams();
   const ref = useRef(null);
   const navigate = useNavigate();
+  const pathName = useLocation()?.pathname;
+  console.log(pathName, "pathName");
   const [data, setData] = useState([]);
   console.log(params, "params");
   const loader = useLoaderData();
@@ -23,8 +30,11 @@ export default function PaymentStatus() {
   async function fetchOrderStatus() {
     try {
       const response = await axios.get(
-        `http://localhost:5000/paymentStatus?orderId=${params?.orderId}`
+        `https://residential-building.onrender.com/paymentStatus?orderId=${params?.orderId}`
       );
+      // const response = await axios.get(
+      //   `http://localhost:5000/paymentStatus?orderId=${params?.orderId}`
+      // );
 
       setData(response?.data?.onlinePaymentStatus);
 
@@ -70,42 +80,60 @@ export default function PaymentStatus() {
     return date;
   };
 
+  const goBack = () => {
+    if (pathName.includes("onlinePayment")) {
+      navigate("/onlinePayment");
+    } else {
+      navigate("/dashboard/draftApplication/payment");
+    }
+  };
+
   return (
-    <div className="p-5">
+    <div className="h-full font-roboto w-full px-5 mt-5">
       <p className="fancy-button w-full text-center">Payment Status</p>
-      <div className="flex justify-between items-center mt-4">
-        <div className="grid grid-cols-2 basis-[45%]">
+      <div className="flex justify-between items-center mt-4 flex-wrap">
+        <div
+          className={`grid grid-cols-2 ${
+            pathName.includes("onlinePayment") ? "basis-full" : "basis-[45%]"
+          }`}
+        >
           {/* Order id  */}
           <p className="text-lg mt-4 font-bold">Order Id:</p>
-          <p className="text-lg mt-4">{data?.order_id}</p>
+          <p className="text-lg mt-4 break-words">{data?.order_id}</p>
 
           {/* TXN id  */}
           <p className="text-lg mt-4 font-bold">TXN Id:</p>
-          <p className="text-lg mt-4">{data?.txn_detail?.txn_id}</p>
+          <p className="text-lg mt-4 break-words">{data?.txn_id}</p>
 
           {/* Email  */}
           <p className="text-lg mt-4 font-bold">Email:</p>
-          <p className="text-lg mt-4">{data?.customer_email}</p>
+          <p className="text-lg mt-4 break-words">{data?.customer_email}</p>
 
           {/* Phone  */}
           <p className="text-lg mt-4 font-bold">Phone:</p>
-          <p className="text-lg mt-4">{data?.customer_phone}</p>
+          <p className="text-lg mt-4 break-words">{data?.customer_phone}</p>
 
           {/* Amount  */}
           <p className="text-lg mt-4 font-bold">Amount:</p>
-          <p className="text-lg mt-4">{data?.amount}</p>
+          <p className="text-lg mt-4 break-words">₹{data?.amount}</p>
 
           {/* Payment method  */}
           <p className="text-lg mt-4 font-bold">Payment method:</p>
-          <p className="text-lg mt-4">{data?.payment_method}</p>
+          <p className="text-lg mt-4 break-words">{data?.payment_method}</p>
 
           {/* Payment date  */}
 
           <p className="text-lg mt-4 font-bold">Payment Date:</p>
-          <p className="text-lg mt-4">{getPaymentDate(data?.date_created)}</p>
+          <p className="text-lg mt-4 break-words">
+            {getPaymentDate(data?.date_created)}
+          </p>
         </div>
 
-        <div className="basis-[45%]">
+        <div
+          className={`${
+            pathName.includes("onlinePayment") ? "basis-full" : "basis-[45%]"
+          }`}
+        >
           <Lottie
             animationData={paymentStatus}
             loop={true}
@@ -119,10 +147,7 @@ export default function PaymentStatus() {
       </div>
 
       <div className="flex justify-center mt-6">
-        <button
-          onClick={() => navigate("/dashboard/draftApplication/payment")}
-          className="rounded-full p-3 fancy-button mt-3"
-        >
+        <button onClick={goBack} className="rounded-full p-3 fancy-button my-3">
           Go Back
         </button>
       </div>

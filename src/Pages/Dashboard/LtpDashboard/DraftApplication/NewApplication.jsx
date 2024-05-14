@@ -35,7 +35,7 @@ const NewApplication = () => {
     ["draftApplications"],
     async () => {
       const response = await fetch(
-        `http://localhost:5000/draftApplications/${userID}`
+        `https://residential-building.onrender.com/draftApplications/${userID}`
       );
       return await response.json();
     }
@@ -76,7 +76,7 @@ const NewApplication = () => {
 
   const removeDraftApplication = (applicationNo) => {
     console.log(applicationNo, "DELTE APP NO");
-    fetch(`http://localhost:5000/deleteSingleDraft`, {
+    fetch(`https://residential-building.onrender.com/deleteSingleDraft`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
@@ -102,7 +102,7 @@ const NewApplication = () => {
 
   // store new application information into the database
   const storeApplicationData = (serialNo) => {
-    const url = `http://localhost:5000/addApplication`;
+    const url = `https://residential-building.onrender.com/addApplication`;
 
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -175,7 +175,7 @@ const NewApplication = () => {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        fetch("http://localhost:5000/getSerialNumber")
+        fetch("https://residential-building.onrender.com/getSerialNumber")
           .then((res) => res.json())
           .then((data) => {
             storeApplicationData(data?.serialNo);

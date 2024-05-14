@@ -23,7 +23,9 @@ const ApplicationSearch = () => {
       searchValue,
       page: "applicationSearch",
     });
-    fetchDataFromTheDb(`http://localhost:5000/${searchType}?search=${query}`)
+    fetchDataFromTheDb(
+      `https://residential-building.onrender.com/${searchType}?search=${query}`
+    )
       .then((data) => {
         setLoading(false);
         console.log(data);
