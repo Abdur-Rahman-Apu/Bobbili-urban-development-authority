@@ -43,7 +43,12 @@ const Login = ({ onShowForgotPassModal }) => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      id: "ltp1",
+      password: "ltp1",
+    },
+  });
 
   const location = useLocation();
 

@@ -263,7 +263,9 @@ export default function OnlinePaymentDetails({
             className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center mt-3 mb-3`}
           >
             <IoIosSend size={20} />
-            <span className="ml-1 ">paid</span>
+            <span className="ml-1 ">
+              {applicationData?.onlinePaymentStatus?.status}
+            </span>
           </button>
         </div>
       ) : (
