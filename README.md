@@ -2,7 +2,7 @@
 
 A website to submit building approval application.
 
-### Live website link: [https://bobbili-urban-development-authority.netlify.app/)
+### Live website link: [https://bobbili-urban-development-authority.netlify.app/]
 
 ## Features
 
@@ -18,21 +18,11 @@ A website to submit building approval application.
 
 ## Screenshots
 
-![Home page](https://i.ibb.co/HB4LSNW/screencapture-phone-store-de866-web-app-2023-02-21-10-21-27.png)
+![Login page](src/assets/screenshots/home.jpg)
 
-![Log in page](https://i.ibb.co/wz8c8Ls/screencapture-phone-store-de866-web-app-login-2023-02-21-10-26-34.png)
+![Dashboard page](src/assets/screenshots/dashboard_urban.jpg)
 
-![Register page](https://i.ibb.co/xMr8N04/screencapture-phone-store-de866-web-app-register-2023-02-21-10-26-46.png)
-
-![Contact page](https://i.ibb.co/K7WfgR2/screencapture-phone-store-de866-web-app-contact-2023-02-21-10-23-47.png)
-
-![Profile page](https://i.ibb.co/Xt43dQK/screencapture-phone-store-de866-web-app-profile-2023-02-21-10-26-19.png)
-
-![Dahboard page](https://i.ibb.co/prXJTtQ/screencapture-phone-store-de866-web-app-dashboard-2023-02-21-10-24-03.png)
-
-![Toggle page](https://i.ibb.co/qFMZVDT/screencapture-phone-store-de866-web-app-dashboard-2023-02-21-10-27-22.png)
-
-![Seller page](https://i.ibb.co/ZmSVDdc/screencapture-phone-store-de866-web-app-dashboard-add-Item-2023-02-21-10-27-34.png)
+![Draft application page](src/assets/screenshots/create.jpg)
 
 ## Tech Stack
 
