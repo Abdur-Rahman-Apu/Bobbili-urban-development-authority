@@ -663,6 +663,8 @@ const Payment = () => {
     });
   };
 
+  const [loadingPayment, setLoadingPayment] = useState(false);
+
   const confirmMessageForPayment = () => {
     Swal.fire({
       title: "Do you want to pay?",
@@ -675,6 +677,7 @@ const Payment = () => {
         const amount = document.getElementById("UDATestCharge").value;
         console.log(amount, "amount");
         if (amount > 0) {
+          setLoadingPayment(true);
           const data = {
             amount: amount,
             customer_email: ltpInfo?.email,
@@ -685,34 +688,63 @@ const Payment = () => {
             userId: userInfoFromLocalStorage()._id,
             page: "dashboard",
           };
-          fetch(
-            "https://residential-building.onrender.com/initiateJuspayPayment",
-            // "http://localhost:5000/initiateJuspayPayment",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP status code: ${response.status}`);
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data, "DATA");
-              if (data.status === "NEW") {
-                const url = data.payment_links.web;
-                window.location.href = url;
+
+          fetch("http://localhost:5000/storePaymentInfo", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: localStorage.getItem("jwToken"),
+            },
+            body: JSON.stringify({
+              applicationNo: data.applicationNo,
+              amount,
+              customer_email: ltpInfo?.email,
+              customer_phone: ltpInfo?.mobileNo,
+            }),
+          })
+            .then((res) => res.json())
+            .then((storeResult) => {
+              setLoadingPayment(false);
+              console.log(storeResult, "Store payment");
+
+              if (storeResult.acknowledged) {
+                fetch(
+                  // "https://residential-building.onrender.com/initiateJuspayPayment",
+                  "http://localhost:5000/initiateJuspayPayment",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      authorization: localStorage.getItem("jwToken"),
+                    },
+                    body: JSON.stringify(data),
+                  }
+                )
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP status code: ${response.status}`);
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    console.log(data, "DATA");
+                    if (data.status === "NEW") {
+                      const url = data.payment_links.web;
+                      window.location.href = url;
+                    } else {
+                      toast.error(data.message);
+                    }
+                  })
+                  .catch((error) => {
+                    toast.error(error.message);
+                  });
               } else {
-                toast.error(data.message);
+                toast.error("Failed to make payment");
               }
             })
-            .catch((error) => {
-              toast.error(error.message);
+            .catch((err) => {
+              setLoadingPayment(false);
+              toast.error("Failed to make payment");
             });
         } else {
           toast.error("Please enter a valid amount");
@@ -856,7 +888,7 @@ const Payment = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    <div
+                    <button
                       className="pay-btn mt-3"
                       onClick={confirmMessageForPayment}
                     >
@@ -865,8 +897,8 @@ const Payment = () => {
                           <SendIcon />
                         </div>
                       </div>
-                      <span>Pay now</span>
-                    </div>
+                      <span>{loadingPayment ? "Paying..." : "Pay now"}</span>
+                    </button>
                   </motion.div>
                 )}
               </>
