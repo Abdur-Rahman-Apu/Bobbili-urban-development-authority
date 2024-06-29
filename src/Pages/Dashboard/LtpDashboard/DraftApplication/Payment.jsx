@@ -744,6 +744,7 @@ const Payment = () => {
                     }
                   })
                   .catch((error) => {
+                    console.log(error, "Payment error");
                     toast.error(error.message);
                   });
               } else {
