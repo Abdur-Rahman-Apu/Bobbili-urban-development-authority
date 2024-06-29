@@ -1,15 +1,18 @@
 import axios from "axios";
 import Lottie from "lottie-react";
 import React, { useEffect, useRef, useState } from "react";
+import { RiArrowGoBackFill } from "react-icons/ri";
 import {
   useLoaderData,
   useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
+import Swal from "sweetalert2";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
 import pendingAnimation from "../../../../../assets/Payment/Payment-Pending.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
+
 export default function PaymentStatus() {
   const params = useParams();
   const ref = useRef(null);
@@ -43,7 +46,10 @@ export default function PaymentStatus() {
 
       console.log(`Order status for order ${params.orderId}: ${status}`);
 
-      if (status === "Charged" || status === "Failed") {
+      if (
+        status.toLowerCase().includes("charged") ||
+        status.toLowerCase().includes("failed")
+      ) {
         clearInterval(ref.current); // Stop polling if terminal status is received
         console.log("Polling stopped.");
       }
@@ -86,6 +92,99 @@ export default function PaymentStatus() {
     } else {
       navigate("/dashboard/draftApplication/payment");
     }
+  };
+
+  const isEligibleForRetry =
+    data?.status === "AUTHENTICATION_FAILED" ||
+    data?.status === "AUTHORIZATION_FAILED";
+
+  const [loadingPayment, setLoadingPayment] = useState(false);
+  const retryPayment = () => {
+    Swal.fire({
+      title: "Do you want to pay?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // make a order
+
+        setLoadingPayment(true);
+        const data = {
+          amount: data?.onlinePaymentStatus?.amount,
+          customer_email: data?.onlinePaymentStatus?.customer_email,
+          customer_phone: data?.onlinePaymentStatus?.customer_phone,
+          first_name: data?.applicantInfo?.ltpDetails?.name,
+          description: `Pay UDA fees`,
+          applicationNo: data?.applicationNo,
+          userId: data?._id,
+          page: "dashboard",
+        };
+
+        fetch(
+          "https://residential-building.onrender.com/storePaymentInfo",
+          // "http://localhost:5000/storePaymentInfo",
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: localStorage.getItem("jwToken"),
+            },
+            body: JSON.stringify({
+              applicationNo: data.applicationNo,
+              amount: data?.onlinePaymentStatus?.amount,
+              customer_email: data?.onlinePaymentStatus?.customer_email,
+              customer_phone: data?.onlinePaymentStatus?.customer_phone,
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then((storeResult) => {
+            console.log(storeResult, "Store payment");
+
+            if (storeResult.acknowledged) {
+              fetch(
+                "https://residential-building.onrender.com/initiateJuspayPayment",
+                // "http://localhost:5000/initiateJuspayPayment",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    authorization: localStorage.getItem("jwToken"),
+                  },
+                  body: JSON.stringify(data),
+                }
+              )
+                .then((response) => {
+                  if (!response.ok) {
+                    setLoadingPayment(false);
+                    throw new Error(`HTTP status code: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then((paymentResponse) => {
+                  console.log(paymentResponse, "DATA");
+                  if (paymentResponse.status === "NEW") {
+                    const url = paymentResponse.payment_links.web;
+                    window.location.href = url;
+                  } else {
+                    toast.error(paymentResponse.message);
+                  }
+                  setLoadingPayment(false);
+                })
+                .catch((error) => {
+                  toast.error(error.message);
+                });
+            } else {
+              setLoadingPayment(false);
+              toast.error("Failed to make payment");
+            }
+          })
+          .catch((err) => {
+            setLoadingPayment(false);
+            toast.error("Failed to make payment");
+          });
+      }
+    });
   };
 
   return (
@@ -146,9 +245,20 @@ export default function PaymentStatus() {
         </div>
       </div>
 
-      <div className="flex justify-center mt-6">
-        <button onClick={goBack} className="rounded-full p-3 fancy-button my-3">
-          Go Back
+      <div className="flex justify-center items-center gap-5 mt-6">
+        {isEligibleForRetry && (
+          <button
+            onClick={retryPayment}
+            className="rounded-full px-4 fancy-button my-3"
+          >
+            {loadingPayment ? "Paying..." : "Try again ⟳"}
+          </button>
+        )}
+        <button
+          onClick={goBack}
+          className=" flex justify-center items-center gap-1 rounded-full bg-black text-white p-3 my-3 nm_Container hover:scale-110 transition-transform"
+        >
+          Go Back <RiArrowGoBackFill />
         </button>
       </div>
     </div>

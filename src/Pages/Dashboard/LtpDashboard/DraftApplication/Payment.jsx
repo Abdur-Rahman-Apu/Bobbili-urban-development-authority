@@ -689,19 +689,23 @@ const Payment = () => {
             page: "dashboard",
           };
 
-          fetch("http://localhost:5000/storePaymentInfo", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: localStorage.getItem("jwToken"),
-            },
-            body: JSON.stringify({
-              applicationNo: data.applicationNo,
-              amount,
-              customer_email: ltpInfo?.email,
-              customer_phone: ltpInfo?.mobileNo,
-            }),
-          })
+          fetch(
+            "https://residential-building.onrender.com/storePaymentInfo",
+            // "http://localhost:5000/storePaymentInfo",
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: localStorage.getItem("jwToken"),
+              },
+              body: JSON.stringify({
+                applicationNo: data.applicationNo,
+                amount,
+                customer_email: ltpInfo?.email,
+                customer_phone: ltpInfo?.mobileNo,
+              }),
+            }
+          )
             .then((res) => res.json())
             .then((storeResult) => {
               setLoadingPayment(false);
@@ -709,8 +713,8 @@ const Payment = () => {
 
               if (storeResult.acknowledged) {
                 fetch(
-                  // "https://residential-building.onrender.com/initiateJuspayPayment",
-                  "http://localhost:5000/initiateJuspayPayment",
+                  "https://residential-building.onrender.com/initiateJuspayPayment",
+                  // "http://localhost:5000/initiateJuspayPayment",
                   {
                     method: "POST",
                     headers: {
