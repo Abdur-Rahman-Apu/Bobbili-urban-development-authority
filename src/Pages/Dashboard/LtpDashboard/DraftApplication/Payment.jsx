@@ -730,7 +730,8 @@ const Payment = () => {
                 )
                   .then((response) => {
                     if (!response.ok) {
-                      throw new Error(`HTTP status code: ${response.status}`);
+                      console.log(response, "response");
+                      throw new Error(`${response.message}`);
                     }
                     return response.json();
                   })
