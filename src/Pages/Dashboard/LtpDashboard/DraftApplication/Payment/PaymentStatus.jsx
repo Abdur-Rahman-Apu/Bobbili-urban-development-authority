@@ -109,7 +109,7 @@ export default function PaymentStatus() {
         // make a order
 
         setLoadingPayment(true);
-        const data = {
+        const paymentData = {
           amount: data?.onlinePaymentStatus?.amount,
           customer_email: data?.onlinePaymentStatus?.customer_email,
           customer_phone: data?.onlinePaymentStatus?.customer_phone,
@@ -141,7 +141,11 @@ export default function PaymentStatus() {
           .then((storeResult) => {
             console.log(storeResult, "Store payment");
 
-            if (storeResult.acknowledged) {
+            if (
+              storeResult.acknowledged &&
+              Number(storeResult?.onlinePaymentStatus?.amount) ===
+                Number(data?.amount)
+            ) {
               fetch(
                 "https://residential-building.onrender.com/initiateJuspayPayment",
                 // "http://localhost:5000/initiateJuspayPayment",
@@ -151,7 +155,7 @@ export default function PaymentStatus() {
                     "Content-Type": "application/json",
                     authorization: localStorage.getItem("jwToken"),
                   },
-                  body: JSON.stringify(data),
+                  body: JSON.stringify(paymentData),
                 }
               )
                 .then((response) => {
