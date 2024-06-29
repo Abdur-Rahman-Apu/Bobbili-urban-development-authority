@@ -730,8 +730,7 @@ const Payment = () => {
                 )
                   .then((response) => {
                     if (!response.ok) {
-                      console.log(response, "response");
-                      throw new Error(`${response.message}`);
+                      throw new Error(`Failed to make payment`);
                     }
                     return response.json();
                   })
