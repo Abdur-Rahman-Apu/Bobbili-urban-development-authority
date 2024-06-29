@@ -708,7 +708,7 @@ const Payment = () => {
           )
             .then((res) => res.json())
             .then((storeResult) => {
-              setLoadingPayment(false);
+              // setLoadingPayment(false);
               console.log(storeResult, "Store payment");
 
               if (
@@ -742,12 +742,15 @@ const Payment = () => {
                     } else {
                       toast.error(data.message);
                     }
+                    setLoadingPayment(false);
                   })
                   .catch((error) => {
+                    setLoadingPayment(false);
                     console.log(error, "Payment error");
                     toast.error(error.message);
                   });
               } else {
+                setLoadingPayment(false);
                 toast.error("Failed to make payment");
               }
             })
