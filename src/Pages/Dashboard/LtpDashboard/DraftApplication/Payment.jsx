@@ -711,7 +711,11 @@ const Payment = () => {
               setLoadingPayment(false);
               console.log(storeResult, "Store payment");
 
-              if (storeResult.acknowledged) {
+              if (
+                storeResult?.acknowledged &&
+                Number(storeResult?.onlinePaymentStatus?.amount) ===
+                  Number(amount)
+              ) {
                 fetch(
                   "https://residential-building.onrender.com/initiateJuspayPayment",
                   // "http://localhost:5000/initiateJuspayPayment",
