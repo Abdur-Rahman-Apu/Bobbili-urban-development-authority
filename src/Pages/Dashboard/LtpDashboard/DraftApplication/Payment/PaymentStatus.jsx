@@ -100,6 +100,7 @@ export default function PaymentStatus() {
 
   const [loadingPayment, setLoadingPayment] = useState(false);
   const retryPayment = () => {
+    console.log(data, "Data in retry payment");
     Swal.fire({
       title: "Do you want to pay?",
       showCancelButton: true,
@@ -107,18 +108,21 @@ export default function PaymentStatus() {
     }).then((result) => {
       if (result.isConfirmed) {
         // make a order
+        console.log(data, "Data in payment status");
 
         setLoadingPayment(true);
         const paymentData = {
-          amount: data?.onlinePaymentStatus?.amount,
-          customer_email: data?.onlinePaymentStatus?.customer_email,
-          customer_phone: data?.onlinePaymentStatus?.customer_phone,
-          first_name: data?.applicantInfo?.ltpDetails?.name,
+          amount: data?.amount,
+          customer_email: data?.customer_email,
+          customer_phone: data?.customer_phone,
+          first_name: loader?.applicantInfo?.ltpDetails?.name,
           description: `Pay UDA fees`,
-          applicationNo: data?.applicationNo,
-          userId: data?._id,
+          applicationNo: loader?.applicationNo,
+          userId: loader?._id,
           page: "dashboard",
         };
+
+        console.log(paymentData, "payment data");
 
         fetch(
           "https://residential-building.onrender.com/storePaymentInfo",
@@ -130,17 +134,17 @@ export default function PaymentStatus() {
               authorization: localStorage.getItem("jwToken"),
             },
             body: JSON.stringify({
-              applicationNo: data.applicationNo,
-              amount: data?.onlinePaymentStatus?.amount,
-              customer_email: data?.onlinePaymentStatus?.customer_email,
-              customer_phone: data?.onlinePaymentStatus?.customer_phone,
+              applicationNo: loader.applicationNo,
+              amount: data?.amount,
+              customer_email: data?.customer_email,
+              customer_phone: data?.customer_phone,
             }),
           }
         )
           .then((res) => res.json())
           .then((storeResult) => {
             console.log(storeResult, "Store payment");
-
+            console.log(data, "data in store payment");
             if (
               storeResult.acknowledged &&
               Number(storeResult?.onlinePaymentStatus?.amount) ===
@@ -161,7 +165,7 @@ export default function PaymentStatus() {
                 .then((response) => {
                   if (!response.ok) {
                     setLoadingPayment(false);
-                    throw new Error(`HTTP status code: ${response.status}`);
+                    throw new Error(`Failed to make payment`);
                   }
                   return response.json();
                 })
@@ -255,7 +259,7 @@ export default function PaymentStatus() {
             onClick={retryPayment}
             className="rounded-full px-4 fancy-button my-3"
           >
-            {loadingPayment ? "Paying..." : "Try again ⟳"}
+            {loadingPayment ? "Paying ⏱" : "Try again ⟳"}
           </button>
         )}
         <button
