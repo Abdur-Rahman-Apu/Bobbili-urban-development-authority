@@ -44,9 +44,12 @@ function SearchApplications() {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `https://residential-building.onrender.com/getPsApplications?gramaPanchayat=${JSON.stringify(
-        userInfoFromLocalStorage()?.gramaPanchayat
+      `https://residential-building.onrender.com/getPsApplications?id=${JSON.stringify(
+        userInfoFromLocalStorage()?._id
       )}`
+      // `http://localhost:5000/getPsApplications?id=${JSON.stringify(
+      //   userInfoFromLocalStorage()?._id
+      // )}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -85,11 +88,12 @@ function SearchApplications() {
 
     const query = JSON.stringify({
       searchValue,
-      gramaPanchayat: userInfoFromLocalStorage().gramaPanchayat,
+      psId: userInfoFromLocalStorage()._id,
     });
 
     fetchDataFromTheDb(
       `https://residential-building.onrender.com/${searchType}?search=${query}`
+      // `http://localhost:5000/${searchType}?search=${query}`
     )
       .then((data) => {
         setLoading(false);
@@ -193,8 +197,10 @@ function SearchApplications() {
           tableComponentProps={tableComponentProps}
         />
       )}
-      {error && <NetworkError errMsg={error} />}
-      {(allData?.length === 0 || !allData) && <NoApplicationFound />}
+      {!loading && error && <NetworkError errMsg={error} />}
+      {!loading && !error && (allData?.length === 0 || !allData) && (
+        <NoApplicationFound />
+      )}
     </>
   );
 }
