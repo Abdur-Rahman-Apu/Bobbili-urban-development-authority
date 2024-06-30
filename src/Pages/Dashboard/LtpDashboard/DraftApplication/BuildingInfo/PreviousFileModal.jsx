@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 
 const PreviousFileModal = ({ FileModal }) => {
   const { setIsModalOpen, isModalOpen, setDataFromDB } = FileModal;

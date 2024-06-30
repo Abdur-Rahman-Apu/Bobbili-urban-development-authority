@@ -2,15 +2,15 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import DefaultDocumentData from "../../../../assets/DefaultDocument.json";
-import DynamicDocuments from "../../../../assets/DynamicDocument.json";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import DefaultDocumentData from "../../../../../assets/DefaultDocument.json";
+import DynamicDocuments from "../../../../../assets/DynamicDocument.json";
+import SaveData from "../SaveData";
 import DefaultDocument from "./DefaultDocument";
 import DocumentFooter from "./DocumentFooter";
 import DynamicDocument from "./DynamicDocument";
-import SaveData from "./SaveData";
 
-const DocumentUpload = () => {
+const Documents = () => {
   const [UpdatedDefaultData, setUpdatedDefaultData] = useState([
     ...DefaultDocumentData,
   ]);
@@ -369,4 +369,4 @@ const DocumentUpload = () => {
   );
 };
 
-export default DocumentUpload;
+export default Documents;

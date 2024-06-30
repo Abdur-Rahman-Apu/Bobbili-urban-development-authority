@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbSlideshow } from "react-icons/tb";
 import { Link, useOutletContext } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import SaveData from "../SaveData";
 import DrawingTable from "./DrawingTable";
-import SaveData from "./SaveData";
 
 const Drawing = () => {
   const [approvedConfirmation, setApprovedConfirmation] = useState("");

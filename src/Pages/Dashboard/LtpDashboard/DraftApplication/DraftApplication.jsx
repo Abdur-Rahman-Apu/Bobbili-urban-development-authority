@@ -12,7 +12,7 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import DrawingFileShowed from "../../../Shared/DrawingFileShowed";
 import EndorsementFileShowed from "../../../Shared/EndorsementFileShow";
 import ProceedingModalShowPdf from "../../../Shared/ProceedingModalShowPdf";
-import Application from "./Application";
+import Application from "./ApplicationModal/Application";
 
 const DraftApplication = () => {
   const navigate = useNavigate();

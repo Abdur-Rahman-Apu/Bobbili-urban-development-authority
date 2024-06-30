@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 
 const FloorDetails = ({
   index,
@@ -78,12 +78,15 @@ const FloorDetails = ({
     page === "shortfall" ||
     role.toLowerCase() === "ps";
 
+  // const isAreaDisabled=
 
-  const inputClass = "w-full px-3 py-2 border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
+  const inputClass =
+    "w-full px-3 py-2 border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200";
 
   return (
     <>
-      <motion.div className="flex flex-col justify-center mx-3"
+      <motion.div
+        className="flex flex-col justify-center mx-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
         viewport={{ once: true }}
@@ -94,7 +97,7 @@ const FloorDetails = ({
         <select
           id={`floorName${index}`}
           name={`floorName${index}`}
-          className='w-full px-3 py-[10px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200'
+          className="w-full px-3 py-[10px] border rounded-lg max-w-xs text-gray-600 bg-gray-50 border-gray-400 focus:border-gray-600 focus:outline-none focus:ring-2 ring-violet-200"
           value={selectedFloor?.length ? selectedFloor : floorChange}
           onChange={(e) => {
             handleFloorChange(e, index);
@@ -111,17 +114,19 @@ const FloorDetails = ({
                 <option
                   key={index}
                   value={eachFloor}
-                  className={`${findOldSelectedValue(eachFloor) ? "hidden" : ""
-                    }`}
+                  className={`${
+                    findOldSelectedValue(eachFloor) ? "hidden" : ""
+                  }`}
                 >
                   {eachFloor}
                 </option>
               );
             })}
         </select>
-      </motion.div >
+      </motion.div>
 
-      <motion.div className="my-4 mx-3"
+      <motion.div
+        className="my-4 mx-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
         viewport={{ once: true }}
@@ -147,7 +152,8 @@ const FloorDetails = ({
         />
       </motion.div>
 
-      <motion.div className="my-4 mx-3"
+      <motion.div
+        className="my-4 mx-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
         viewport={{ once: true }}
@@ -173,43 +179,45 @@ const FloorDetails = ({
         />
       </motion.div>
 
-      {
-        role.toLowerCase() === "ltp" && (
-          <div className="flex justify-start items-center ml-7 mt-7">
-            {index === length - 1 && index < 3 && (
-              <motion.div className="flex justify-center items-center"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0, transition: { duration: 2, } }}
-                viewport={{ once: true }}
+      {role.toLowerCase() === "ltp" && (
+        <div className="flex justify-start items-center ml-7 mt-7">
+          {index === length - 1 && index < 3 && (
+            <motion.div
+              className="flex justify-center items-center"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0, transition: { duration: 2 } }}
+              viewport={{ once: true }}
+            >
+              <button
+                className={`nm_Container text-xl rounded-full w-[30px] h-[30px] text-normalViolet cursor-pointer transition-all duration-500 hover:shadow-sm hover:shadow-black font-bold ${
+                  hideBtn && "hidden"
+                }`}
+                onClick={increaseFloorNo}
               >
-                <button
-                  className={`nm_Container text-xl rounded-full w-[30px] h-[30px] text-normalViolet cursor-pointer transition-all duration-500 hover:shadow-sm hover:shadow-black font-bold ${hideBtn && "hidden"
-                    }`}
-                  onClick={increaseFloorNo}
-                >
-                  +
-                </button>
-              </motion.div>
-            )}
+                +
+              </button>
+            </motion.div>
+          )}
 
-            {index === length - 1 && index > 0 && index <= 3 && (
-              <motion.div className="flex justify-center items-center"
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0, transition: { duration: 2, } }}
-                viewport={{ once: true }}
+          {index === length - 1 && index > 0 && index <= 3 && (
+            <motion.div
+              className="flex justify-center items-center"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0, transition: { duration: 2 } }}
+              viewport={{ once: true }}
+            >
+              <button
+                className={`nm_Container text-xl mx-2 rounded-full text-red-500 w-[30px] h-[30px]  transition-all duration-500 font-bold ${
+                  hideBtn && "hidden"
+                }`}
+                onClick={decreaseFloorNo}
               >
-                <button
-                  className={`nm_Container text-xl mx-2 rounded-full text-red-500 w-[30px] h-[30px]  transition-all duration-500 font-bold ${hideBtn && "hidden"
-                    }`}
-                  onClick={decreaseFloorNo}
-                >
-                  -
-                </button>
-              </motion.div>
-            )}
-          </div>
-        )
-      }
+                -
+              </button>
+            </motion.div>
+          )}
+        </div>
+      )}
     </>
   );
 };

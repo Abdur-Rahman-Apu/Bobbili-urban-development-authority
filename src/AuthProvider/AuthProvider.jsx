@@ -235,6 +235,7 @@ const AuthProvider = ({ children }) => {
 
       return await response.json();
     } catch (err) {
+      console.log(err, "err");
       toast.error("ERROR");
     }
   };

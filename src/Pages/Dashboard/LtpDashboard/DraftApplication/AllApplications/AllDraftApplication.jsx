@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AiFillPlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import DeleteIcon from "../../../Components/DeleteIcon";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import DeleteIcon from "../../../../Components/DeleteIcon";
 
 const AllDraftApplication = ({
   serialNo,

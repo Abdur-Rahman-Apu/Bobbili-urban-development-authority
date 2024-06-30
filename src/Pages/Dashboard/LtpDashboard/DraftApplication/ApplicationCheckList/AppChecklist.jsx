@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import ChecklistQuestions from "../../../../assets/AppChecklist.json";
-import SaveData from "./SaveData";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import ChecklistQuestions from "../../../../../assets/AppChecklist.json";
+import SaveData from "../SaveData";
 
 function AppChecklist() {
   const [openApplication, setOpenApplication] = useState(false);
@@ -21,7 +20,7 @@ function AppChecklist() {
 
   // after select question firing here
   const handleAnswer = (event, questionNo) => {
-    toast.success(`Clicked: ${questionNo}, Value: ${event.target.value}`);
+    // toast.success(`Clicked: ${questionNo}, Value: ${event.target.value}`);
     const updatedQuestions = questions.map((question) => ({
       ...question,
       answer:

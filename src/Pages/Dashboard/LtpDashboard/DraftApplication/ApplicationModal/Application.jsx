@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import ApplicationHeader from "./ApplicationHeader";
 
 function Application({ setOpenApplication, filteredData }) {

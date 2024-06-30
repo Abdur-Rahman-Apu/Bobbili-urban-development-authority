@@ -9,11 +9,11 @@ import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
 import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import InputField from "../../../Components/InputField";
-import SendIcon from "../../../Components/SendIcon";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import InputField from "../../../../Components/InputField";
+import SendIcon from "../../../../Components/SendIcon";
+import SaveData from "../SaveData";
 import Modal from "./Modal";
-import SaveData from "./SaveData";
 
 const Payment = () => {
   const {

@@ -6,14 +6,14 @@ import AddUser from "../Pages/Dashboard/Admin/Admin2/AddUser";
 import AllUsers from "../Pages/Dashboard/Admin/Admin2/AllUsers";
 import UpdateLocation from "../Pages/Dashboard/Admin/SuperAdmin/UpdateLocation";
 import Approved from "../Pages/Dashboard/LtpDashboard/Approved/Approved";
-import AppChecklist from "../Pages/Dashboard/LtpDashboard/DraftApplication/AppChecklist";
-import ApplicantInfo from "../Pages/Dashboard/LtpDashboard/DraftApplication/ApplicantInfo";
-import BuildingInfo from "../Pages/Dashboard/LtpDashboard/DraftApplication/BuildingInfo";
-import Documents from "../Pages/Dashboard/LtpDashboard/DraftApplication/Documents";
+import ApplicantInfo from "../Pages/Dashboard/LtpDashboard/DraftApplication/ApplicantInfo/ApplicantInfo";
+import AppChecklist from "../Pages/Dashboard/LtpDashboard/DraftApplication/ApplicationCheckList/AppChecklist";
+import BuildingInfo from "../Pages/Dashboard/LtpDashboard/DraftApplication/BuildingInfo/BuildingInfo";
+import Documents from "../Pages/Dashboard/LtpDashboard/DraftApplication/Documents/Documents";
 import DraftApplication from "../Pages/Dashboard/LtpDashboard/DraftApplication/DraftApplication";
-import Drawing from "../Pages/Dashboard/LtpDashboard/DraftApplication/Drawing";
-import NewApplication from "../Pages/Dashboard/LtpDashboard/DraftApplication/NewApplication";
-import Payment from "../Pages/Dashboard/LtpDashboard/DraftApplication/Payment";
+import Drawing from "../Pages/Dashboard/LtpDashboard/DraftApplication/Drawing/Drawing";
+import NewApplication from "../Pages/Dashboard/LtpDashboard/DraftApplication/NewApplication/NewApplication";
+import Payment from "../Pages/Dashboard/LtpDashboard/DraftApplication/Payment/Payment";
 import PaymentStatus from "../Pages/Dashboard/LtpDashboard/DraftApplication/Payment/PaymentStatus";
 import RejectedApplications from "../Pages/Dashboard/LtpDashboard/RejectedApplication/RejectedApplications";
 import ResubmitApplication from "../Pages/Dashboard/LtpDashboard/Resubmit/ResubmitApplication";
@@ -170,7 +170,8 @@ const router = createBrowserRouter([
             path: "/dashboard/draftApplication/buildingInfo",
             element: (
               <BothUserRoute>
-                <BuildingInfo />
+                {" "}
+                <BuildingInfo />{" "}
               </BothUserRoute>
             ),
           },
@@ -178,7 +179,8 @@ const router = createBrowserRouter([
             path: "/dashboard/draftApplication/applicantInfo",
             element: (
               <BothUserRoute>
-                <ApplicantInfo />
+                {" "}
+                <ApplicantInfo />{" "}
               </BothUserRoute>
             ),
           },
@@ -186,7 +188,8 @@ const router = createBrowserRouter([
             path: "/dashboard/draftApplication/applicationChecklist",
             element: (
               <BothUserRoute>
-                <AppChecklist />
+                {" "}
+                <AppChecklist />{" "}
               </BothUserRoute>
             ),
           },
@@ -194,7 +197,8 @@ const router = createBrowserRouter([
             path: "/dashboard/draftApplication/documents",
             element: (
               <BothUserRoute>
-                <Documents />
+                {" "}
+                <Documents />{" "}
               </BothUserRoute>
             ),
           },
@@ -202,7 +206,7 @@ const router = createBrowserRouter([
             path: "/dashboard/draftApplication/drawing",
             element: (
               <BothUserRoute>
-                <Drawing />
+                <Drawing />{" "}
               </BothUserRoute>
             ),
           },

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
-import InputField from "../../../Components/InputField";
+import InputField from "../../../../Components/InputField";
 
 const OwnerDetail = ({
   index,

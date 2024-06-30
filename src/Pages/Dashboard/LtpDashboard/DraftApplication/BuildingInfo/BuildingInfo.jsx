@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineAreaChart } from "react-icons/ai";
 import { FaHandPointRight } from "react-icons/fa";
 import { HiInformationCircle } from "react-icons/hi";
 import { PiWall } from "react-icons/pi";
 import { useOutletContext } from "react-router";
 import { useLocation } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import InputField from "../../../Components/InputField";
-import useGetPageWiseApplication from "../../../CustomHook/useGetPageWiseApplication";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import InputField from "../../../../Components/InputField";
+import useGetPageWiseApplication from "../../../../CustomHook/useGetPageWiseApplication";
+import SaveData from "../SaveData";
 import FloorDetails from "./FloorDetails";
 import PreviousFileModal from "./PreviousFileModal";
-import SaveData from "./SaveData";
 
 const BuildingInfo = () => {
   const stepperData = useOutletContext();
@@ -155,6 +156,7 @@ const BuildingInfo = () => {
   // HERE DATA IS GETTING FROM THE DATABASE AS WELL AS UPDATING THE USE STATES  AND  ALL DISTRICTS ARE FETCHED
   useEffect(() => {
     const getData = async () => {
+      console.log(applicationNo, cameFrom, "App no,came from");
       const applicationData = await getApplicationData(applicationNo, cameFrom);
       console.log(applicationData, "All info ApplicationData");
       if (Object.keys(applicationData)?.length) {
@@ -349,7 +351,67 @@ const BuildingInfo = () => {
   };
 
   const decreaseFloorNo = () => {
+    console.log(totalFloor, "total floor");
+    console.log(floorOptions, "floor options");
+    console.log(individualFloorSelected, "floor selected");
+
+    // Get last selected floor name and add into the floor option state
+    const lastSelectedFloorName = document.querySelector(
+      `#floorName${totalFloor.length - 1}`
+    )?.value;
+
+    console.log(lastSelectedFloorName, "last selected floor name");
+
+    // checking builtUpArea and Parking area. If value is exist, then remove the value and maintain the total builtUpArea and parking area
+
+    const lastBuiltUpAreaInput = document.querySelector(
+      `#builtUpArea${totalFloor.length - 1}`
+    );
+
+    const lastBuiltUpAreaValue = lastBuiltUpAreaInput?.value;
+
+    const lastParkingAreaInput = document.querySelector(
+      `#parkingArea${totalFloor.length - 1}`
+    );
+
+    const lastParkingAreaValue = lastParkingAreaInput?.value;
+
+    console.log(lastBuiltUpAreaValue, "last built up area value");
+    console.log(lastParkingAreaValue, "last parking up area value");
+    console.log(builtUpArea, builtUpAreaSum, "builtup area");
+    console.log(parkingArea, parkingAreaSum, "parking area");
+
+    if (lastBuiltUpAreaValue) {
+      handleBuiltUpArea(0, totalFloor?.length - 1);
+      lastBuiltUpAreaInput.value = "";
+    }
+
+    if (lastParkingAreaValue) {
+      handleParkingArea(0, totalFloor?.length - 1);
+      lastParkingAreaInput.value = "";
+    }
+
+    // remove the last floor
     totalFloor.pop();
+
+    // update states
+    if (
+      lastSelectedFloorName &&
+      !lastSelectedFloorName?.toLowerCase()?.includes("select")
+    ) {
+      console.log("came here");
+
+      // setFloorOptions((prev) => [...prev, lastSelectedFloorName]);
+      setIndividualFloorSelected((prev) => {
+        const newValue = [...prev];
+        newValue[totalFloor.length] = "";
+        console.log(
+          newValue,
+          "After removing from the individual floor selected"
+        );
+        return newValue;
+      });
+    }
     setTotalFloor([...totalFloor]);
   };
 
@@ -497,6 +559,16 @@ const BuildingInfo = () => {
         parkingArea: parkingArea === "" ? 0 : parkingArea,
       };
     });
+
+    // TODO: is floor detail empty
+    const isFloorDetailEmpty = floorDetails.some(
+      (floorName) => !floorOptions.includes(floorName.name)
+    );
+
+    if (isFloorDetailEmpty) {
+      toast.error("Floor name is empty");
+      throw new Error("Floor name is empty");
+    }
 
     const totalBuiltUpArea = document.getElementById("totalBuiltUpArea").value;
     const totalParkingArea = document.getElementById("totalParkingArea").value;

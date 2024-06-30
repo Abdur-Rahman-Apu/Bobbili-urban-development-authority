@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { AiOutlineFileDone } from "react-icons/ai";
 import { BsHouses } from "react-icons/bs";
 import { VscDebugContinue } from "react-icons/vsc";
-import Application from "../../Dashboard/LtpDashboard/DraftApplication/Application";
+
+import Application from "../../Dashboard/LtpDashboard/DraftApplication/ApplicationModal/Application";
 import DrawingFileShowed from "../../Shared/DrawingFileShowed";
 import ProceedingModalShowPdf from "../../Shared/ProceedingModalShowPdf";
 import MainPageInput from "../MainPageInput";

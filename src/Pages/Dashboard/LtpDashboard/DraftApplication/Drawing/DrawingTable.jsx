@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import DocumentFooter from "./DocumentFooter";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import DocumentFooter from "../Documents/DocumentFooter";
 
 function DrawingTable({
   setApprovedConfirmation,
@@ -220,7 +219,7 @@ function DrawingTable({
                     className="w-full h-14 px-3 py-2 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.proposedSiteObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -249,7 +248,7 @@ function DrawingTable({
                       submitData?.drawingTableObs?.accessRoadWidthObs
                     }
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -277,7 +276,7 @@ function DrawingTable({
                       submitData?.drawingTableObs?.scopeOfRoadWideningObs
                     }
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -303,7 +302,7 @@ function DrawingTable({
                     className="w-full h-14 px-3 py-2  rounded-lg dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.netPlotAreaObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -331,7 +330,7 @@ function DrawingTable({
                       submitData?.drawingTableObs?.buildingHeightObs
                     }
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -386,7 +385,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.fontObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -412,7 +411,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.rareObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -438,7 +437,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.sideOneObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -464,7 +463,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.sideTwoObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -493,7 +492,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.floorObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -513,7 +512,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.stiltFloorObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -533,7 +532,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.groundFloorObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -553,7 +552,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.firstFloorObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -573,7 +572,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.secondFloorObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -631,7 +630,7 @@ function DrawingTable({
                       submitData?.drawingTableObs?.stairCaseWidthObs
                     }
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>
@@ -661,7 +660,7 @@ function DrawingTable({
                     className="w-full px-3 h-14 dark:text-black focus:outline-none bg-gray-50"
                     defaultValue={submitData?.drawingTableObs?.unitsObs}
                     placeholder="Write Your Observation"
-                  // onChange={handleRoadWideningAreaChange}
+                    // onChange={handleRoadWideningAreaChange}
                   />
                 </td>
               </tr>

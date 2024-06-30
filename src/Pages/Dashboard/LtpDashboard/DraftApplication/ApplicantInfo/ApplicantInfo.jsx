@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { FaBuildingUser } from "react-icons/fa6";
 import { useOutletContext } from "react-router";
-import { AuthContext } from "../../../../AuthProvider/AuthProvider";
-import InputField from "../../../Components/InputField";
-import useGetUser from "../../../CustomHook/useGetUser";
+import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import InputField from "../../../../Components/InputField";
+import useGetUser from "../../../../CustomHook/useGetUser";
+import SaveData from "../SaveData";
 import OwnerDetail from "./OwnerDetail";
-import SaveData from "./SaveData";
 
 const ApplicantInfo = () => {
   const stepperData = useOutletContext();
@@ -136,7 +136,7 @@ const ApplicantInfo = () => {
       const applicationData = await getApplicationData(applicationNo, cameFrom);
       const ltpDetailsData = applicationData?.applicantInfo?.ltpDetails;
       const applicantDetailsData =
-        applicationData.applicantInfo.applicantDetails;
+        applicationData?.applicantInfo?.applicantDetails;
 
       setApplicantDetails(applicantDetailsData);
       setLtpType(ltpDetailsData?.type);
