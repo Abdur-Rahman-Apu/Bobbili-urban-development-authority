@@ -6,7 +6,7 @@ import { BsFillHouseCheckFill, BsFillHouseLockFill } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router";
 import BeatLoader from "react-spinners/BeatLoader";
 import LoginCSS from "../../../Style/Login.module.css";
-import { getCookie } from "../../../utils/utils";
+import { getCookie, setCookie } from "../../../utils/utils";
 
 const Login = ({ onShowForgotPassModal }) => {
   const navigate = useNavigate();
@@ -55,11 +55,12 @@ const Login = ({ onShowForgotPassModal }) => {
       const data = await response.json();
 
       if (data.status) {
+        // store userinfo into cookie
+        setCookie("loggedUser", JSON.stringify(data?.userInfo), 0.5);
         // handle user clicked on remember me checkbox
         if (checkbox) {
-          document.cookie = "userId=" + id + ";path=http://localhost:5173/";
-          document.cookie =
-            "password=" + password + ";path=http://localhost:5173/";
+          document.cookie = "userId=" + id + ";path=/";
+          document.cookie = "password=" + password + ";path=/";
         }
 
         setLoading(false);
