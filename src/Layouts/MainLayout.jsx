@@ -9,6 +9,7 @@ import ParticleBg from "../Pages/Components/ParticleBg";
 import toast from "react-hot-toast";
 import { FaUsers } from "react-icons/fa6";
 import ChatBox from "../Pages/Shared/ChatBox";
+import { getCookie } from "../utils/utils";
 
 const MainLayout = () => {
   const path = useLocation()?.pathname;
@@ -69,7 +70,7 @@ const MainLayout = () => {
   const [toggleChat, setToggleChat] = useState(false);
 
   const navigate = useNavigate();
-  const isAuthExist = JSON.parse(localStorage.getItem("loggedUser"));
+  const isAuthExist = JSON.parse(getCookie("loggedUser"));
 
   if (isAuthExist) {
     navigate("/dashboard");

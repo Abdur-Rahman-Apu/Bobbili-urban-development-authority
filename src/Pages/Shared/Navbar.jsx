@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import UserImg from "../../assets/images//man.png";
+import { getCookie } from "../../utils/utils";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const Navbar = () => {
     setShowModal(true);
   }, [showModal]);
 
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  const user = JSON.parse(getCookie("loggedUser"));
 
   return (
     <div className="navbar nm_Container sticky top-0 z-50 shadow-md bg-bgColor">

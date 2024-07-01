@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { createContext, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
+import { getCookie } from "../utils/utils";
 
 export const AuthContext = createContext();
 
@@ -14,7 +15,9 @@ const AuthProvider = ({ children }) => {
 
   // get user information from the localStorage
   const userInfoFromLocalStorage = () => {
-    return JSON.parse(localStorage.getItem("loggedUser"));
+    console.log(getCookie("loggedUser"), "cookie in auth");
+    // return getCookie("loggedUser");
+    return JSON.parse(getCookie("loggedUser"));
   };
 
   // update user info
@@ -274,7 +277,7 @@ const AuthProvider = ({ children }) => {
 
   // logout function
   const handleLogOut = (navigate) => {
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    const loggedUser = JSON.parse(getCookie("loggedUser"));
     console.log(loggedUser, "Logged user");
     fetch(
       `https://residential-building.onrender.com/reverseLoggedInFlag?userId=${JSON.stringify(

@@ -1,8 +1,9 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router";
+import { getCookie } from "../../utils/utils";
 
 const PrivateRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  const user = JSON.parse(getCookie("loggedUser"));
 
   const location = useLocation();
 

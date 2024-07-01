@@ -1,10 +1,9 @@
 import React from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { getCookie } from "../../utils/utils";
 
 const AdminRoute = ({ children }) => {
-  const role = JSON.parse(
-    localStorage.getItem("loggedUser")
-  )?.role?.toLowerCase();
+  const role = JSON.parse(getCookie("loggedUser"))?.role?.toLowerCase();
 
   const condition =
     role === "admin1" || role === "admin2" || role === "super admin";

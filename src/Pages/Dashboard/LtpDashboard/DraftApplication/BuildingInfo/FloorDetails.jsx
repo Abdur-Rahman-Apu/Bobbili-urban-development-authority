@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import { getCookie } from "../../../../../utils/utils";
 
 const FloorDetails = ({
   index,
@@ -20,7 +21,7 @@ const FloorDetails = ({
 }) => {
   const [floorChange, setFloorChange] = useState("select");
 
-  const { role } = JSON.parse(localStorage.getItem("loggedUser"));
+  const { role } = JSON.parse(getCookie("loggedUser"));
 
   const [selectedFloor, setSelectedFloor] = useState("");
 

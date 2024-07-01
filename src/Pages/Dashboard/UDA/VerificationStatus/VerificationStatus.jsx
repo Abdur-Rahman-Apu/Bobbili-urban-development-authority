@@ -4,6 +4,7 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Style from "../../../../Style/TableDownloadBtn.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { getCookie } from "../../../../utils/utils";
 import SearchUserLoading from "../../../Shared/SearchUserLoading";
 
 const VerificationStatus = () => {
@@ -20,7 +21,7 @@ const VerificationStatus = () => {
     sheet: "VerificationStatus",
   });
 
-  const getToken = localStorage.getItem("jwToken");
+  const getToken = JSON.parse(getCookie("jwToken"));
 
   useEffect(() => {
     setLoading(true);

@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { getCookie } from "../../../../../utils/utils";
 import InputField from "../../../../Components/InputField";
 import SendIcon from "../../../../Components/SendIcon";
 import SaveData from "../SaveData";
@@ -689,6 +690,8 @@ const Payment = () => {
             page: "dashboard",
           };
 
+          const token = JSON.parse(getCookie("jwToken"));
+
           fetch(
             "https://residential-building.onrender.com/storePaymentInfo",
             // "http://localhost:5000/storePaymentInfo",
@@ -696,7 +699,7 @@ const Payment = () => {
               method: "PATCH",
               headers: {
                 "Content-Type": "application/json",
-                authorization: localStorage.getItem("jwToken"),
+                authorization: token,
               },
               body: JSON.stringify({
                 applicationNo: data.applicationNo,
@@ -716,6 +719,7 @@ const Payment = () => {
                 Number(storeResult?.onlinePaymentStatus?.amount) ===
                   Number(amount)
               ) {
+                const token = JSON.parse(getCookie("jwToken"));
                 fetch(
                   "https://residential-building.onrender.com/initiateJuspayPayment",
                   // "http://localhost:5000/initiateJuspayPayment",
@@ -723,7 +727,7 @@ const Payment = () => {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
-                      authorization: localStorage.getItem("jwToken"),
+                      authorization: token,
                     },
                     body: JSON.stringify(data),
                   }

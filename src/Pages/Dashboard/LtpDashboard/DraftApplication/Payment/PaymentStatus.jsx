@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
 import pendingAnimation from "../../../../../assets/Payment/Payment-Pending.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
+import { getCookie } from "../../../../../utils/utils";
 
 export default function PaymentStatus() {
   const params = useParams();
@@ -125,6 +126,7 @@ export default function PaymentStatus() {
 
         console.log(paymentData, "payment data");
 
+        const token = JSON.parse(getCookie("jwToken"));
         fetch(
           "https://residential-building.onrender.com/storePaymentInfo",
           // "http://localhost:5000/storePaymentInfo",
@@ -132,7 +134,7 @@ export default function PaymentStatus() {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-              authorization: localStorage.getItem("jwToken"),
+              authorization: token,
             },
             body: JSON.stringify({
               applicationNo: loader.applicationNo,
@@ -151,6 +153,7 @@ export default function PaymentStatus() {
               Number(storeResult?.onlinePaymentStatus?.amount) ===
                 Number(data?.amount)
             ) {
+              const token = JSON.parse(getCookie("jwToken"));
               fetch(
                 "https://residential-building.onrender.com/initiateJuspayPayment",
                 // "http://localhost:5000/initiateJuspayPayment",
@@ -158,7 +161,7 @@ export default function PaymentStatus() {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
-                    authorization: localStorage.getItem("jwToken"),
+                    authorization: token,
                   },
                   body: JSON.stringify(paymentData),
                 }

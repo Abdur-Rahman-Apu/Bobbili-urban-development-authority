@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../../Style/Home.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { getCookie } from "../../../../utils/utils";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import IndividualUser from "./IndividualUser";
@@ -23,7 +24,7 @@ const AllUsers = () => {
   const { userInfoFromLocalStorage, checkLicenseExpirationOfLtp } =
     useContext(AuthContext);
 
-  const getToken = localStorage.getItem("jwToken");
+  const getToken = JSON.parse(getCookie("jwToken"));
 
   const { data, refetch, isLoading, isSuccess } = useQuery({
     queryKey: ["allUser"],

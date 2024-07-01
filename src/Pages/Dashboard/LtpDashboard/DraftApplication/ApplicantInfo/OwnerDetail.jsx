@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { getCookie } from "../../../../../utils/utils";
 import InputField from "../../../../Components/InputField";
 
 const OwnerDetail = ({
@@ -16,7 +17,7 @@ const OwnerDetail = ({
 }) => {
   const ownerSerial = ["First", "Second", "Third", "Fourth", "Fifth"];
 
-  const { role } = JSON.parse(localStorage.getItem("loggedUser"));
+  const { role } = JSON.parse(getCookie("loggedUser"));
 
   const handleInputPhone = (e) => {
     // Remove non-numeric characters

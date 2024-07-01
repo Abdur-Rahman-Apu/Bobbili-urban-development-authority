@@ -7,32 +7,14 @@ import { useLocation, useNavigate } from "react-router";
 import BeatLoader from "react-spinners/BeatLoader";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import LoginCSS from "../../../Style/Login.module.css";
+import { getCookie } from "../../../utils/utils";
 
 const Login = ({ onShowForgotPassModal }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { getUserData } = useContext(AuthContext);
+  const { getUserData, userInfoFromLocalStorage } = useContext(AuthContext);
 
-  // get Cookie data
-  const getCookie = (searchData) => {
-    // Split cookie string and get all individual name=value pairs in an array
-    var cookieArr = document.cookie.split(";");
-
-    // Loop through the array elements
-    for (var i = 0; i < cookieArr.length; i++) {
-      var cookiePair = cookieArr[i].split("=");
-
-      /* Removing whitespace at the beginning of the cookie name
-        and compare it with the given string */
-      if (searchData == cookiePair[0].trim()) {
-        // Decode the cookie value and return
-        return decodeURIComponent(cookiePair[1]);
-      }
-    }
-
-    // Return null if not found
-    return null;
-  };
+  console.log(userInfoFromLocalStorage(), "user info");
 
   let cookieUserId, cookieUserPassword;
 
@@ -54,9 +36,9 @@ const Login = ({ onShowForgotPassModal }) => {
 
   const from = location?.state?.from?.pathName || "/dashboard";
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    setLoading(true);
+    // setLoading(true);
     const { id, password, checkbox } = data;
     console.log(data);
 
@@ -68,6 +50,60 @@ const Login = ({ onShowForgotPassModal }) => {
     console.log(userInfo);
 
     // fetch user information from the databaase
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/login?credentials=${JSON.stringify(userInfo)}`,
+        { method: "GET", credentials: "include" }
+      );
+
+      console.log(response, "response");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+
+        throw new Error(JSON.stringify(errorData.message)); // Assuming the error message is in the 'error' field
+      }
+
+      const data = await response.json();
+      console.log("Data:", data);
+
+      if (data.status) {
+        // handle user clicked on remember me checkbox
+        if (checkbox) {
+          console.log(checkbox);
+          document.cookie = "userId=" + id + ";path=http://localhost:5173/";
+          document.cookie =
+            "password=" + password + ";path=http://localhost:5173/";
+        }
+
+        toast.success("Logged in successfully");
+        navigate(from, { replace: true });
+      }
+    } catch (err) {
+      console.log(err, "err");
+      toast.error(err.message);
+    }
+
+    // const response=fetch(
+    //   `http://localhost:5000/login?credentials=${JSON.stringify(userInfo)}`,
+    //   { method: "GET", credentials: "include" }
+    // )
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw new Error(res.json());
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((result) => {
+    //     console.log(result, "result");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, "err");
+    //   });
+
+    return;
+
     getUserData(id)
       .then((result) => {
         if (result?.status) {

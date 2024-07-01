@@ -18,8 +18,8 @@ import PsSidebar from "./PsSidebar/PsSidebar";
 import UdaSidebar from "./UdaSidebar/UdaSidebar";
 
 const DashboardLayout = () => {
-  const { handleLogOut } = useContext(AuthContext);
-  const currentUser = JSON.parse(localStorage.getItem("loggedUser"));
+  const { handleLogOut, userInfoFromLocalStorage } = useContext(AuthContext);
+  const currentUser = userInfoFromLocalStorage();
   console.log(currentUser?.gender);
   const gender = currentUser?.gender;
   const navigate = useNavigate();
