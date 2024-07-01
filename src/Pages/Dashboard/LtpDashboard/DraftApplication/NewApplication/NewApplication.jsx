@@ -15,14 +15,14 @@ import AllDraftApplication from "../AllApplications/AllDraftApplication";
 
 const NewApplication = () => {
   const {
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     sendUserDataIntoDB,
     alertToConfirmDelete,
     showPageBasedOnApplicationType,
     stepCompleted,
   } = useContext(AuthContext);
 
-  const { _id: userID } = userInfoFromLocalStorage();
+  const { _id: userID } = userInfoFromCookie();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 

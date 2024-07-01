@@ -13,9 +13,14 @@ import { getCookie } from "../utils/utils";
 
 const MainLayout = () => {
   const path = useLocation()?.pathname;
+  const navigate = useNavigate();
 
+  const [toggleChat, setToggleChat] = useState(false);
   const [removeChatUser, setRemoveChatUser] = useState(null);
   const [visitorCount, setVisitorCount] = useState(0);
+  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+
+  const isAuthExist = JSON.parse(getCookie("loggedUser"));
 
   // get total visitor number
   useEffect(() => {
@@ -30,21 +35,13 @@ const MainLayout = () => {
       });
   }, []);
 
-  console.log(path);
   const active =
-    "bg-[#8B5BF6] shadow-md shadow-violetDark text-white border-none ";
+    "bg-normalViolet shadow-md shadow-violetDark text-white border-none ";
 
   const notActive =
-    "hover:bg-normalViolet text-[#8B5BF6] hover:text-white border border-violetLight";
-
-  const gradientColor =
-    "font-bold bg-gradient-to-r from-violet-500 to-fuchsia-500";
-
-  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+    "hover:bg-normalViolet text-normalViolet hover:text-white border border-violetLight";
 
   useEffect(() => {
-    // console.log("theme" in localStorage);
-
     if (
       theme === "dark" ||
       window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -56,8 +53,6 @@ const MainLayout = () => {
       document.documentElement.classList.remove("dark");
       document.documentElement.classList.remove("dark:bg-black");
       localStorage.setItem("theme", "light");
-
-      // console.log(theme);
     }
 
     return () => {
@@ -66,11 +61,6 @@ const MainLayout = () => {
       localStorage.setItem("theme", "light");
     };
   }, [theme]);
-
-  const [toggleChat, setToggleChat] = useState(false);
-
-  const navigate = useNavigate();
-  const isAuthExist = JSON.parse(getCookie("loggedUser"));
 
   if (isAuthExist) {
     navigate("/dashboard");
@@ -85,14 +75,10 @@ const MainLayout = () => {
         {/* upper part  */}
         <div className="py-3 flex-col lg:flex-row flex justify-between items-center z-[10]">
           <div className="basis-3/4 z-[10] pt-2">
-            <p
-              // className="css-3d-text w-fit p-2 text-4xl text-gray-600 font-bold font-sofadi"
-              className="w-fit italic tracking-wider p-2 text-5xl font-bold font-titleFont text-black"
-            >
+            <p className="w-fit italic tracking-wider p-2 text-5xl font-bold font-titleFont text-black">
               Bobbili Urban Development Authority
             </p>
             <p
-              // className={`css-3d-text w-fit p-2 text-2xl text-gray-600 font-bold font-sofadi`}
               className={`w-fit px-2 tracking-wider italic text-3xl text-gray-600 font-bold font-titleFont `}
             >
               Residential Building Plan Approval System
@@ -123,22 +109,6 @@ const MainLayout = () => {
             >
               <MdOutlineDashboard size={25} className="text-2xl" />
             </Link>
-
-            {/* <div className="cursor-pointer">
-            {theme === "dark" ? (
-              <FiSun
-                size={25}
-                onClick={() => setTheme("light")}
-                className="dark:text-white"
-              />
-            ) : (
-              <MdOutlineDarkMode
-                size={25}
-                onClick={() => setTheme("dark")}
-                className=""
-              />
-            )}
-          </div> */}
           </div>
         </div>
 
@@ -184,7 +154,7 @@ const MainLayout = () => {
         </div>
 
         {toggleChat && (
-          <div className="fixed border-2 border-[#8B5BF6] shadow-lg bottom-[70px] right-8 z-10 h-[86vh] w-[400px] bg-white rounded-lg hover:transform hover:translate-y-[-5px] hover:scale-[1.005] hover:translate-z-0 transition-all duration-500 ease-out">
+          <div className="fixed border-2 border-normalViolet shadow-lg bottom-[70px] right-8 z-10 h-[86vh] w-[400px] bg-white rounded-lg hover:transform hover:translate-y-[-5px] hover:scale-[1.005] hover:translate-z-0 transition-all duration-500 ease-out">
             <ChatBox setRemoveChatUser={setRemoveChatUser} />
           </div>
         )}

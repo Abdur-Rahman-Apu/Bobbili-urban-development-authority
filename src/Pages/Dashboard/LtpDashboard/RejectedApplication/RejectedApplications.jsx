@@ -8,10 +8,9 @@ const RejectedApplications = () => {
   const [tableData, setTableData] = useState([]);
   const [data, setData] = useState([]);
 
-  const { userInfoFromLocalStorage, fetchDataFromTheDb } =
-    useContext(AuthContext);
+  const { userInfoFromCookie, fetchDataFromTheDb } = useContext(AuthContext);
 
-  const id = userInfoFromLocalStorage()?._id;
+  const id = userInfoFromCookie()?._id;
 
   console.log(id, "ID");
 

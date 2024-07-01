@@ -7,7 +7,7 @@ import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowAllShortfallApplications from "./ShowAllShortfallApplications";
 
 const Shortfall = () => {
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
+  const { userInfoFromCookie, showPageBasedOnApplicationType } =
     useContext(AuthContext);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Shortfall = () => {
   //     async () => {
   //       const response = await fetch(
   //         `https://residential-building.onrender.com/allSubmitApplications?id=${
-  //           userInfoFromLocalStorage()._id
+  //           userInfoFromCookie()._id
   //         }`
   //       );
   //       return await response.json();

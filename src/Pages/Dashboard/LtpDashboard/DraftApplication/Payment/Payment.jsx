@@ -22,7 +22,7 @@ const Payment = () => {
     confirmAlert,
     alertToTransferDataIntoDepartment,
     sendUserDataIntoDB,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     getUserData,
     stepCompleted,
   } = useContext(AuthContext);
@@ -53,7 +53,7 @@ const Payment = () => {
   const [sentData, setSentData] = useState(
     JSON.parse(localStorage.getItem("PPS"))
   );
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
 
@@ -64,7 +64,7 @@ const Payment = () => {
   useEffect(() => {
     fetch(
       `https://residential-building.onrender.com/userInformation?id=${
-        userInfoFromLocalStorage()?.userId
+        userInfoFromCookie()?.userId
       }`
     )
       .then((res) => res.json())
@@ -686,7 +686,7 @@ const Payment = () => {
             first_name: ltpInfo?.name,
             description: `Pay UDA fees`,
             applicationNo: JSON.parse(localStorage.getItem("CurrentAppNo")),
-            userId: userInfoFromLocalStorage()._id,
+            userId: userInfoFromCookie()._id,
             page: "dashboard",
           };
 

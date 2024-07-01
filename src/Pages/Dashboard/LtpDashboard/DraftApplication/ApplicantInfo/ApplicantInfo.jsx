@@ -14,14 +14,14 @@ const ApplicantInfo = () => {
   const [isStepperVisible, currentStep, steps] = stepperData;
 
   const {
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     confirmAlert,
     sendUserDataIntoDB,
     getApplicationData,
     stepCompleted,
   } = useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
 
   const [data] = useGetUser();
 

@@ -18,14 +18,13 @@ Chart.register(CategoryScale);
 const ShowCharts = () => {
   const path = useLocation().pathname;
 
-  const { userInfoFromLocalStorage, fetchDataFromTheDb } =
-    useContext(AuthContext);
+  const { userInfoFromCookie, fetchDataFromTheDb } = useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage()?.role?.toLowerCase();
+  const role = userInfoFromCookie()?.role?.toLowerCase();
 
   const isLtpOrPs = role === "ltp" || role === "ps";
 
-  // const role = userInfoFromLocalStorage().role;
+  // const role = userInfoFromCookie().role;
 
   const [allLocationData, setAllLocationData] = useState([]);
   const [allDistricts, setAllDistricts] = useState([]);
@@ -146,7 +145,7 @@ const ShowCharts = () => {
       fetch(
         `https://residential-building.onrender.com/filterApplications?search=${JSON.stringify(
           {
-            id: userInfoFromLocalStorage()._id,
+            id: userInfoFromCookie()._id,
             role,
             selectedDate,
           }
@@ -195,7 +194,7 @@ const ShowCharts = () => {
 
       fetch(
         `https://residential-building.onrender.com/totalApplications?data=${JSON.stringify(
-          userInfoFromLocalStorage()
+          userInfoFromCookie()
         )}`
       )
         .then((res) => res.json())

@@ -11,7 +11,7 @@ import NoApplicationFound from "../../../../../Shared/NoApplicationFound";
 import ShowNewMessages from "./ShowNewMessages";
 
 const NewMessage = () => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadOnAccept, setLoadOnAccept] = useState(false);
@@ -22,7 +22,7 @@ const NewMessage = () => {
   const tableHeader = ["Sl.no.", "Customer Info", "Action"];
 
   useEffect(() => {
-    socket.emit("login", { id: userInfoFromLocalStorage().role.toLowerCase() });
+    socket.emit("login", { id: userInfoFromCookie().role.toLowerCase() });
   }, [socket]);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ const NewMessage = () => {
           {
             id,
             action: "accept",
-            acceptedBy: userInfoFromLocalStorage().role.toLowerCase(),
+            acceptedBy: userInfoFromCookie().role.toLowerCase(),
           }
         )}`
       );

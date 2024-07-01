@@ -11,7 +11,7 @@ import showSearchedApplication from "../SearchApplications/showSearchedApplicati
 
 const Inward = () => {
   const {
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     showPageBasedOnApplicationType,
     fetchDataFromTheDb,
   } = useContext(AuthContext);
@@ -31,7 +31,7 @@ const Inward = () => {
     async () => {
       const response = await fetch(
         `https://residential-building.onrender.com/submitApplications?userId=${
-          userInfoFromLocalStorage()?._id
+          userInfoFromCookie()?._id
         }`
       );
       return await response.json();

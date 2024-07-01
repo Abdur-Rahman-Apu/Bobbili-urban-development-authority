@@ -9,7 +9,7 @@ const EndorsementModal = () => {
     getApplicationData,
     ownerNamePattern,
     fetchDataFromTheDb,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
@@ -139,7 +139,7 @@ const EndorsementModal = () => {
     if (dataFromDb && Object.keys(dataFromDb)?.length) {
       fetchDataFromTheDb(
         `https://residential-building.onrender.com/userInformation?id=${
-          userInfoFromLocalStorage().userId
+          userInfoFromCookie().userId
         }`
       ).then((result) => {
         console.log(result, "PS");

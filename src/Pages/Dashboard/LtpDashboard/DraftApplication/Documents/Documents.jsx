@@ -36,12 +36,12 @@ const Documents = () => {
     confirmAlert,
     sendUserDataIntoDB,
     getApplicationData,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     stepCompleted,
   } = useContext(AuthContext);
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
   const gradientColor = "bg-gradient-to-r from-violet-500 to-fuchsia-500";
   const [defaultImageData, setDefaultImageData] = useState([]);
   const [dynamicImageData, setDynamicImageData] = useState([]);

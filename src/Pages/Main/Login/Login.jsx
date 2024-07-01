@@ -1,63 +1,50 @@
 import { motion } from "framer-motion";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BsFillHouseCheckFill, BsFillHouseLockFill } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router";
 import BeatLoader from "react-spinners/BeatLoader";
-import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import LoginCSS from "../../../Style/Login.module.css";
 import { getCookie } from "../../../utils/utils";
 
 const Login = ({ onShowForgotPassModal }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const { getUserData, userInfoFromLocalStorage } = useContext(AuthContext);
+  const [show, setShow] = useState(false);
 
-  console.log(userInfoFromLocalStorage(), "user info");
+  const from = location?.state?.from?.pathName || "/dashboard";
 
   let cookieUserId, cookieUserPassword;
-
   cookieUserId = getCookie("userId");
   cookieUserPassword = getCookie("password");
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       id: "ltp1",
       password: "ltp1",
     },
   });
 
-  const location = useLocation();
-
-  const from = location?.state?.from?.pathName || "/dashboard";
-
+  // handling login
   const onSubmit = async (data) => {
-    console.log(data);
-    // setLoading(true);
+    setLoading(true);
     const { id, password, checkbox } = data;
-    console.log(data);
 
     const userInfo = {
       id,
       password,
     };
 
-    console.log(userInfo);
-
-    // fetch user information from the databaase
-
+    // fetch user information from the database
     try {
       const response = await fetch(
-        `http://localhost:5000/login?credentials=${JSON.stringify(userInfo)}`,
+        `https://residential-building.onrender.com/login?credentials=${JSON.stringify(
+          userInfo
+        )}`,
         { method: "GET", credentials: "include" }
       );
-
-      console.log(response, "response");
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -66,160 +53,32 @@ const Login = ({ onShowForgotPassModal }) => {
       }
 
       const data = await response.json();
-      console.log("Data:", data);
 
       if (data.status) {
         // handle user clicked on remember me checkbox
         if (checkbox) {
-          console.log(checkbox);
           document.cookie = "userId=" + id + ";path=http://localhost:5173/";
           document.cookie =
             "password=" + password + ";path=http://localhost:5173/";
         }
 
+        setLoading(false);
+
         toast.success("Logged in successfully");
         navigate(from, { replace: true });
       }
     } catch (err) {
-      console.log(err, "err");
+      setLoading(false);
       toast.error(err.message);
     }
-
-    // const response=fetch(
-    //   `http://localhost:5000/login?credentials=${JSON.stringify(userInfo)}`,
-    //   { method: "GET", credentials: "include" }
-    // )
-    //   .then((res) => {
-    //     if (!res.ok) {
-    //       throw new Error(res.json());
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((result) => {
-    //     console.log(result, "result");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err, "err");
-    //   });
-
-    return;
-
-    getUserData(id)
-      .then((result) => {
-        if (result?.status) {
-          console.log(1);
-          const { userInfo } = result;
-
-          console.log(userInfo, "userInfo");
-
-          // checking whether password is matching or not
-          if (userInfo?.isLoggedIn) {
-            setLoading(false);
-            toast.error("User already active");
-          } else {
-            if (
-              userInfo?.role?.toLowerCase() === "ps" &&
-              userInfo?.handOver === "true"
-            ) {
-              setLoading(false);
-              toast.error("You handOvered your credentials");
-            } else {
-              if (userInfo.password === password) {
-                console.log("1");
-
-                console.log(userInfo, "LOGIN");
-                // set information to localstorage to stay logged in
-                localStorage.setItem("loggedUser", JSON.stringify(userInfo));
-
-                console.log(localStorage.getItem("loggedUser"));
-
-                // axios.post("https://residential-building.onrender.com/jwt",userInfo,{
-                //   withCredentials: true,
-                //   headers: {
-                //       'Access-Control-Allow-Origin': '*',
-                //       'Content-Type': 'application/json'
-                //   }).then(result=>{
-
-                //   })
-
-                fetch("https://residential-building.onrender.com/jwt", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(userInfo),
-                })
-                  .then((res) => res.json())
-                  .then((result) => {
-                    console.log(result);
-
-                    if (result?.success) {
-                      // set information to cookie to implement remember me functionality
-
-                      localStorage.setItem("jwToken", result?.token);
-                      if (checkbox) {
-                        console.log(checkbox);
-                        document.cookie =
-                          "userId=" + id + ";path=http://localhost:5173/";
-                        document.cookie =
-                          "password=" +
-                          password +
-                          ";path=http://localhost:5173/";
-                      }
-
-                      fetch(
-                        `https://residential-building.onrender.com/updateWithLoggedIn?userId=${JSON.stringify(
-                          userInfo?._id
-                        )}`,
-                        {
-                          method: "PATCH",
-                        }
-                      )
-                        .then((res) => res.json())
-                        .then((result) => {
-                          console.log(result, "Result");
-                          if (result?.acknowledged) {
-                            setLoading(false);
-                            localStorage.setItem("theme", "light");
-                            toast.success("Login successfully");
-                            navigate(from, { replace: true });
-                          } else {
-                            setLoading(false);
-                            toast.error("Server Error");
-                          }
-                        })
-                        .catch((err) => {
-                          setLoading(false);
-                          toast.error("Server Error");
-                        });
-                    }
-                  });
-              } else {
-                setLoading(false);
-                toast.error("Password is wrong");
-              }
-            }
-          }
-        } else {
-          setLoading(false);
-          toast.error("No information found!");
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        toast.error("Server Failed");
-      });
   };
 
   //password hide and show functionality
-  const [show, setShow] = useState(false);
   const handlePasswordShow = () => {
     show ? setShow(false) : setShow(true);
   };
 
-  // if (loading) {
-  //   return "Loading...";
-  // }
-  let [color, setColor] = useState("#a36ee0");
-  const override = {
+  const overrideStyleForBeatLoader = {
     display: "block",
     width: "fit-content",
     margin: "0 auto",
@@ -321,9 +180,9 @@ const Login = ({ onShowForgotPassModal }) => {
           <div className="flex justify-center">
             {loading ? (
               <BeatLoader
-                color={color}
+                color={"#a36ee0"}
                 loading={loading}
-                cssOverride={override}
+                cssOverride={overrideStyleForBeatLoader}
                 size={15}
                 aria-label="Loading Spinner"
                 data-testid="loader"

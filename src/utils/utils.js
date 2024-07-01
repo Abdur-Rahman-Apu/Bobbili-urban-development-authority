@@ -112,6 +112,16 @@ export const otpGenerator = () => {
   return otp;
 };
 
+export const setCookie = (name, value, days) => {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = ";expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + ";path=/";
+};
+
 // get Cookie data
 export const getCookie = (searchData) => {
   // Split cookie string and get all individual name=value pairs in an array

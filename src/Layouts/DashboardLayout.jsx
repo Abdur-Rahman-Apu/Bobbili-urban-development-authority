@@ -18,8 +18,8 @@ import PsSidebar from "./PsSidebar/PsSidebar";
 import UdaSidebar from "./UdaSidebar/UdaSidebar";
 
 const DashboardLayout = () => {
-  const { handleLogOut, userInfoFromLocalStorage } = useContext(AuthContext);
-  const currentUser = userInfoFromLocalStorage();
+  const { handleLogOut, userInfoFromCookie } = useContext(AuthContext);
+  const currentUser = userInfoFromCookie();
   console.log(currentUser?.gender);
   const gender = currentUser?.gender;
   const navigate = useNavigate();
@@ -62,30 +62,13 @@ const DashboardLayout = () => {
           confirmButtonText: "Leave Now",
           allowOutsideClick: false,
         }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
+          // if confirmed then handle log out
           if (result.isConfirmed) {
             handleLogOut(navigate);
           }
         });
       }
     });
-    // Swal.fire({
-    //   title: "Do you want to handOver?",
-    //   showCancelButton: true,
-    //   confirmButtonText: "Yes",
-    // }).then((result) => {
-    //   /* Read more about isConfirmed, isDenied below */
-    //   if (result.isConfirmed) {
-    //     fetch(`https://residential-building.onrender.com/handOveredByPs?id=${JSON.stringify(id)}`, {
-    //       method: "PATCH",
-    //     })
-    //       .then((res) => res.json())
-    //       .then((result) => {
-    //         console.log(result, "result");
-    //         Swal.fire("Saved!", "", "success");
-    //       });
-    //   }
-    // });
   };
 
   return (
@@ -129,10 +112,6 @@ const DashboardLayout = () => {
             <li>
               <div className="flex-1 mt-10 lg:mt-3">
                 <Link to="/dashboard" className="font-bold normal-case text-xl">
-                  {/* <img className="h-full" src={Logo} alt="The logo of the website" /> */}
-                  {/* <p className="hidden text-gray-600 lg:block text-3xl font-titleFont">
-                    BUDA
-                  </p> */}
                   {/* <SvgTextAnimation /> */}
                   <button className="logo-btn" data-text="Awesome">
                     <span className="actual-text">&nbsp;BUDA&nbsp;</span>
@@ -143,7 +122,6 @@ const DashboardLayout = () => {
                 </Link>
               </div>
 
-              {/* <LuSettings size={20} className="text-black cursor-pointer" /> */}
               <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="block w-20 btn-circle avatar ">
                   <div className="cursor-pointer mx-auto mt-3 rounded-full nm_Container bg-sky-200">

@@ -12,7 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { setIsDark, userInfoFromLocalStorage, handleLogOut } =
+  const { setIsDark, userInfoFromCookie, handleLogOut } =
     useContext(AuthContext);
 
   const [theme, setTheme] = useState(localStorage.getItem("theme"));
@@ -55,7 +55,7 @@ const Navbar = () => {
   const onSubmit = (formValue) => {
     fetch(
       `https://residential-building.onrender.com/updateUserInfo/${
-        userInfoFromLocalStorage()._id
+        userInfoFromCookie()._id
       }`,
       {
         method: "PATCH",

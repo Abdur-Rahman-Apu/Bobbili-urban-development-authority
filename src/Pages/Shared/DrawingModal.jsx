@@ -12,7 +12,7 @@ const DrawingModal = () => {
   function onDocumentLoadSuccess(numPages) {
     setNumPages(numPages);
   }
-  const { getApplicationData, getUserData, userInfoFromLocalStorage } =
+  const { getApplicationData, getUserData, userInfoFromCookie } =
     useContext(AuthContext);
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
@@ -64,7 +64,7 @@ const DrawingModal = () => {
   const [psSignImg, setPsSignImg] = useState(null);
   useEffect(() => {
     const getPsData = async () => {
-      const { userId } = userInfoFromLocalStorage();
+      const { userId } = userInfoFromCookie();
 
       const data = await getUserData(userId);
       console.log(data, "data");

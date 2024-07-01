@@ -14,7 +14,7 @@ function Outward() {
 
   const navigate = useNavigate();
 
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
+  const { userInfoFromCookie, showPageBasedOnApplicationType } =
     useContext(AuthContext);
 
   // get all applications which are submitted already
@@ -23,7 +23,7 @@ function Outward() {
     async () => {
       const response = await fetch(
         `https://residential-building.onrender.com/totalApplications?data=${JSON.stringify(
-          userInfoFromLocalStorage()
+          userInfoFromCookie()
         )}`
       );
       return await response.json();

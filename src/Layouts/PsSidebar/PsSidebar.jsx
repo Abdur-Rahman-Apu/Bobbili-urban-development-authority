@@ -15,10 +15,10 @@ function PsSidebar() {
     decideHoverColor,
     isDark,
     findWhichMenuIsActiveForPsSideBar,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage()?.role;
+  const role = userInfoFromCookie()?.role;
 
   const [activeColor, setActiveColor] = useState("");
   const [hoverColor, setHoverColor] = useState("");

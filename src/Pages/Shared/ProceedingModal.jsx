@@ -7,7 +7,7 @@ const ProceedingModal = () => {
     getApplicationData,
     calculateNoOfFloors,
     getUserData,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
@@ -31,7 +31,7 @@ const ProceedingModal = () => {
 
   useEffect(() => {
     const psData = async () => {
-      const { userId } = userInfoFromLocalStorage();
+      const { userId } = userInfoFromCookie();
 
       const data = await getUserData(userId);
       console.log(data, "data");

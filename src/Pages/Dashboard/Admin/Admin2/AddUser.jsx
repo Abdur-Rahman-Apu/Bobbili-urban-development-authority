@@ -12,12 +12,12 @@ const AddUser = () => {
   const [userType, setUserType] = useState(null);
 
   const {
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     checkLicenseExpirationOfLtp,
     fetchDataFromTheDb,
   } = useContext(AuthContext);
 
-  const userRole = userInfoFromLocalStorage().role;
+  const userRole = userInfoFromCookie().role;
 
   const navigate = useNavigate();
 

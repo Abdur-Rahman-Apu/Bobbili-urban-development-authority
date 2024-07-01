@@ -7,7 +7,7 @@ import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowAllApprovedApplications from "./ShowAllApprovedApplications";
 
 const Approved = () => {
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
+  const { userInfoFromCookie, showPageBasedOnApplicationType } =
     useContext(AuthContext);
 
   const navigate = useNavigate();

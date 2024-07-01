@@ -7,7 +7,7 @@ import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowSubmittedApplication from "./ShowSubmittedApplication";
 
 const SubmitApplication = () => {
-  const { userInfoFromLocalStorage, showPageBasedOnApplicationType } =
+  const { userInfoFromCookie, showPageBasedOnApplicationType } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState("");

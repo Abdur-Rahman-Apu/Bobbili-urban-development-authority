@@ -10,7 +10,7 @@ import unknownImg from "../../../../../../assets/images/unknown.png";
 import socket from "../../../../../Common/socket";
 
 const ConnectedCustomers = ({ setActiveChat, setShow }) => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [checkNewMessage, setCheckNewMessage] = useState([]);
 
@@ -30,7 +30,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
         try {
           const { data: updateData } = await axios.get(
             `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
-              userInfoFromLocalStorage().role.toLowerCase()
+              userInfoFromCookie().role.toLowerCase()
             )}`
           );
 
@@ -52,7 +52,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
       try {
         const { data } = await axios.get(
           `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
-            userInfoFromLocalStorage().role.toLowerCase()
+            userInfoFromCookie().role.toLowerCase()
           )}`
         );
 

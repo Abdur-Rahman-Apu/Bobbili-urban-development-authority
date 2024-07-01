@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { MdSpaceDashboard } from "react-icons/md";
-import { AuthContext } from "../../AuthProvider/AuthProvider";
 import { BiSolidUserPlus } from "react-icons/bi";
 import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
+import { MdSpaceDashboard } from "react-icons/md";
 import { RiCustomerService2Fill } from "react-icons/ri";
+import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const AdminSideBar = () => {
   const path = useLocation().pathname;
@@ -14,13 +14,13 @@ const AdminSideBar = () => {
     decideActiveColor,
     decideHoverColor,
     isDark,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
   const [activeColor, setActiveColor] = useState("");
   const [hoverColor, setHoverColor] = useState("");
 
-  const role = userInfoFromLocalStorage()?.role?.toLowerCase();
+  const role = userInfoFromCookie()?.role?.toLowerCase();
 
   console.log(role, "role");
 

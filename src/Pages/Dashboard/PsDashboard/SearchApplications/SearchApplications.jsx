@@ -13,7 +13,7 @@ function SearchApplications() {
   localStorage.setItem("page", JSON.stringify("searchApplicationByPs"));
   const navigate = useNavigate();
   const {
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     showPageBasedOnApplicationType,
     fetchDataFromTheDb,
   } = useContext(AuthContext);
@@ -45,10 +45,10 @@ function SearchApplications() {
     setLoading(true);
     fetch(
       `https://residential-building.onrender.com/getPsApplications?id=${JSON.stringify(
-        userInfoFromLocalStorage()?._id
+        userInfoFromCookie()?._id
       )}`
       // `http://localhost:5000/getPsApplications?id=${JSON.stringify(
-      //   userInfoFromLocalStorage()?._id
+      //   userInfoFromCookie()?._id
       // )}`
     )
       .then((res) => res.json())
@@ -88,7 +88,7 @@ function SearchApplications() {
 
     const query = JSON.stringify({
       searchValue,
-      psId: userInfoFromLocalStorage()._id,
+      psId: userInfoFromCookie()._id,
     });
 
     fetchDataFromTheDb(

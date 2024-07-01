@@ -16,7 +16,7 @@ import NoApplicationFound from "../../../../../Shared/NoApplicationFound";
 import ShowMissedRequest from "./ShowMissedRequest";
 
 const MissedRequest = () => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [allData, setAllData] = useState([]);
   const [tableData, setTableData] = useState({});
@@ -42,7 +42,7 @@ const MissedRequest = () => {
   }, []);
 
   useEffect(() => {
-    socket.emit("login", { id: userInfoFromLocalStorage().role.toLowerCase() });
+    socket.emit("login", { id: userInfoFromCookie().role.toLowerCase() });
   }, []);
 
   useEffect(() => {

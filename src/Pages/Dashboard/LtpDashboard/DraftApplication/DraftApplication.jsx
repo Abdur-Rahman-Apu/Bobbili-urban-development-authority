@@ -23,7 +23,7 @@ const DraftApplication = () => {
   const [openEndorsement, setOpenEndorsement] = useState(false);
   const [openDrawing, setOpenDrawing] = useState(false);
 
-  const { userInfoFromLocalStorage, stepCompleted } = useContext(AuthContext);
+  const { userInfoFromCookie, stepCompleted } = useContext(AuthContext);
 
   const state = location?.state;
   console.log(state, "location");
@@ -44,7 +44,7 @@ const DraftApplication = () => {
 
   console.log(stepCompleted.current, "STEEP");
 
-  const role = userInfoFromLocalStorage()?.role;
+  const role = userInfoFromCookie()?.role;
 
   useEffect(() => {
     if (stepCompleted.current === 6) {

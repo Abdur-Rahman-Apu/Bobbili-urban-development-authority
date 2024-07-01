@@ -7,7 +7,7 @@ const PreviousFileModal = ({ FileModal }) => {
   const { setIsModalOpen, isModalOpen, setDataFromDB } = FileModal;
   const fileInputRef = useRef(null);
 
-  const { sendUserDataIntoDB, userInfoFromLocalStorage, getApplicationData } =
+  const { sendUserDataIntoDB, userInfoFromCookie, getApplicationData } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const PreviousFileModal = ({ FileModal }) => {
         console.log(modifiedFields, "modifiedFields");
 
         const filterDataForLtp = {
-          userId: userInfoFromLocalStorage()._id,
+          userId: userInfoFromCookie()._id,
           oldApplicationNo: newAppNo,
         };
 

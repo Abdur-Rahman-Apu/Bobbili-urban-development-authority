@@ -1,6 +1,6 @@
+import { motion } from "framer-motion";
 import React, { useContext } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
-import { motion } from "framer-motion";
 
 const InputField = ({
   id,
@@ -14,8 +14,8 @@ const InputField = ({
   // Define default values for type and placeholder if not provided
   const inputType = type || "text";
 
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
-  const role = userInfoFromLocalStorage().role;
+  const { userInfoFromCookie } = useContext(AuthContext);
+  const role = userInfoFromCookie().role;
   const page = JSON.parse(localStorage.getItem("page"));
   const isReadOnly =
     role === "PS" ||

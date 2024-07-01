@@ -7,7 +7,7 @@ import Login from "../Login/Login";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 
 const Home = () => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const path = useLocation().pathname;
   const [isOpenForgotPassModal, setIsOpenForgotPassModal] = useState(false);
   // console.log(path);

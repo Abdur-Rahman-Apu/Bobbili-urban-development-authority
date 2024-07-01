@@ -3,13 +3,13 @@ import { useQuery } from "react-query";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const useGetPageWiseApplication = (searchApplicationName) => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   // console.log(searchApplicationName.split(" ").join(""));
   const { data, refetch, isLoading, isError, isSuccess } = useQuery(
     [`all${searchApplicationName.split(" ").join("")}`],
     async () => {
       const query = {
-        userId: userInfoFromLocalStorage()._id,
+        userId: userInfoFromCookie()._id,
         searchApplicationName,
       };
       const response = await fetch(

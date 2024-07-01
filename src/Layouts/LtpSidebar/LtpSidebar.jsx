@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { MdOutlineLogout, MdSpaceDashboard } from "react-icons/md";
-import { BiCheckDouble, BiSolidImageAdd } from "react-icons/bi";
-import { CgDanger } from "react-icons/cg";
-import { BsSendCheckFill } from "react-icons/bs";
 import { AiOutlineForm } from "react-icons/ai";
+import { BiCheckDouble, BiSolidImageAdd } from "react-icons/bi";
+import { BsSendCheckFill } from "react-icons/bs";
+import { CgDanger } from "react-icons/cg";
+import { MdSpaceDashboard } from "react-icons/md";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const LtpSidebar = () => {
@@ -18,10 +18,10 @@ const LtpSidebar = () => {
     decideHoverColor,
     isDark,
     findWhichMenuIsActiveForLtpSideBar,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage()?.role;
+  const role = userInfoFromCookie()?.role;
 
   const [activeColor, setActiveColor] = useState("");
   const [hoverColor, setHoverColor] = useState("");
@@ -53,8 +53,9 @@ const LtpSidebar = () => {
   return (
     <>
       <li
-        className={`${path === "/dashboard" && activeColor
-          } ${sidebarHoverClass}`}
+        className={`${
+          path === "/dashboard" && activeColor
+        } ${sidebarHoverClass}`}
       >
         <span>
           <MdSpaceDashboard size={20} />
@@ -65,11 +66,14 @@ const LtpSidebar = () => {
       </li>
 
       <li
-        className={`${findWhichMenuIsActiveForLtpSideBar(
-          path,
-          "/dashboard/draftApplication",
-          "draft",
-          role) && activeColor} ${sidebarHoverClass}`}
+        className={`${
+          findWhichMenuIsActiveForLtpSideBar(
+            path,
+            "/dashboard/draftApplication",
+            "draft",
+            role
+          ) && activeColor
+        } ${sidebarHoverClass}`}
       >
         <span>
           <BiSolidImageAdd size={22} />
@@ -86,15 +90,16 @@ const LtpSidebar = () => {
       </li>
 
       <li
-        className={`${(findWhichMenuIsActiveForLtpSideBar(
-          path,
-          "/dashboard/submitApplication",
-          "submit",
-          role
-        ) ||
-          path.includes("/dashboard/submitApplication")) &&
+        className={`${
+          (findWhichMenuIsActiveForLtpSideBar(
+            path,
+            "/dashboard/submitApplication",
+            "submit",
+            role
+          ) ||
+            path.includes("/dashboard/submitApplication")) &&
           activeColor
-          } ${sidebarHoverClass}`}
+        } ${sidebarHoverClass}`}
       >
         <span>
           <BsSendCheckFill size={19} />
@@ -111,13 +116,14 @@ const LtpSidebar = () => {
       </li>
 
       <li
-        className={`${findWhichMenuIsActiveForLtpSideBar(
-          path,
-          "/dashboard/approvedApplication",
-          "approved",
-          role
-        ) && activeColor
-          } ${sidebarHoverClass}`}
+        className={`${
+          findWhichMenuIsActiveForLtpSideBar(
+            path,
+            "/dashboard/approvedApplication",
+            "approved",
+            role
+          ) && activeColor
+        } ${sidebarHoverClass}`}
       >
         <span>
           <BiCheckDouble size={23} />
@@ -151,13 +157,14 @@ const LtpSidebar = () => {
       </li>
 
       <li
-        className={`${findWhichMenuIsActiveForLtpSideBar(
-          path,
-          "/dashboard/rejectedApplications",
-          "rejected",
-          role
-        ) && activeColor
-          } ${sidebarHoverClass} flex items-center ps-4 ${hoverColor} mb-1`}
+        className={`${
+          findWhichMenuIsActiveForLtpSideBar(
+            path,
+            "/dashboard/rejectedApplications",
+            "rejected",
+            role
+          ) && activeColor
+        } ${sidebarHoverClass} flex items-center ps-4 ${hoverColor} mb-1`}
       >
         <span>
           <CgDanger size={22} />

@@ -5,14 +5,14 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import undefinedImg from "../../../../assets/images/man.png";
 
 const IndividualUser = ({ user, deleteUser, updateUser }) => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
 
   const imgSrc =
     user?.gender?.toLowerCase() === "male"
       ? "https://avatar.iran.liara.run/public/boy"
       : "https://avatar.iran.liara.run/public/girl";
 
-  const userType = userInfoFromLocalStorage().role;
+  const userType = userInfoFromCookie().role;
   // console.log(user, "user");
 
   return (

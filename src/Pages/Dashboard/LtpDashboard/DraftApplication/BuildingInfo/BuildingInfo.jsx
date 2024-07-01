@@ -34,7 +34,7 @@ const BuildingInfo = () => {
   const {
     confirmAlert,
     sendUserDataIntoDB,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     getApplicationData,
     fetchDataFromTheDb,
     stepCompleted,
@@ -45,9 +45,9 @@ const BuildingInfo = () => {
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
 
-  // const { _id: id } = userInfoFromLocalStorage();
+  // const { _id: id } = userInfoFromCookie();
 
-  const role = userInfoFromLocalStorage()?.role;
+  const role = userInfoFromCookie()?.role;
 
   const page = JSON.parse(localStorage.getItem("page"));
 

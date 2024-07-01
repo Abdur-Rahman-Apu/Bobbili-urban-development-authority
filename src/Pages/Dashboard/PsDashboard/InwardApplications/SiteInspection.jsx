@@ -18,7 +18,7 @@ const SiteInspection = () => {
     confirmAlert,
     sendUserDataIntoDB,
     getApplicationData,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
   } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
@@ -84,8 +84,8 @@ const SiteInspection = () => {
     async () => {
       const query = JSON.stringify({
         appNo: applicationNo,
-        userId: userInfoFromLocalStorage()._id,
-        role: userInfoFromLocalStorage().role,
+        userId: userInfoFromCookie()._id,
+        role: userInfoFromCookie().role,
         page: cameFrom,
       });
 
@@ -351,7 +351,7 @@ const SiteInspection = () => {
         return await sendUserDataIntoDB(url, "PATCH", {
           applicationNo,
           siteInspection,
-          psId: userInfoFromLocalStorage()._id,
+          psId: userInfoFromCookie()._id,
         });
       }
     } else {
@@ -422,7 +422,7 @@ const SiteInspection = () => {
     //   const trackPSAction = JSON.parse(localStorage.getItem("PSDecision"));
 
     //   const data = {
-    //     psId: userInfoFromLocalStorage()?._id,
+    //     psId: userInfoFromCookie()?._id,
     //     applicationNo,
     //     trackPSAction,
     //     psSignedFiles: psSignedPdf,
@@ -462,7 +462,7 @@ const SiteInspection = () => {
     const trackPSAction = JSON.parse(localStorage.getItem("PSDecision"));
 
     const data = {
-      psId: userInfoFromLocalStorage()?._id,
+      psId: userInfoFromCookie()?._id,
       applicationNo,
       trackPSAction,
       psSignedFiles: storage,
@@ -616,7 +616,7 @@ const SiteInspection = () => {
     setLoadingForOtpGeneration(true);
     const otp = "1235";
     const data = {
-      psId: userInfoFromLocalStorage()._id,
+      psId: userInfoFromCookie()._id,
       otp,
     };
     fetch(`https://residential-building.onrender.com/storeOtpForPsSign`, {
@@ -799,7 +799,7 @@ const SiteInspection = () => {
     setError("");
     console.log(otp, "OTP");
     const data = {
-      psId: userInfoFromLocalStorage()._id,
+      psId: userInfoFromCookie()._id,
       otp,
     };
     fetch(

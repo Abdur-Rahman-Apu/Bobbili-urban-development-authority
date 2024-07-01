@@ -21,7 +21,7 @@ const AllUsers = () => {
   const [validityError, setValidityError] = useState("");
   const [loadingForUpdate, setLoadingForUpdate] = useState(false);
 
-  const { userInfoFromLocalStorage, checkLicenseExpirationOfLtp } =
+  const { userInfoFromCookie, checkLicenseExpirationOfLtp } =
     useContext(AuthContext);
 
   const getToken = JSON.parse(getCookie("jwToken"));
@@ -53,7 +53,7 @@ const AllUsers = () => {
         setError(msg);
       } else {
         if (
-          userInfoFromLocalStorage()?.role?.toLowerCase() !==
+          userInfoFromCookie()?.role?.toLowerCase() !==
           "Super Admin"?.toLowerCase()
         ) {
           setRecords([...data.filter((u) => u.role !== "Super Admin")]);

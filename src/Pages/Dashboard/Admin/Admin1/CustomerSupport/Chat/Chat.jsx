@@ -7,7 +7,7 @@ import ConnectedCustomers from "./ConnectedCustomers";
 import RightSidebar from "./RightSidebar";
 
 const Chat = () => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const [activeChat, setActiveChat] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -15,7 +15,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket.emit("login", {
-      id: userInfoFromLocalStorage()?.role?.toLowerCase(),
+      id: userInfoFromCookie()?.role?.toLowerCase(),
     });
   }, [socket]);
 

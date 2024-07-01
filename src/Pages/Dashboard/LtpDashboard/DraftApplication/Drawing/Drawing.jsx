@@ -29,14 +29,14 @@ const Drawing = () => {
     confirmAlert,
     sendUserDataIntoDB,
     getApplicationData,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     getSubmitApplicationData,
     stepCompleted,
   } = useContext(AuthContext);
 
   const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
   const cameFrom = JSON.parse(localStorage.getItem("page"));
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
 
   const [imageFromDB, setImageFromDB] = useState({});
 

@@ -8,7 +8,7 @@ import { district } from "../../../assets/buildingInfo.json";
 const Location = () => {
   const path = useLocation().pathname;
 
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const gradientColor = "bg-gradient-to-r from-violet-500 to-fuchsia-500";
 
   const [applicationNumbers, setApplicationNumbers] = useState(null);

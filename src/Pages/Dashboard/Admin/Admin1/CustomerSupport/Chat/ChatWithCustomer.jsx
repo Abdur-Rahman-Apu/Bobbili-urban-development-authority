@@ -20,7 +20,7 @@ const ChatWithCustomer = ({
   setMessages,
 }) => {
   console.log(activeChat, "c");
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
   const [connectionStatus, setConnectionStatus] = useState(true);
   const [userLeft, setUserLeft] = useState(false);
   const messagesRef = useRef(null);
@@ -80,7 +80,7 @@ const ChatWithCustomer = ({
     console.log(data);
 
     const messageData = {
-      userId: userInfoFromLocalStorage()?.role?.toLowerCase(),
+      userId: userInfoFromCookie()?.role?.toLowerCase(),
       message: data?.message,
     };
 
@@ -96,7 +96,7 @@ const ChatWithCustomer = ({
           id: activeChat?._id,
           action: "text",
           message: {
-            userId: userInfoFromLocalStorage()?.role?.toLowerCase(),
+            userId: userInfoFromCookie()?.role?.toLowerCase(),
             message: messageData?.message,
           },
         }

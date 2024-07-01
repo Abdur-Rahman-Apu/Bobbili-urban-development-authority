@@ -11,9 +11,9 @@ import useGetUser from "../CustomHook/useGetUser";
 import UpdateProfileInput from "./UpdateProfileInput";
 
 const UpdateProfile = () => {
-  const { userInfoFromLocalStorage } = useContext(AuthContext);
+  const { userInfoFromCookie } = useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage()?.role;
+  const role = userInfoFromCookie()?.role;
 
   const [data, refetch] = useGetUser();
 
@@ -88,7 +88,7 @@ const UpdateProfile = () => {
       console.log(formValue, "form value");
       fetch(
         `https://residential-building.onrender.com/updateUserInfo/${
-          userInfoFromLocalStorage()._id
+          userInfoFromCookie()._id
         }`,
         {
           method: "PATCH",

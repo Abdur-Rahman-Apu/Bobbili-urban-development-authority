@@ -14,7 +14,7 @@ function AppChecklist() {
     confirmAlert,
     sendUserDataIntoDB,
     getApplicationData,
-    userInfoFromLocalStorage,
+    userInfoFromCookie,
     stepCompleted,
   } = useContext(AuthContext);
 
@@ -67,7 +67,7 @@ function AppChecklist() {
   };
   const btn =
     "btn btn-md text-sm px-6 bg-Primary transition duration-700 hover:bg-btnHover hover:shadow-md";
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
 
   return (
     <div className="text-sm relative font-roboto">

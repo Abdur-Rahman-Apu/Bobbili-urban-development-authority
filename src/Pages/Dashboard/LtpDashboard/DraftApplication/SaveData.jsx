@@ -23,13 +23,10 @@ const SaveData = ({
   setShowApprovedModal,
   setShowShortfallModal,
 }) => {
-  const {
-    userInfoFromLocalStorage,
-    needToHideElementBasedOnPage,
-    stepCompleted,
-  } = useContext(AuthContext);
+  const { userInfoFromCookie, needToHideElementBasedOnPage, stepCompleted } =
+    useContext(AuthContext);
 
-  const role = userInfoFromLocalStorage().role;
+  const role = userInfoFromCookie().role;
 
   // console.log(role, "ROLE");
 

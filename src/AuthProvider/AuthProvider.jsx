@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { createContext, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
-import { deleteCookie, getCookie } from "../utils/utils";
+import { deleteCookie, getCookie, setCookie } from "../utils/utils";
 
 export const AuthContext = createContext();
 
@@ -14,21 +14,20 @@ const AuthProvider = ({ children }) => {
   const stepCompleted = useRef(null);
 
   // get user information from the localStorage
-  const userInfoFromLocalStorage = () => {
+  const userInfoFromCookie = () => {
     console.log(getCookie("loggedUser"), "cookie in auth");
-    // return getCookie("loggedUser");
     return JSON.parse(getCookie("loggedUser"));
   };
 
-  // update user info
-  const updateUserInfoInLocalStorage = (id) => {
+  // update user info  intocookie
+  const updateUserInfoInCookie = (id) => {
     fetch(`https://residential-building.onrender.com/getUser?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status) {
           const { userInfo } = data;
-          // set information to localstorage to stay logged in
-          localStorage.setItem("loggedUser", JSON.stringify(userInfo));
+          // set information to cookie to stay logged in
+          setCookie("loggedUser", JSON.stringify(userInfo), 0.5);
           toast.success("user update successfully");
         } else {
           setLoading(false);
@@ -67,7 +66,7 @@ const AuthProvider = ({ children }) => {
   const alertToTransferDataIntoDepartment = async (applicationNo, navigate) => {
     console.log(applicationNo, "CurrentApplicationNo");
 
-    const data = { userId: userInfoFromLocalStorage()._id, applicationNo };
+    const data = { userId: userInfoFromCookie()._id, applicationNo };
 
     const url = `https://residential-building.onrender.com/deleteApplication?data=${JSON.stringify(
       data
@@ -121,16 +120,16 @@ const AuthProvider = ({ children }) => {
 
   // confirmation message and send data to database
   const confirmAlert = (stepperData, collectInputFieldData, pageWiseAction) => {
-    console.log(userInfoFromLocalStorage()._id, "GET USER ID");
+    console.log(userInfoFromCookie()._id, "GET USER ID");
 
-    const role = userInfoFromLocalStorage().role;
+    const role = userInfoFromCookie().role;
 
     const applicationNo = JSON.parse(localStorage.getItem("CurrentAppNo"));
 
     let url;
 
     const filterDataForLtp = JSON.stringify({
-      userId: userInfoFromLocalStorage()._id,
+      userId: userInfoFromCookie()._id,
       oldApplicationNo: applicationNo,
     });
 
@@ -227,8 +226,8 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
       const query = JSON.stringify({
         appNo,
-        userId: userInfoFromLocalStorage()?._id,
-        role: userInfoFromLocalStorage()?.role,
+        userId: userInfoFromCookie()?._id,
+        role: userInfoFromCookie()?.role,
         page,
       });
 
@@ -278,7 +277,7 @@ const AuthProvider = ({ children }) => {
   // logout function
   const handleLogOut = (navigate) => {
     const loggedUser = JSON.parse(getCookie("loggedUser"));
-    console.log(loggedUser, "Logged user");
+
     fetch(
       `https://residential-building.onrender.com/reverseLoggedInFlag?userId=${JSON.stringify(
         loggedUser._id
@@ -558,8 +557,8 @@ const AuthProvider = ({ children }) => {
 
   //   create a object to transfer data into various components
   const userInfo = {
-    updateUserInfoInLocalStorage,
-    userInfoFromLocalStorage,
+    updateUserInfoInCookie,
+    userInfoFromCookie,
     sendUserDataIntoDB,
     getUserData,
     confirmAlert,
