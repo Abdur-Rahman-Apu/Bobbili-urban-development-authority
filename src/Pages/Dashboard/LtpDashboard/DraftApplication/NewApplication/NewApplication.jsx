@@ -35,7 +35,8 @@ const NewApplication = () => {
     ["draftApplications"],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/draftApplications/${userID}`
+        `https://residential-building.onrender.com/draftApplications/${userID}`,
+        { method: "GET", credentials: "include" }
       );
       return await response.json();
     }
