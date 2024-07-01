@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { createContext, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
-import { getCookie } from "../utils/utils";
+import { deleteCookie, getCookie } from "../utils/utils";
 
 export const AuthContext = createContext();
 
@@ -291,8 +291,9 @@ const AuthProvider = ({ children }) => {
       .then((result) => {
         if (result.acknowledged) {
           localStorage.clear();
+          deleteCookie("loggedUser");
+          deleteCookie("jwToken");
           toast.success("Logout successfully");
-
           navigate("/");
         } else {
           toast.error("Server Error");
