@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../utils/api";
 import TableLayout from "../../../Components/TableLayout";
 import useDebounce from "../../../CustomHook/useDebounce";
 import NetworkError from "../../../Shared/NetworkError";
@@ -44,10 +45,10 @@ function SearchApplications() {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `https://residential-building.onrender.com/getPsApplications?id=${JSON.stringify(
+      `${baseUrl}/searchApp/psApplications?id=${JSON.stringify(
         userInfoFromCookie()?._id
       )}`
-      // `http://localhost:5000/getPsApplications?id=${JSON.stringify(
+      // `http://localhost:5000/searchApp/psApplications?id=${JSON.stringify(
       //   userInfoFromCookie()?._id
       // )}`
     )
@@ -92,7 +93,7 @@ function SearchApplications() {
     });
 
     fetchDataFromTheDb(
-      `https://residential-building.onrender.com/${searchType}?search=${query}`
+      `${baseUrl}/${searchType}?search=${query}`
       // `http://localhost:5000/${searchType}?search=${query}`
     )
       .then((data) => {
@@ -120,7 +121,7 @@ function SearchApplications() {
     }
 
     // fetchDataFromTheDb(
-    //   `https://residential-building.onrender.com/getSearchedApplication?search=${search}`
+    //   `${baseUrl}/getSearchedApplication?search=${search}`
     // ).then((data) => {
     //   console.log(data);
     //   setAllData(data?.result);

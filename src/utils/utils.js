@@ -1,50 +1,4 @@
-// // export async function getBase64Url(url) {
-// //   const toDataUrl = async function (url, callback) {
-// //     //Convert to base64
-// //     return new Promise((resolve, reject) => {
-// //       var xhr = new XMLHttpRequest();
-// //       xhr.onload = function () {
-// //         var reader = new FileReader();
-// //         reader.onloadend = function () {
-// //           resolve(reader.result);
-// //         };
-// //         reader.readAsDataURL(xhr.response);
-// //       };
-// //       xhr.onerror = () => {
-// //         reject({
-// //           status: this.status,
-// //           statusText: xhr.statusText,
-// //         });
-// //       };
-// //       xhr.open("GET", url);
-// //       xhr.responseType = "blob";
-// //       xhr.send();
-// //     });
-// //   };
-// //   const urlBase64 = await toDataUrl(url);
-// //   return urlBase64;
-// // }
-
-// export async function getBase64Url(url) {
-//   try {
-//     const response = await fetch(
-//       `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(url)}`
-//     );
-//     if (!response.ok) {
-//       throw new Error("Failed to fetch image");
-//     }
-//     const blob = await response.blob();
-//     const reader = new FileReader();
-//     reader.readAsDataURL(blob);
-//     return new Promise((resolve, reject) => {
-//       reader.onloadend = () => resolve(reader.result);
-//       reader.onerror = reject;
-//     });
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return null;
-//   }
-// }
+import { baseUrl } from "./api";
 
 async function parseURI(d) {
   var reader =
@@ -63,9 +17,7 @@ async function parseURI(d) {
 
 export async function getDataBlob(url) {
   const res = await fetch(
-    `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(
-      url
-    )}`
+    `${baseUrl}/storage/getImage?url=${encodeURIComponent(url)}`
   );
   //   var res = await fetch(url);
   var blob = await res.blob();
@@ -77,9 +29,7 @@ export async function getDataBlob(url) {
 
 export async function URLtoFile(url) {
   const res = await fetch(
-    `https://residential-building.onrender.com/get-image?url=${encodeURIComponent(
-      url
-    )}`
+    `${baseUrl}/storage/getImage?url=${encodeURIComponent(url)}`
   );
   const blob = await res.blob();
   // Gets URL data and read to blob

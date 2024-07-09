@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../utils/api";
 import TableLayout from "../../../Components/TableLayout";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
 import ShowAllRejectedApplications from "./ShowAllRejectedApplications";
@@ -28,7 +29,7 @@ const RejectedApplications = () => {
   useEffect(() => {
     (async function () {
       const applicationData = await fetchDataFromTheDb(
-        `https://residential-building.onrender.com/getRejectedApplications?userId=${id}`
+        `${baseUrl}/rejectedApp?userId=${id}`
       );
       if (applicationData?.length) {
         setData(applicationData);

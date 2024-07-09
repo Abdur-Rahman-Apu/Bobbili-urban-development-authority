@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 const ProceedingModal = () => {
   // const { setOpenProceeding, openProceeding, filteredData } = modalProceeding;
   const {
@@ -38,7 +39,7 @@ const ProceedingModal = () => {
       if (data?.userInfo) {
         setPsData(data?.userInfo);
         fetch(
-          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+          `${baseUrl}/storage/proxyImage?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
         )
           .then((res) => {
             console.log(res);

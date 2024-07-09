@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../../Style/Home.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import { getCookie } from "../../../../utils/utils";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
@@ -29,13 +30,10 @@ const AllUsers = () => {
   const { data, refetch, isLoading, isSuccess } = useQuery({
     queryKey: ["allUser"],
     queryFn: async () => {
-      const response = await fetch(
-        "https://residential-building.onrender.com/allUser",
-        {
-          method: "GET",
-          headers: { authorization: getToken },
-        }
-      );
+      const response = await fetch(`${baseUrl}/user/all`, {
+        method: "GET",
+        headers: { authorization: getToken },
+      });
       const data = await response.json();
       return data;
     },
@@ -83,7 +81,7 @@ const AllUsers = () => {
   const deleteUser = (id) => {
     console.log(id);
 
-    fetch(`https://residential-building.onrender.com/deleteUser/${id}`, {
+    fetch(`${baseUrl}/user/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -127,7 +125,7 @@ const AllUsers = () => {
     console.log(data);
 
     const updateDataIntoDB = (id, data) => {
-      fetch(`https://residential-building.onrender.com/updateUserInfo/${id}`, {
+      fetch(`${baseUrl}/user/update/${id}`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",

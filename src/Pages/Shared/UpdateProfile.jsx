@@ -7,6 +7,7 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 import userAddressLogo from "../../assets/user_logo/address_info.svg";
 import userContactLogo from "../../assets/user_logo/contact_info.svg";
 import userInfoLogo from "../../assets/user_logo/user_info_svg.svg";
+import { baseUrl } from "../../utils/api";
 import useGetUser from "../CustomHook/useGetUser";
 import UpdateProfileInput from "./UpdateProfileInput";
 
@@ -60,7 +61,7 @@ const UpdateProfile = () => {
 
       try {
         const response = await axios.post(
-          "https://residential-building.onrender.com/upload?page=sign",
+          `${baseUrl}/storage/upload?page=sign`,
           formData,
           {
             headers: {
@@ -86,20 +87,15 @@ const UpdateProfile = () => {
 
     if (isPsSignUploadSuccess) {
       console.log(formValue, "form value");
-      fetch(
-        `https://residential-building.onrender.com/updateUserInfo/${
-          userInfoFromCookie()._id
-        }`,
-        {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            data: formValue,
-            isPsSigned: isPsSignUploadSuccess,
-            signId,
-          }),
-        }
-      )
+      fetch(`${baseUrl}/updateUserInfo/${userInfoFromCookie()._id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          data: formValue,
+          isPsSigned: isPsSignUploadSuccess,
+          signId,
+        }),
+      })
         .then((res) => res.json())
         .then(async (result) => {
           console.log(result);

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
+import { baseUrl } from "../../../utils/api";
 import useDebounce from "../../CustomHook/useDebounce";
 import NetworkError from "../../Shared/NetworkError";
 import SearchApplicationLoading from "../../Shared/SearchApplicationLoading";
@@ -30,7 +31,7 @@ const OnlinePayment = () => {
       page: "onlinePayment",
     });
     fetchDataFromTheDb(
-      `https://residential-building.onrender.com/${searchType}?search=${query}`
+      `${baseUrl}/${searchType}?search=${query}`
       // `http://localhost:5000/${searchType}?search=${query}`
     )
       .then((data) => {

@@ -6,6 +6,7 @@ import { BsFillHouseCheckFill, BsFillHouseLockFill } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router";
 import BeatLoader from "react-spinners/BeatLoader";
 import LoginCSS from "../../../Style/Login.module.css";
+import { baseUrl } from "../../../utils/api";
 import { getCookie, setCookie } from "../../../utils/utils";
 
 const Login = ({ onShowForgotPassModal }) => {
@@ -40,9 +41,7 @@ const Login = ({ onShowForgotPassModal }) => {
     // fetch user information from the database
     try {
       const response = await fetch(
-        `https://residential-building.onrender.com/login?credentials=${JSON.stringify(
-          userInfo
-        )}`,
+        `${baseUrl}/login?credentials=${JSON.stringify(userInfo)}`,
         { method: "GET", credentials: "include" }
       );
 

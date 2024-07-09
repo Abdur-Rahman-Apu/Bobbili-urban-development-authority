@@ -4,6 +4,7 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Style from "../../../../Style/TableDownloadBtn.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import MISReportTableLayout from "../../../Components/MISReportTableLayout";
 import Loading from "../../../Shared/Loading";
 import ShowRevenueReports from "./ShowRevenueReports";
@@ -55,7 +56,7 @@ const RevenueReport = () => {
     (async function () {
       try {
         const applicationData = await fetchDataFromTheDb(
-          "https://residential-building.onrender.com/totalApplications"
+          `${baseUrl}/totalApplications`
         );
         console.log(applicationData, "AD");
         if (Object.keys(applicationData)?.length) {

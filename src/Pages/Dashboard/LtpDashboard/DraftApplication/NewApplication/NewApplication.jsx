@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../../utils/api";
 import StarIcon from "../../../../Components/StarIcon";
 import TableLayout from "../../../../Components/TableLayout";
 import NoApplicationFound from "../../../../Shared/NoApplicationFound";
@@ -34,10 +35,12 @@ const NewApplication = () => {
   const { data, refetch, isLoading, isError, isSuccess } = useQuery(
     ["draftApplications"],
     async () => {
-      const response = await fetch(
-        `https://residential-building.onrender.com/draftApplications/${userID}`,
-        { method: "GET", credentials: "include" }
-      );
+      const response = await fetch(`${baseUrl}/draftApp/getById/${userID}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      console.log(response, "REsponse of draft applications");
+
       return await response.json();
     }
   );
@@ -53,7 +56,8 @@ const NewApplication = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log("ERROR");
+      console.log(isError, "ERROR");
+      console.log(data, "data");
       setError("Failed to fetch data");
       setLoading(false);
     } else {
@@ -71,13 +75,17 @@ const NewApplication = () => {
 
   useEffect(() => {
     if (!data) {
-      setError("Failed to fetch data");
+      setError("No applications found");
+    }
+
+    if (data?.message) {
+      setError(data?.message);
     }
   }, [data]);
 
   const removeDraftApplication = (applicationNo) => {
     console.log(applicationNo, "DELTE APP NO");
-    fetch(`https://residential-building.onrender.com/deleteSingleDraft`, {
+    fetch(`${baseUrl}/draftApp/single`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
@@ -103,7 +111,7 @@ const NewApplication = () => {
 
   // store new application information into the database
   const storeApplicationData = (serialNo) => {
-    const url = `https://residential-building.onrender.com/addApplication`;
+    const url = `${baseUrl}/draftApp/add`;
 
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -176,7 +184,7 @@ const NewApplication = () => {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        fetch("https://residential-building.onrender.com/getSerialNumber")
+        fetch(`${baseUrl}/apps/serialNo`)
           .then((res) => res.json())
           .then((data) => {
             storeApplicationData(data?.serialNo);

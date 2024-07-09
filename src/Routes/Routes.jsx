@@ -38,6 +38,7 @@ import Dashboard from "../Pages/Shared/Dashboard";
 import Error from "../Pages/Shared/Error";
 import UpdateProfile from "../Pages/Shared/UpdateProfile";
 import PrivateRoute from "../Routes/PrivateRoutes/PrivateRoute";
+import { baseUrl } from "../utils/api";
 import SiteInspection from "./../Pages/Dashboard/PsDashboard/InwardApplications/SiteInspection";
 import AdminRoute from "./PrivateRoutes/AdminRoute";
 import BothUserRoute from "./PrivateRoutes/BothUserRoute";
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
             element: <PaymentStatus />,
             loader: async ({ request, params }) => {
               // return fetch(
-              //   `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
+              //   `${baseUrl}/paymentStatus?orderId=${params.orderId}`
               // );
               return fetch(
                 `http://localhost:5000/paymentStatus?orderId=${params.orderId}`
@@ -228,10 +229,10 @@ const router = createBrowserRouter([
             ),
             loader: async ({ request, params }) => {
               // return fetch(
-              //   `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
+              //   `${baseUrl}/paymentStatus?orderId=${params.orderId}`
               // );
               return fetch(
-                `https://residential-building.onrender.com/paymentStatus?orderId=${params.orderId}`
+                `${baseUrl}/paymentStatus?orderId=${params.orderId}`
               );
             },
           },

@@ -8,6 +8,7 @@ import { PiWall } from "react-icons/pi";
 import { useOutletContext } from "react-router";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../../utils/api";
 import InputField from "../../../../Components/InputField";
 import useGetPageWiseApplication from "../../../../CustomHook/useGetPageWiseApplication";
 import SaveData from "../SaveData";
@@ -170,7 +171,7 @@ const BuildingInfo = () => {
     // console.log(districtData, 'districtData');
 
     // const apiUrl = "../../src/assets/buildingInfo.json";
-    // fetch('https://residential-building.onrender.com/getDistricts')
+    // fetch(`${baseUrl}/getDistricts`)
     //   .then((response) => response.json())
     //   .then((result) => {
     //     console.log(result[0], 'result.district');
@@ -184,9 +185,7 @@ const BuildingInfo = () => {
 
   useEffect(() => {
     (async function () {
-      const locationData = await fetchDataFromTheDb(
-        "https://residential-building.onrender.com/getDistricts"
-      );
+      const locationData = await fetchDataFromTheDb(`${baseUrl}/districts`);
       console.log(locationData, "LOC");
       const extractsDataFromDB = locationData[0]?.district;
       // setAllLocationData(extractsDataFromDB);

@@ -4,6 +4,7 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 export default function DrawingFileShowed({ modalStates, searchAppData }) {
   console.log(searchAppData, "DRAEING");
@@ -37,7 +38,7 @@ export default function DrawingFileShowed({ modalStates, searchAppData }) {
   const getPsSignedFiles = async (applicationData) => {
     try {
       const response = await fetch(
-        `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
+        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
       );
       console.log(response, "response");
       const blob = await response.blob();

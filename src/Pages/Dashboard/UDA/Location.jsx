@@ -4,6 +4,7 @@ import { TfiExport } from "react-icons/tfi";
 import { useLocation } from "react-router";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import { district } from "../../../assets/buildingInfo.json";
+import { baseUrl } from "../../../utils/api";
 
 const Location = () => {
   const path = useLocation().pathname;
@@ -113,11 +114,7 @@ const Location = () => {
       selectedDate?.length && (data["date"] = selectedDate);
 
       console.log(data);
-      fetch(
-        `https://residential-building.onrender.com/filterApplications?search=${JSON.stringify(
-          data
-        )}`
-      )
+      fetch(`${baseUrl}/apps/getChartDetails?search=${JSON.stringify(data)}`)
         .then((res) => res.json())
         .then((result) => {
           console.log(result);
@@ -127,7 +124,7 @@ const Location = () => {
       console.log(data, "Data");
     } else {
       console.log("all");
-      fetch("https://residential-building.onrender.com/totalApplications")
+      fetch(`${baseUrl}/totalApplications`)
         .then((res) => res.json())
         .then((result) => {
           console.log(result);

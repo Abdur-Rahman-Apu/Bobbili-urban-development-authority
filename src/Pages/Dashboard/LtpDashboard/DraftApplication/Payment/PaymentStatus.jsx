@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
 import pendingAnimation from "../../../../../assets/Payment/Payment-Pending.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
+import { baseUrl } from "../../../../../utils/api";
 import { getCookie } from "../../../../../utils/utils";
 
 export default function PaymentStatus() {
@@ -35,7 +36,7 @@ export default function PaymentStatus() {
   async function fetchOrderStatus() {
     try {
       const response = await axios.get(
-        `https://residential-building.onrender.com/paymentStatus?orderId=${params?.orderId}`
+        `${baseUrl}/paymentStatus?orderId=${params?.orderId}`
       );
       // const response = await axios.get(
       //   `http://localhost:5000/paymentStatus?orderId=${params?.orderId}`
@@ -128,7 +129,7 @@ export default function PaymentStatus() {
 
         const token = JSON.parse(getCookie("jwToken"));
         fetch(
-          "https://residential-building.onrender.com/storePaymentInfo",
+          `${baseUrl}/storePaymentInfo`,
           // "http://localhost:5000/storePaymentInfo",
           {
             method: "PATCH",
@@ -155,7 +156,7 @@ export default function PaymentStatus() {
             ) {
               const token = JSON.parse(getCookie("jwToken"));
               fetch(
-                "https://residential-building.onrender.com/initiateJuspayPayment",
+                `${baseUrl}/initiateJuspayPayment`,
                 // "http://localhost:5000/initiateJuspayPayment",
                 {
                   method: "POST",

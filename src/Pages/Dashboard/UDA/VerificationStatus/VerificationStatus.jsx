@@ -4,6 +4,7 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Style from "../../../../Style/TableDownloadBtn.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import { getCookie } from "../../../../utils/utils";
 import SearchUserLoading from "../../../Shared/SearchUserLoading";
 
@@ -26,7 +27,7 @@ const VerificationStatus = () => {
   useEffect(() => {
     setLoading(true);
     setError("");
-    fetch("https://residential-building.onrender.com/getVerificationStatus", {
+    fetch(`${baseUrl}/apps/verificationStatus`, {
       method: "GET",
       headers: { authorization: getToken },
     })

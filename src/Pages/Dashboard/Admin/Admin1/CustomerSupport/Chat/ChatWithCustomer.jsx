@@ -8,6 +8,7 @@ import { AuthContext } from "../../../../../../AuthProvider/AuthProvider";
 import femaleImg from "../../../../../../assets/images/female.png";
 import maleImg from "../../../../../../assets/images/male.png";
 import unknownImg from "../../../../../../assets/images/unknown.png";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 
 const ChatWithCustomer = ({
@@ -91,16 +92,14 @@ const ChatWithCustomer = ({
     setMessages((prevMessages) => [...prevMessages, { ...messageData }]);
 
     await axios.patch(
-      `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-        {
-          id: activeChat?._id,
-          action: "text",
-          message: {
-            userId: userInfoFromCookie()?.role?.toLowerCase(),
-            message: messageData?.message,
-          },
-        }
-      )}`
+      `${baseUrl}/message?update=${JSON.stringify({
+        id: activeChat?._id,
+        action: "text",
+        message: {
+          userId: userInfoFromCookie()?.role?.toLowerCase(),
+          message: messageData?.message,
+        },
+      })}`
     );
 
     resetField("message");

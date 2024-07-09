@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import TableLayout from "../../../Components/TableLayout";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
@@ -30,9 +31,7 @@ const Inward = () => {
     ["allInwardApplications"],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/submitApplications?userId=${
-          userInfoFromCookie()?._id
-        }`
+        `${baseUrl}/submitApp/getByPsInfo?userId=${userInfoFromCookie()?._id}`
       );
       return await response.json();
     }

@@ -3,6 +3,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { IoIosSend } from "react-icons/io";
 import Swal from "sweetalert2";
+import { baseUrl } from "../../../utils/api";
 import MainPageInput from "../MainPageInput";
 export default function OnlinePaymentDetails({
   totalApplications,
@@ -34,7 +35,7 @@ export default function OnlinePaymentDetails({
             page: "home",
           };
           fetch(
-            "https://residential-building.onrender.com/initiateJuspayPayment",
+            `${baseUrl}/initiateJuspayPayment`,
             // "http://localhost:5000/initiateJuspayPayment",
             {
               method: "POST",

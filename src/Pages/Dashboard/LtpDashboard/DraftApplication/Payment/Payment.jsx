@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../../utils/api";
 import { getCookie } from "../../../../../utils/utils";
 import InputField from "../../../../Components/InputField";
 import SendIcon from "../../../../Components/SendIcon";
@@ -63,9 +64,7 @@ const Payment = () => {
 
   useEffect(() => {
     fetch(
-      `https://residential-building.onrender.com/userInformation?id=${
-        userInfoFromCookie()?.userId
-      }`
+      `${baseUrl}/user/allInfoByUserId?userId=${userInfoFromCookie()?.userId}`
     )
       .then((res) => res.json())
       .then((result) => {
@@ -520,7 +519,7 @@ const Payment = () => {
         console.log(...formData);
         try {
           const response = await axios.post(
-            "https://residential-building.onrender.com/upload?page=payment",
+            `${baseUrl}/storage/upload?page=payment`,
             formData,
             {
               headers: {
@@ -693,7 +692,7 @@ const Payment = () => {
           const token = JSON.parse(getCookie("jwToken"));
 
           fetch(
-            "https://residential-building.onrender.com/storePaymentInfo",
+            `${baseUrl}/storePaymentInfo`,
             // "http://localhost:5000/storePaymentInfo",
             {
               method: "PATCH",
@@ -721,7 +720,7 @@ const Payment = () => {
               ) {
                 const token = JSON.parse(getCookie("jwToken"));
                 fetch(
-                  "https://residential-building.onrender.com/initiateJuspayPayment",
+                  `${baseUrl}/initiateJuspayPayment`,
                   // "http://localhost:5000/initiateJuspayPayment",
                   {
                     method: "POST",

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 const useGetPageWiseApplication = (searchApplicationName) => {
   const { userInfoFromCookie } = useContext(AuthContext);
@@ -13,9 +14,7 @@ const useGetPageWiseApplication = (searchApplicationName) => {
         searchApplicationName,
       };
       const response = await fetch(
-        `https://residential-building.onrender.com/allPageWiseApplications?data=${JSON.stringify(
-          query
-        )}`
+        `${baseUrl}/allPageWiseApplications?data=${JSON.stringify(query)}`
       );
       return await response.json();
     }

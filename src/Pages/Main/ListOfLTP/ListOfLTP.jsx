@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import HomeCss from "../../../Style/Home.module.css";
+import { baseUrl } from "../../../utils/api";
 import NoApplicationFound from "../../Shared/NoApplicationFound";
 import SearchUserLoading from "../../Shared/SearchUserLoading";
 
@@ -10,7 +11,7 @@ const ListOfLTP = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    fetch("https://residential-building.onrender.com/allUser")
+    fetch(`${baseUrl}/user/all`)
       .then((res) => res.json())
       .then((data) => {
         setLoading(false);

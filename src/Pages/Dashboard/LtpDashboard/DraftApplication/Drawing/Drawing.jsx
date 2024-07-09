@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { TbSlideshow } from "react-icons/tb";
 import { Link, useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../../utils/api";
 import SaveData from "../SaveData";
 import DrawingTable from "./DrawingTable";
 
@@ -120,7 +121,7 @@ const Drawing = () => {
           formData.append("file", selectedFiles[file]);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=drawing",
+              `${baseUrl}/storage/upload?page=drawing`,
               formData,
               {
                 headers: {

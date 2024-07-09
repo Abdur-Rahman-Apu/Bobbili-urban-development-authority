@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 import TableLayout from "../../../../../Components/TableLayout";
 import Loading from "../../../../../Shared/Loading";
@@ -33,9 +34,7 @@ const NewMessage = () => {
       if (data?.change?.operationType === "insert") {
         console.log(allData, "After updating");
         try {
-          const { data } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
-          );
+          const { data } = await axios.get(`${baseUrl}/message/notAccepted`);
 
           setAllData(data);
         } catch (err) {
@@ -51,9 +50,7 @@ const NewMessage = () => {
       if (data?.change?.operationType === "update") {
         console.log(allData, "After updating");
         try {
-          const { data } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
-          );
+          const { data } = await axios.get(`${baseUrl}/message/notAccepted`);
 
           setAllData(data);
         } catch (err) {
@@ -72,7 +69,7 @@ const NewMessage = () => {
   useEffect(() => {
     setError("");
     setLoading(true);
-    fetch("https://residential-building.onrender.com/messageRequest")
+    fetch(`${baseUrl}/message/notAccepted`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -91,20 +88,18 @@ const NewMessage = () => {
     console.log(id);
     try {
       const { data } = await axios.patch(
-        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-          {
-            id,
-            action: "accept",
-            acceptedBy: userInfoFromCookie().role.toLowerCase(),
-          }
-        )}`
+        `${baseUrl}/message?update=${JSON.stringify({
+          id,
+          action: "accept",
+          acceptedBy: userInfoFromCookie().role.toLowerCase(),
+        })}`
       );
 
       if (data.acknowledged) {
         toast.success("Request accepted");
         try {
           const { data: updateData } = await axios.get(
-            "https://residential-building.onrender.com/messageRequest"
+            `${baseUrl}/message/notAccepted`
           );
           console.log(updateData, "UPD");
           setAllData(updateData);

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 import ConnectedCustomers from "./ConnectedCustomers";
 import RightSidebar from "./RightSidebar";
@@ -23,12 +24,10 @@ const Chat = () => {
     console.log(id, "id");
     try {
       const { data } = await axios.patch(
-        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-          {
-            id,
-            action: "chatEnd",
-          }
-        )}`
+        `${baseUrl}/message?update=${JSON.stringify({
+          id,
+          action: "chatEnd",
+        })}`
       );
 
       if (data.acknowledged) {
@@ -42,9 +41,7 @@ const Chat = () => {
     console.log(id, "ID");
 
     try {
-      const { data } = await axios.delete(
-        `https://residential-building.onrender.com/messageRequest?id=${id}`
-      );
+      const { data } = await axios.delete(`${baseUrl}/message?id=${id}`);
 
       if (data.acknowledged) {
         toast.success("Chat removed");
@@ -73,7 +70,7 @@ const Chat = () => {
   //       (async function () {
   //         try {
   //           const { data } = await axios.get(
-  //             `https://residential-building.onrender.com/messages?id=${activeChat?._id}`
+  //             `${baseUrl}/message?id=${activeChat?._id}`
   //           );
 
   //           console.log(data, "GET OLD MESSAGES");

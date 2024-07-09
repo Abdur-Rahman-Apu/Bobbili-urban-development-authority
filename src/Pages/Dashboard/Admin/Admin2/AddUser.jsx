@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import Style from "../../../../Style/AddUserStyle.module.css";
+import { baseUrl } from "../../../../utils/api";
 
 const AddUser = () => {
   const { register, handleSubmit, resetField } = useForm();
@@ -38,9 +39,7 @@ const AddUser = () => {
 
   useEffect(() => {
     (async function () {
-      const locationData = await fetchDataFromTheDb(
-        "https://residential-building.onrender.com/getDistricts"
-      );
+      const locationData = await fetchDataFromTheDb(`${baseUrl}/districts`);
       console.log(locationData, "LOC");
       const extractsDataFromDB = locationData[0]?.district;
       setAllLocationData(extractsDataFromDB);
@@ -134,7 +133,7 @@ const AddUser = () => {
 
               try {
                 const response = await axios.post(
-                  "https://residential-building.onrender.com/upload?page=sign",
+                  `${baseUrl}/storage/upload?page=sign`,
                   formData,
                   {
                     headers: {
@@ -174,7 +173,7 @@ const AddUser = () => {
 
       // if (userInfo) {
       //   // store users data in the database
-      //   fetch("https://residential-building.onrender.com/addUser", {
+      //   fetch(`${baseUrl}/user/add`, {
       //     method: "POST",
       //     headers: {
       //       "Content-type": "application/json",

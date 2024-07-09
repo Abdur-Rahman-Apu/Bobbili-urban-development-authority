@@ -9,6 +9,7 @@ import ErrorAnimation from "../../../../../../assets/ServerError.json";
 import femaleImg from "../../../../../../assets/images/female.png";
 import maleImg from "../../../../../../assets/images/male.png";
 import unknownImg from "../../../../../../assets/images/unknown.png";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 import TableLayout from "../../../../../Components/TableLayout";
 import Loading from "../../../../../Shared/Loading";
@@ -28,7 +29,7 @@ const MissedRequest = () => {
   useEffect(() => {
     setLoading(true);
     setError("");
-    fetch("https://residential-building.onrender.com/missedMessage")
+    fetch(`${baseUrl}/message/missed`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -55,9 +56,7 @@ const MissedRequest = () => {
         data?.change?.operationType === "insert"
       ) {
         console.log(allData, "After updating or inserting");
-        const { data } = await axios.get(
-          "https://residential-building.onrender.com/missedMessage"
-        );
+        const { data } = await axios.get(`${baseUrl}/message/missed`);
 
         setAllData(data);
       }
@@ -74,9 +73,7 @@ const MissedRequest = () => {
     setLoading(true);
     const filteredData = allData.filter((each) => each._id !== id);
     setAllData(filteredData);
-    const { data } = await axios.delete(
-      `https://residential-building.onrender.com/messageRequest?id=${id}`
-    );
+    const { data } = await axios.delete(`${baseUrl}/message?id=${id}`);
 
     if (data.acknowledged) {
       toast.success("Contacted with the person");

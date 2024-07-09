@@ -7,6 +7,7 @@ import { AuthContext } from "../../../../../../AuthProvider/AuthProvider";
 import femaleImg from "../../../../../../assets/images/female.png";
 import maleImg from "../../../../../../assets/images/male.png";
 import unknownImg from "../../../../../../assets/images/unknown.png";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 
 const ConnectedCustomers = ({ setActiveChat, setShow }) => {
@@ -29,7 +30,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
       ) {
         try {
           const { data: updateData } = await axios.get(
-            `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
+            `${baseUrl}/message/accepted?role=${JSON.stringify(
               userInfoFromCookie().role.toLowerCase()
             )}`
           );
@@ -51,7 +52,7 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
     (async function () {
       try {
         const { data } = await axios.get(
-          `https://residential-building.onrender.com/acceptMessage?role=${JSON.stringify(
+          `${baseUrl}/message/accepted?role=${JSON.stringify(
             userInfoFromCookie().role.toLowerCase()
           )}`
         );
@@ -88,12 +89,10 @@ const ConnectedCustomers = ({ setActiveChat, setShow }) => {
   const messageSeen = async (id) => {
     try {
       await axios.patch(
-        `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-          {
-            id,
-            action: "trackCustomerNewMessage",
-          }
-        )}`
+        `${baseUrl}/message?update=${JSON.stringify({
+          id,
+          action: "trackCustomerNewMessage",
+        })}`
       );
     } catch (err) {
       console.log(err, "Error message");

@@ -4,6 +4,7 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 const DrawingModal = () => {
   const [numPages, setNumPages] = useState();
@@ -38,7 +39,7 @@ const DrawingModal = () => {
         setDataFromDB(applicationData);
         try {
           const response = await fetch(
-            `https://residential-building.onrender.com/pdf?fileId=${applicationData?.drawing?.Drawing}`
+            `${baseUrl}/storage/pdf?fileId=${applicationData?.drawing?.Drawing}`
           );
           console.log(response, "response");
           const blob = await response.blob();
@@ -71,7 +72,7 @@ const DrawingModal = () => {
       if (data?.userInfo) {
         setPsData(data?.userInfo);
         fetch(
-          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
+          `${baseUrl}/storage/proxyImage?url=https://drive.google.com/thumbnail?id=${data?.userInfo?.signId}`
         )
           .then((res) => {
             console.log(res);

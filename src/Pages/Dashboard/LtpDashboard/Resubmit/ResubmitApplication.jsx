@@ -9,6 +9,7 @@ import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import DefaultDocuments from "../../../../assets/DefaultDocument.json";
 import DynamicDocuments from "../../../../assets/DynamicDocument.json";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import EndorsementModal from "../../../Shared/EndorsementModal";
 import Loading from "../../../Shared/Loading";
 
@@ -43,9 +44,7 @@ const ResubmitApplication = () => {
     setLoading(true);
     setError("");
     fetchDataFromTheDb(
-      `https://residential-building.onrender.com/getSpecificShortfallApplication?appNo=${JSON.stringify(
-        appNo
-      )}`
+      `${baseUrl}/shortfallApp/specificApp?appNo=${JSON.stringify(appNo)}`
     )
       .then((result) => {
         setLoading(false);
@@ -213,7 +212,7 @@ const ResubmitApplication = () => {
           formData.append("file", drawingFiles[file]);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=drawing",
+              `${baseUrl}/storage/upload?page=drawing`,
               formData,
               {
                 headers: {
@@ -256,7 +255,7 @@ const ResubmitApplication = () => {
           formData.append("file", loopTimes[lt][i].imageId);
           try {
             const response = await axios.post(
-              "https://residential-building.onrender.com/upload?page=document",
+              `${baseUrl}/storage/upload?page=document`,
               formData,
               {
                 headers: {
@@ -360,9 +359,10 @@ const ResubmitApplication = () => {
 
       console.log(mergedData);
 
-      const url = `https://residential-building.onrender.com/storeResubmitApplication?data=${JSON.stringify(
-        { appNo, oldImageFiles: oldImageFilesId }
-      )}`;
+      const url = `${baseUrl}/shortfallApp/resubmit?data=${JSON.stringify({
+        appNo,
+        oldImageFiles: oldImageFilesId,
+      })}`;
 
       const result = await sendUserDataIntoDB(url, "PATCH", mergedData);
 

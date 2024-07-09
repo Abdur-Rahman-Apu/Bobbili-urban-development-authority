@@ -5,6 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import DefaultDocumentData from "../../../../../assets/DefaultDocument.json";
 import DynamicDocuments from "../../../../../assets/DynamicDocument.json";
+import { baseUrl } from "../../../../../utils/api";
 import SaveData from "../SaveData";
 import DefaultDocument from "./DefaultDocument";
 import DocumentFooter from "./DocumentFooter";
@@ -206,7 +207,7 @@ const Documents = () => {
         formData.append("file", loopTimes[lt][i].file);
         try {
           const response = await axios.post(
-            "https://residential-building.onrender.com/upload?page=document",
+            `${baseUrl}/storage/upload?page=document`,
             formData,
             {
               headers: {

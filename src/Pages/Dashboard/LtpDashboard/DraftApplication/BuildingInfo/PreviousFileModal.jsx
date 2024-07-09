@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../../../utils/api";
 
 const PreviousFileModal = ({ FileModal }) => {
   const { setIsModalOpen, isModalOpen, setDataFromDB } = FileModal;
@@ -30,11 +31,7 @@ const PreviousFileModal = ({ FileModal }) => {
     console.log(formData.value);
 
     const searchData = { appNo: formData.value, page: "approved" };
-    fetch(
-      `https://residential-building.onrender.com/getApplicationData?data=${JSON.stringify(
-        searchData
-      )}`
-    )
+    fetch(`${baseUrl}/apps/findByQuery?data=${JSON.stringify(searchData)}`)
       .then((res) => res.json())
       .then(async (oldApprovedFileData) => {
         const {
@@ -101,7 +98,7 @@ const PreviousFileModal = ({ FileModal }) => {
         };
 
         const result = await sendUserDataIntoDB(
-          `https://residential-building.onrender.com/updateDraftApplicationData?filterData=${JSON.stringify(
+          `${baseUrl}/draftApp/update?filterData=${JSON.stringify(
             filterDataForLtp
           )}`,
           "PATCH",

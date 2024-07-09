@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 const useGetUser = () => {
   const { userInfoFromCookie } = useContext(AuthContext);
@@ -11,9 +12,7 @@ const useGetUser = () => {
     [`specificUserInfo`],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/userInformation?id=${
-          userInfoFromCookie()?.userId
-        }`
+        `${baseUrl}/user/allInfoByUserId?userId=${userInfoFromCookie()?.userId}`
       );
       return await response.json();
     }

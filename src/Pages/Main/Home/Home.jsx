@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../../utils/api";
 import OtpModal from "../../Shared/OtpModal";
 import Login from "../Login/Login";
 import ForgotPasswordModal from "./ForgotPasswordModal";
@@ -91,16 +92,13 @@ const Home = () => {
       userId: resetData?.id,
       otp,
     };
-    fetch(
-      `https://residential-building.onrender.com/storeOtpForForgotPassword`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    )
+    fetch(`${baseUrl}/forgotPassOtp/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
       .then((res) => res.json())
       .then((result) => {
         console.log(result, "result");
@@ -125,11 +123,7 @@ const Home = () => {
       otp,
       password: resetPassFormData?.password,
     };
-    fetch(
-      `https://residential-building.onrender.com/otpMatchForForgotPassword?data=${JSON.stringify(
-        data
-      )}`
-    )
+    fetch(`${baseUrl}/forgotPassOtp/matchOtp?data=${JSON.stringify(data)}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result, "OTP match");

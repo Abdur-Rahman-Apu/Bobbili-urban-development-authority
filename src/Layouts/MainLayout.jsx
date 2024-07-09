@@ -9,6 +9,7 @@ import ParticleBg from "../Pages/Components/ParticleBg";
 import toast from "react-hot-toast";
 import { FaUsers } from "react-icons/fa6";
 import ChatBox from "../Pages/Shared/ChatBox";
+import { baseUrl } from "../utils/api";
 import { getCookie } from "../utils/utils";
 
 const MainLayout = () => {
@@ -24,7 +25,7 @@ const MainLayout = () => {
 
   // get total visitor number
   useEffect(() => {
-    fetch("https://residential-building.onrender.com/getVisitorCount")
+    fetch(`${baseUrl}/visitorAmount`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result, "result");
@@ -129,12 +130,10 @@ const MainLayout = () => {
               console.log("ASCHI REMOVE KORTE");
               try {
                 await axios.patch(
-                  `https://residential-building.onrender.com/messageRequest?update=${JSON.stringify(
-                    {
-                      id: removeChatUser.uniqueId,
-                      action: "leaveFromTheMessage",
-                    }
-                  )}`
+                  `${baseUrl}/message?update=${JSON.stringify({
+                    id: removeChatUser.uniqueId,
+                    action: "leaveFromTheMessage",
+                  })}`
                 );
               } catch (err) {
                 console.log(err, "Error message");

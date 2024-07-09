@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../../../assets/ServerError.json";
+import { baseUrl } from "../../../../utils/api";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
 
@@ -22,7 +23,7 @@ function Outward() {
     ["allOutwardApplications"],
     async () => {
       const response = await fetch(
-        `https://residential-building.onrender.com/totalApplications?data=${JSON.stringify(
+        `${baseUrl}/totalApplications?data=${JSON.stringify(
           userInfoFromCookie()
         )}`
       );

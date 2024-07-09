@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import DefaultDocuments from "../../assets/DefaultDocument.json";
 import DynamicDocuments from "../../assets/DynamicDocument.json";
+import { baseUrl } from "../../utils/api";
 
 const EndorsementModal = () => {
   // const { openEndorsement, setOpenEndorsement } = modalEndorsement;
@@ -86,7 +87,7 @@ const EndorsementModal = () => {
       }
 
       const findShortfallSerial = await fetchDataFromTheDb(
-        "https://residential-building.onrender.com/getShortfallSerial"
+        `${baseUrl}/shortfallApp/serial`
       );
 
       if (findShortfallSerial) {
@@ -138,14 +139,12 @@ const EndorsementModal = () => {
   useEffect(() => {
     if (dataFromDb && Object.keys(dataFromDb)?.length) {
       fetchDataFromTheDb(
-        `https://residential-building.onrender.com/userInformation?id=${
-          userInfoFromCookie().userId
-        }`
+        `${baseUrl}/user/allInfoByUserId?userId=${userInfoFromCookie().userId}`
       ).then((result) => {
         console.log(result, "PS");
         setPsInfo(result);
         fetch(
-          `https://residential-building.onrender.com/proxy-image?url=https://drive.google.com/thumbnail?id=${result?.signId}`
+          `${baseUrl}/storage/proxyImage?url=https://drive.google.com/thumbnail?id=${result?.signId}`
         )
           .then((res) => {
             console.log(res);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { baseUrl } from "../../../../../../utils/api";
 import socket from "../../../../../Common/socket";
 import ChatWithCustomer from "./ChatWithCustomer";
 
@@ -19,7 +20,7 @@ const RightSidebar = ({
       (async function () {
         try {
           const { data } = await axios.get(
-            `https://residential-building.onrender.com/messages?id=${activeChat?._id}`
+            `${baseUrl}/message?id=${activeChat?._id}`
           );
 
           console.log(data, "GET OLD MESSAGES");

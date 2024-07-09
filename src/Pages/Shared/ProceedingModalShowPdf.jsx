@@ -4,6 +4,7 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 export default function ProceedingModalShowPdf({
   modalProceeding,
@@ -40,7 +41,7 @@ export default function ProceedingModalShowPdf({
   const getPsSignedFiles = async (applicationData) => {
     try {
       const response = await fetch(
-        `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
+        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
       );
       console.log(response, "response");
       const blob = await response.blob();

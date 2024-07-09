@@ -4,6 +4,7 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { baseUrl } from "../../utils/api";
 
 export default function EndorsementFileShowed({ modalEndorsement }) {
   const { setOpenEndorsement, openEndorsement } = modalEndorsement;
@@ -41,7 +42,7 @@ export default function EndorsementFileShowed({ modalEndorsement }) {
       setAllInfo(applicationData);
       try {
         const response = await fetch(
-          `https://residential-building.onrender.com/pdf?fileId=${applicationData?.psSignedFiles?.endorsementFile}`
+          `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.endorsementFile}`
         );
         console.log(response, "response");
         const blob = await response.blob();

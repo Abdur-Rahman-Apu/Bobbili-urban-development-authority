@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import UserImg from "../../assets/images//man.png";
+import { baseUrl } from "../../utils/api";
 import { getCookie } from "../../utils/utils";
 
 const Navbar = () => {
@@ -53,16 +54,11 @@ const Navbar = () => {
   }, [theme]);
 
   const onSubmit = (formValue) => {
-    fetch(
-      `https://residential-building.onrender.com/updateUserInfo/${
-        userInfoFromCookie()._id
-      }`,
-      {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(formValue),
-      }
-    )
+    fetch(`${baseUrl}/updateUserInfo/${userInfoFromCookie()._id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(formValue),
+    })
       .then((res) => res.json())
       .then(async (result) => {
         console.log(result);

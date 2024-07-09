@@ -11,6 +11,7 @@ import { FaTreeCity } from "react-icons/fa6";
 import { MdForest, MdLocationCity } from "react-icons/md";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import ErrorAnimation from "../../assets/ServerError.json";
+import { baseUrl } from "../../utils/api";
 import Loading from "../Shared/Loading";
 
 Chart.register(CategoryScale);
@@ -48,9 +49,7 @@ const ShowCharts = () => {
     (async function () {
       setLoading(true);
       try {
-        const locationData = await fetchDataFromTheDb(
-          "https://residential-building.onrender.com/getDistricts"
-        );
+        const locationData = await fetchDataFromTheDb(`${baseUrl}/districts`);
         console.log(locationData, "LOC");
         const extractsDataFromDB = locationData[0]?.district;
         setAllLocationData(extractsDataFromDB);
@@ -143,13 +142,11 @@ const ShowCharts = () => {
     if (isLtpOrPs && selectedDate.length) {
       console.log("ltp");
       fetch(
-        `https://residential-building.onrender.com/filterApplications?search=${JSON.stringify(
-          {
-            id: userInfoFromCookie()._id,
-            role,
-            selectedDate,
-          }
-        )}`
+        `${baseUrl}/apps/getChartDetails?search=${JSON.stringify({
+          id: userInfoFromCookie()._id,
+          role,
+          selectedDate,
+        })}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -171,11 +168,7 @@ const ShowCharts = () => {
       selectedDate?.length && (data["date"] = selectedDate);
 
       console.log(data);
-      fetch(
-        `https://residential-building.onrender.com/filterApplications?search=${JSON.stringify(
-          data
-        )}`
-      )
+      fetch(`${baseUrl}/apps/getChartDetails?search=${JSON.stringify(data)}`)
         .then((res) => res.json())
         .then((result) => {
           setLoading(false);
@@ -193,7 +186,7 @@ const ShowCharts = () => {
       setLoading(true);
 
       fetch(
-        `https://residential-building.onrender.com/totalApplications?data=${JSON.stringify(
+        `${baseUrl}/totalApplications?data=${JSON.stringify(
           userInfoFromCookie()
         )}`
       )

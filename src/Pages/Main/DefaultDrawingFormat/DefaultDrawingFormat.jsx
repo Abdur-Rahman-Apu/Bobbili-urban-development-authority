@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { baseUrl } from "../../../utils/api";
 import Loading from "../../Shared/Loading";
 
 const DefaultDrawingFormat = () => {
@@ -21,7 +22,7 @@ const DefaultDrawingFormat = () => {
       });
     }
 
-    fetch(`https://residential-building.onrender.com/downloadFile?data=${data}`)
+    fetch(`${baseUrl}/storage/downloadFile?data=${data}`)
       .then((res) => {
         if (res.ok) {
           // If the response status is OK, it means the file download is successful

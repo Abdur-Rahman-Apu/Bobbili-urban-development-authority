@@ -12,19 +12,6 @@ const Shortfall = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // get all applications which are submitted already
-  //   const { data, refetch, isLoading, isError } = useQuery(
-  //     ["allSubmitApplication"],
-  //     async () => {
-  //       const response = await fetch(
-  //         `https://residential-building.onrender.com/allSubmitApplications?id=${
-  //           userInfoFromCookie()._id
-  //         }`
-  //       );
-  //       return await response.json();
-  //     }
-  //   );
-
   const [data, refetch, isError, isLoading, isSuccess] =
     useGetPageWiseApplication("Shortfall Applications");
 

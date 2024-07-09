@@ -9,6 +9,7 @@ import LoginCSS from "../../../Style/Login.module.css";
 import lineSvg from "../../../assets/images/line.svg";
 import stairLikeLine from "../../../assets/images/stairLikeLine.png";
 import triangle from "../../../assets/images/triangle.png";
+import { baseUrl } from "../../../utils/api";
 import isBetweenWorkingHours from "../../Common/CheckWorkingHours";
 import TextEditor from "../../Components/TextEditor";
 
@@ -51,7 +52,7 @@ const RequestPage = ({ props }) => {
 
     try {
       const { data } = await axios.post(
-        "https://residential-building.onrender.com/messageRequest",
+        `${baseUrl}/message`,
         messageRequest,
         config
       );
@@ -104,7 +105,7 @@ const RequestPage = ({ props }) => {
 
       try {
         const { data } = await axios.post(
-          "https://residential-building.onrender.com/messageRequest",
+          `${baseUrl}/message`,
           messageRequest,
           config
         );

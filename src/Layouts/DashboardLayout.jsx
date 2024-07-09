@@ -12,6 +12,7 @@ import nonUser from "../assets/images/nonUser.png";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
 // import { FaUserMinus } from "react-icons/fa6";
 // import Swal from "sweetalert2";
+import { baseUrl } from "../utils/api";
 import AdminSideBar from "./AdminSidebar/AdminSideBar";
 import LtpSidebar from "./LtpSidebar/LtpSidebar";
 import PsSidebar from "./PsSidebar/PsSidebar";
@@ -36,9 +37,7 @@ const DashboardLayout = () => {
       showLoaderOnConfirm: true,
       preConfirm: async () => {
         try {
-          const url = `https://residential-building.onrender.com/handOveredByPs?id=${JSON.stringify(
-            id
-          )}`;
+          const url = `${baseUrl}/user/handOveredByPs?id=${JSON.stringify(id)}`;
           const response = await fetch(url, { method: "PATCH" });
 
           if (!response?.ok) {

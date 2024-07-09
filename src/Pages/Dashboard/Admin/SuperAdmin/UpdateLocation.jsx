@@ -9,6 +9,7 @@ import cityImage from "../../../../assets/images/city.png";
 import districtImage from "../../../../assets/images/district.png";
 import IndiaMapImg from "../../../../assets/images/india.jpg";
 import villageImage from "../../../../assets/images/village.png";
+import { baseUrl } from "../../../../utils/api";
 import LocationStyle from "./LocationPageStyle.module.css";
 
 const UpdateLocation = () => {
@@ -50,9 +51,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     (async function () {
       try {
-        const locationData = await fetchDataFromTheDb(
-          "https://residential-building.onrender.com/getDistricts"
-        );
+        const locationData = await fetchDataFromTheDb(`${baseUrl}/districts`);
         console.log(locationData, "LOC");
         const extractsDataFromDB = locationData[0]?.district;
         setAllLocationData(extractsDataFromDB);
@@ -120,15 +119,11 @@ const UpdateLocation = () => {
       // add location
       console.log(data, "ADD");
 
-      url = `https://residential-building.onrender.com/addLocation?data=${JSON.stringify(
-        data
-      )}`;
+      url = `${baseUrl}/districts/add?data=${JSON.stringify(data)}`;
     } else {
       // remove location
       console.log(data, "Remove");
-      url = `https://residential-building.onrender.com/removeLocation?data=${JSON.stringify(
-        data
-      )}`;
+      url = `${baseUrl}/districts/remove?data=${JSON.stringify(data)}`;
     }
 
     fetch(url, {

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { createContext, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
+import { baseUrl } from "../utils/api";
 import { deleteCookie, getCookie, setCookie } from "../utils/utils";
 
 export const AuthContext = createContext();
@@ -21,7 +22,7 @@ const AuthProvider = ({ children }) => {
 
   // update user info  intocookie
   const updateUserInfoInCookie = (id) => {
-    fetch(`https://residential-building.onrender.com/getUser?id=${id}`)
+    fetch(`${baseUrl}/user?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status) {
@@ -51,12 +52,10 @@ const AuthProvider = ({ children }) => {
   };
 
   // get user data
-  const getUserData = async (id) => {
-    console.log(id, "AUTH ID");
+  const getUserData = async (userId) => {
+    console.log(userId, "AUTH ID");
 
-    const response = await fetch(
-      `https://residential-building.onrender.com/getUser?id=${id}`
-    );
+    const response = await fetch(`${baseUrl}/user?userId=${userId}`);
     const data = await response.json();
     console.log(data, "raian2");
     return data;
@@ -68,9 +67,10 @@ const AuthProvider = ({ children }) => {
 
     const data = { userId: userInfoFromCookie()._id, applicationNo };
 
-    const url = `https://residential-building.onrender.com/deleteApplication?data=${JSON.stringify(
+    const url = `${baseUrl}/draftApp/singleAndTransferToSubmit?data=${JSON.stringify(
       data
     )}`;
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to update this!",
@@ -134,10 +134,10 @@ const AuthProvider = ({ children }) => {
     });
 
     role === "LTP" &&
-      (url = `https://residential-building.onrender.com/updateDraftApplicationData?filterData=${filterDataForLtp}`);
+      (url = `${baseUrl}/draftApp/update?filterData=${filterDataForLtp}`);
 
     role === "PS" &&
-      (url = `https://residential-building.onrender.com/recommendDataOfPs?appNo=${applicationNo}`);
+      (url = `${baseUrl}/submitApp/recommendByPs?appNo=${applicationNo}`);
 
     // console.log(url, "url here");
 
@@ -231,9 +231,7 @@ const AuthProvider = ({ children }) => {
         page,
       });
 
-      const response = await fetch(
-        `https://residential-building.onrender.com/getApplicationData?data=${query}`
-      );
+      const response = await fetch(`${baseUrl}/apps/findByQuery?data=${query}`);
 
       return await response.json();
     } catch (err) {
@@ -252,7 +250,7 @@ const AuthProvider = ({ children }) => {
       console.log(query, "query");
 
       const response = await fetch(
-        `https://residential-building.onrender.com/getSubmitDataOfPs?appNo=${query}`
+        `${baseUrl}/submitApp/getByAppNo?appNo=${query}`
       );
 
       return await response.json();
@@ -264,9 +262,7 @@ const AuthProvider = ({ children }) => {
   // get all draft application data
   const getAllDraftApplicationData = async () => {
     try {
-      const response = await fetch(
-        `https://residential-building.onrender.com/allDraftApplicationData`
-      );
+      const response = await fetch(`${baseUrl}/draftApp/all`);
 
       return await response.json();
     } catch (err) {
@@ -279,7 +275,7 @@ const AuthProvider = ({ children }) => {
     const loggedUser = JSON.parse(getCookie("loggedUser"));
 
     fetch(
-      `https://residential-building.onrender.com/reverseLoggedInFlag?userId=${JSON.stringify(
+      `${baseUrl}/user/reverseLoggedInFlag?userId=${JSON.stringify(
         loggedUser._id
       )}`,
       {
@@ -381,9 +377,7 @@ const AuthProvider = ({ children }) => {
         appNo: applicationNo,
       });
 
-      fetch(
-        `https://residential-building.onrender.com/getApplicationData?data=${searchData}`
-      )
+      fetch(`${baseUrl}/apps/findByQuery?data=${searchData}`)
         .then((res) => res.json())
         .then((data) => {
           const prevState = data?.prevSavedState;
@@ -402,7 +396,7 @@ const AuthProvider = ({ children }) => {
       //     appNo: applicationNo,
       //   });
       //   const data = await fetchDataFromTheDb(
-      //     `https://residential-building.onrender.com/getApplicationData?data=${searchData}`
+      //     `${baseUrl}/apps/findByQuery?data=${searchData}`
       //   );
       // })();
 
