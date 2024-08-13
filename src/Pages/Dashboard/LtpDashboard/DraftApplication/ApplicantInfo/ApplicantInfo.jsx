@@ -99,7 +99,7 @@ const ApplicantInfo = () => {
       name: ltpName,
       licenseNo,
       validity,
-      phoneNo: ltpPhoneNo,
+      phone: ltpPhoneNo,
       email: ltpEmail,
       address: ltpAddress,
     };
@@ -139,6 +139,9 @@ const ApplicantInfo = () => {
         applicationData?.applicantInfo?.applicantDetails;
 
       setApplicantDetails(applicantDetailsData);
+      if (role === "PS") {
+        setLtpDetails(applicationData?.applicantInfo?.ltpDetails);
+      }
       setLtpType(ltpDetailsData?.type);
       setLtpPhone(ltpDetailsData?.phoneNo);
     };
@@ -167,8 +170,7 @@ const ApplicantInfo = () => {
     }
   }, [applicantDetails]);
 
-  const { designation, name, email, licenseNo, phone, validity, address } =
-    ltpDetails || {};
+  const { name, email, licenseNo, phone, validity, address } = ltpDetails || {};
 
   // Classes for this component :
   let labelClass = "block mb-1 font-semibold text-gray-600";
