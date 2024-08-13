@@ -821,7 +821,7 @@ const Payment = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    <button
+                    <div
                       className="pay-btn mt-3"
                       onClick={confirmMessageForPayment}
                     >
@@ -831,7 +831,7 @@ const Payment = () => {
                         </div>
                       </div>
                       <span>{loadingPayment ? "Paying..." : "Pay now"}</span>
-                    </button>
+                    </div>
                   </motion.div>
                 )}
               </>
@@ -1227,7 +1227,7 @@ const Payment = () => {
               {applicationData?.payment?.labourCessCharge
                 ?.labourCessBankReceipt && (
                 <Link
-                  to={`https://drive.google.com/file/d/${applicationData?.payment?.labourCessCharge?.labourCessBankReceip}/view?usp=sharing`}
+                  to={`https://drive.google.com/file/d/${applicationData?.payment?.labourCessCharge?.labourCessBankReceipt}/view?usp=sharing`}
                   target="_blank"
                   className="flex justify-center items-center ms-10 px-4 py-2 hover:underline bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-lg shadow-lg rounded-full"
                 >

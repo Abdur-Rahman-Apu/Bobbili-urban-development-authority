@@ -20,6 +20,8 @@ function PsSidebar() {
 
   const role = userInfoFromCookie()?.role;
 
+  const psMenu = JSON.parse(localStorage.getItem("psMenu"));
+
   const [activeColor, setActiveColor] = useState("");
   const [hoverColor, setHoverColor] = useState("");
 
@@ -53,7 +55,9 @@ function PsSidebar() {
             "submit",
             role,
             "inward"
-          ) && activeColor
+          ) &&
+          psMenu === "inward" &&
+          activeColor
         } mt-1  flex items-center  ps-3 ${hoverColor}`}
       >
         <span>

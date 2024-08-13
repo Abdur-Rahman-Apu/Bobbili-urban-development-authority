@@ -616,7 +616,7 @@ const SiteInspection = () => {
       psId: userInfoFromCookie()._id,
       otp,
     };
-    fetch(`${baseUrl}//psSignOtp/add`, {
+    fetch(`${baseUrl}/psSignOtp/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import { baseUrl } from "../../../../utils/api";
 import TableLayout from "../../../Components/TableLayout";
 import Loading from "../../../Shared/Loading";
 import NoApplicationFound from "../../../Shared/NoApplicationFound";
-import showSearchedApplication from "../SearchApplications/showSearchedApplication";
+import ShowInwardApplications from "./ShowInwardApplications";
 
 const Inward = () => {
   const {
@@ -126,7 +126,7 @@ const Inward = () => {
         <div>
           <TableLayout
             tableData={tableData}
-            Component={showSearchedApplication}
+            Component={ShowInwardApplications}
             tableComponentProps={tableComponentProps}
           />
 

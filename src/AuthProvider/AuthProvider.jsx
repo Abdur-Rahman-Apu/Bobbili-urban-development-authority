@@ -45,6 +45,7 @@ const AuthProvider = ({ children }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     };
     const response = await fetch(url, config);
     const result = await response.json();

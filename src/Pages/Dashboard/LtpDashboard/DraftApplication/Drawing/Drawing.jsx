@@ -48,7 +48,7 @@ const Drawing = () => {
   useEffect(() => {
     localStorage.setItem("selectedFiles", JSON.stringify(["", ""]));
     getApplicationData(applicationNo, cameFrom).then((res) => {
-      console.log(res);
+      console.log(res, "res");
       setSavedData(res);
       setBuildingInfoData(res?.buildingInfo);
       if (Object.keys(res?.drawing)?.length) {
@@ -246,6 +246,17 @@ const Drawing = () => {
       localStorage.removeItem("selectedFiles");
     };
   }, []);
+
+  console.log(
+    role == "PS" &&
+      buildingInfoData?.length !== 0 &&
+      getSubmitData?.length !== 0,
+    "condition"
+  );
+
+  console.log(role == "PS");
+  console.log(buildingInfoData);
+  console.log(getSubmitData);
 
   return (
     <div className="text-black ml-4 mt-3">
