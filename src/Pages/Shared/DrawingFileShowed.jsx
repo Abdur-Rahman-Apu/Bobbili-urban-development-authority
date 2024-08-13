@@ -36,9 +36,14 @@ export default function DrawingFileShowed({ modalStates, searchAppData }) {
   const [pdfUrl, setPdfUrl] = useState("");
 
   const getPsSignedFiles = async (applicationData) => {
+    console.log(applicationData, "Get ps signed files");
+    console.log(
+      applicationData?.psSignedFiles?.drawingFile,
+      "Get ps signed files"
+    );
     try {
       const response = await fetch(
-        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.drawingFile}`
+        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.drawing}`
       );
       console.log(response, "response");
       const blob = await response.blob();

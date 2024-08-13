@@ -87,7 +87,7 @@ const UpdateProfile = () => {
 
     if (isPsSignUploadSuccess) {
       console.log(formValue, "form value");
-      fetch(`${baseUrl}/updateUserInfo/${userInfoFromCookie()._id}`, {
+      fetch(`${baseUrl}/user/update/${userInfoFromCookie()._id}`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

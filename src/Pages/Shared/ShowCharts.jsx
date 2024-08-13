@@ -186,7 +186,7 @@ const ShowCharts = () => {
       setLoading(true);
 
       fetch(
-        `${baseUrl}/totalApplications?data=${JSON.stringify(
+        `${baseUrl}/apps/amountWithApps?data=${JSON.stringify(
           userInfoFromCookie()
         )}`
       )

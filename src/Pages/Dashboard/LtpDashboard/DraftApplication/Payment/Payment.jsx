@@ -8,10 +8,9 @@ import { IoReceipt } from "react-icons/io5";
 import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
 import { useLocation, useNavigate, useOutletContext } from "react-router";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
+import { handlePaymentProcess } from "../../../../../services/paymentService";
 import { baseUrl } from "../../../../../utils/api";
-import { getCookie } from "../../../../../utils/utils";
 import InputField from "../../../../Components/InputField";
 import SendIcon from "../../../../Components/SendIcon";
 import SaveData from "../SaveData";
@@ -36,9 +35,12 @@ const Payment = () => {
   const stepperData = useOutletContext();
   const pathname = useLocation().pathname;
 
+  console.log(pathname, "pathname in payment");
+
   const navigate = useNavigate();
   const [isStepperVisible, currentStep, steps, handleStepClick] = stepperData;
   const [applicationData, setApplicationData] = useState({});
+  const [paymentId, setPaymentId] = useState(null);
   const [condition, setCondition] = useState("");
   const [calculatedData, setCalculatedData] = useState({});
   const [selectedFiles, setSelectedFiles] = useState({
@@ -75,6 +77,7 @@ const Payment = () => {
     getApplicationData(applicationNo, cameFrom).then((appData) => {
       console.log(appData, "APP DATA");
       setApplicationData(appData);
+      setPaymentId(appData?.payment?.udaCharge?.paymentId);
 
       if (appData?.prevSavedState === 6) {
         localStorage.setItem("PPS", JSON.parse(1));
@@ -607,6 +610,7 @@ const Payment = () => {
     )?.value;
 
     const udaCharge = {
+      ...applicationData?.payment?.udaCharge,
       vacantArea: vacantArea ?? "",
       TotalPenalizationCharged: TotalPenalizationCharged ?? "",
       TotalOpenSpaceCharged: TotalOpenSpaceCharged ?? "",
@@ -666,106 +670,13 @@ const Payment = () => {
   const [loadingPayment, setLoadingPayment] = useState(false);
 
   const confirmMessageForPayment = () => {
-    Swal.fire({
-      title: "Do you want to pay?",
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // make a order
-
-        const amount = document.getElementById("UDATestCharge").value;
-        console.log(amount, "amount");
-        if (amount > 0) {
-          setLoadingPayment(true);
-          const data = {
-            amount: amount,
-            customer_email: ltpInfo?.email,
-            customer_phone: ltpInfo?.mobileNo,
-            first_name: ltpInfo?.name,
-            description: `Pay UDA fees`,
-            applicationNo: JSON.parse(localStorage.getItem("CurrentAppNo")),
-            userId: userInfoFromCookie()._id,
-            page: "dashboard",
-          };
-
-          const token = JSON.parse(getCookie("jwToken"));
-
-          fetch(
-            `${baseUrl}/storePaymentInfo`,
-            // "http://localhost:5000/storePaymentInfo",
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: token,
-              },
-              body: JSON.stringify({
-                applicationNo: data.applicationNo,
-                amount,
-                customer_email: ltpInfo?.email,
-                customer_phone: ltpInfo?.mobileNo,
-              }),
-            }
-          )
-            .then((res) => res.json())
-            .then((storeResult) => {
-              // setLoadingPayment(false);
-              console.log(storeResult, "Store payment");
-
-              if (
-                storeResult?.acknowledged &&
-                Number(storeResult?.onlinePaymentStatus?.amount) ===
-                  Number(amount)
-              ) {
-                const token = JSON.parse(getCookie("jwToken"));
-                fetch(
-                  `${baseUrl}/initiateJuspayPayment`,
-                  // "http://localhost:5000/initiateJuspayPayment",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      authorization: token,
-                    },
-                    body: JSON.stringify(data),
-                  }
-                )
-                  .then((response) => {
-                    if (!response.ok) {
-                      throw new Error(`Failed to make payment`);
-                    }
-                    return response.json();
-                  })
-                  .then((data) => {
-                    console.log(data, "DATA");
-                    if (data.status === "NEW") {
-                      const url = data.payment_links.web;
-                      window.location.href = url;
-                    } else {
-                      toast.error(data.message);
-                    }
-                    setLoadingPayment(false);
-                  })
-                  .catch((error) => {
-                    setLoadingPayment(false);
-                    console.log(error, "Payment error");
-                    toast.error(error.message);
-                  });
-              } else {
-                setLoadingPayment(false);
-                toast.error("Failed to make payment");
-              }
-            })
-            .catch((err) => {
-              setLoadingPayment(false);
-              toast.error("Failed to make payment");
-            });
-        } else {
-          toast.error("Please enter a valid amount");
-        }
-      }
-    });
+    const amount = document.getElementById("UDATotalCharged").value;
+    handlePaymentProcess(
+      amount,
+      setLoadingPayment,
+      applicationData,
+      "dashboard"
+    );
   };
 
   console.log(sentData, "Sent data");
@@ -820,6 +731,7 @@ const Payment = () => {
               placeholder="000"
               type="number"
               ltpDetails={calculatedData?.vacantAreaDevelopmentCharged}
+              isAlwaysHide={true}
             />
             <InputField
               id="builtUpArea"
@@ -828,6 +740,7 @@ const Payment = () => {
               placeholder="000"
               type="number"
               ltpDetails={calculatedData?.builtUpAreaDevelopmentCharged}
+              isAlwaysHide={true}
             />
             {(Newly_Developed_Condition || RLP_IPLP_Condition) && (
               <InputField
@@ -837,6 +750,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.TotalOpenSpaceCharged}
+                isAlwaysHide={true}
               />
             )}
             {RLP_IPLP_Condition && (
@@ -847,6 +761,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.TotalPenalizationCharged}
+                isAlwaysHide={true}
               />
             )}
             <InputField
@@ -856,6 +771,7 @@ const Payment = () => {
               placeholder="000"
               type="number"
               ltpDetails={calculatedData?.TotalLabourCessComp2Charged}
+              isAlwaysHide={true}
             />
             <InputField
               id="userCharges"
@@ -864,6 +780,7 @@ const Payment = () => {
               placeholder="000"
               type="number"
               ltpDetails={calculatedData?.userCharged}
+              isAlwaysHide={true}
             />
             <InputField
               id="UDATotalCharged"
@@ -872,20 +789,21 @@ const Payment = () => {
               placeholder="000"
               type="number"
               ltpDetails={calculatedData?.UDATotalCharged}
+              isAlwaysHide={true}
             />
-            <InputField
+            {/* <InputField
               id="UDATestCharge"
               name="UDATestCharged"
               label="Pay Online"
               placeholder="000"
               type="number"
-            />
+            /> */}
             {role === "LTP" && cameFrom?.toLowerCase() === "draft" && (
               <>
-                {applicationData?.onlinePaymentStatus?.order_id ? (
+                {paymentId ? (
                   <div className="flex gap-2 items-end ms-5 mt-[16px]">
                     <Link
-                      to={`/dashboard/draftApplication/paymentStatus/${applicationData?.onlinePaymentStatus?.order_id}`}
+                      to={`/dashboard/draftApplication/paymentStatus/${paymentId}`}
                       className="bg-gradient-to-b from-normalViolet to-normalViolet text-white w-fit px-4 py-3 rounded-full capitalize font-roboto flex gap-2 items-center shadow-lg"
                     >
                       <IoReceipt size={15} className="mr-1" />
@@ -1074,6 +992,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.paperPublicationCharged}
+                isAlwaysHide={true}
               />
               <InputField
                 id="processingFee"
@@ -1082,6 +1001,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.processingFees}
+                isAlwaysHide={true}
               />
               {
                 <InputField
@@ -1091,6 +1011,7 @@ const Payment = () => {
                   placeholder="000"
                   type="number"
                   ltpDetails={calculatedData?.bettermentCharged}
+                  isAlwaysHide={true}
                 />
               }
               <InputField
@@ -1100,6 +1021,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.buildingPermitFees}
+                isAlwaysHide={true}
               />
               <InputField
                 id="gramaSiteApprovalCharges"
@@ -1108,6 +1030,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.gramaSiteApprovalCharged}
+                isAlwaysHide={true}
               />
 
               <InputField
@@ -1117,6 +1040,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.GramaPanchayetTotalCharged}
+                isAlwaysHide={true}
               />
             </div>
 
@@ -1230,6 +1154,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.labourCessCompo1Charged}
+                isAlwaysHide={true}
               />
             </div>
 
@@ -1346,6 +1271,7 @@ const Payment = () => {
                 placeholder="000"
                 type="number"
                 ltpDetails={calculatedData?.greenFeeCharged}
+                isAlwaysHide={true}
               />
             </div>
 

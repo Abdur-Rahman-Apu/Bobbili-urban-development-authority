@@ -41,7 +41,7 @@ const Login = ({ onShowForgotPassModal }) => {
     // fetch user information from the database
     try {
       const response = await fetch(
-        `${baseUrl}/login?credentials=${JSON.stringify(userInfo)}`,
+        `${baseUrl}/auth/login?credentials=${JSON.stringify(userInfo)}`,
         { method: "GET", credentials: "include" }
       );
 

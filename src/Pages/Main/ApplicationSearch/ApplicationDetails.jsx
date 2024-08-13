@@ -98,7 +98,7 @@ export default function ApplicationDetails({
               id="surveyNo"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.buildingInfo?.generalInformation?.surveyNo
               }
             />
@@ -107,25 +107,21 @@ export default function ApplicationDetails({
               id="village"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
-                applicationData?.buildingInfo?.generalInformation?.village
-              }
+              value={applicationData?.buildingInfo?.generalInformation?.village}
             />
             <MainPageInput
               label="Mandal :"
               id="mandal"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
-                applicationData?.buildingInfo?.generalInformation?.mandal
-              }
+              value={applicationData?.buildingInfo?.generalInformation?.mandal}
             />
             <MainPageInput
               label="District :"
               id="district"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.buildingInfo?.generalInformation?.district
               }
             />
@@ -137,16 +133,14 @@ export default function ApplicationDetails({
               id="netPlotArea"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
-                applicationData?.buildingInfo?.plotDetails?.netPlotAreaCal
-              }
+              value={applicationData?.buildingInfo?.plotDetails?.netPlotAreaCal}
             />
             <MainPageInput
               label="No. of floors :"
               id="noOfFloors"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.buildingInfo?.plotDetails?.floorDetails?.length
               }
             />
@@ -155,14 +149,14 @@ export default function ApplicationDetails({
               id="noOfUnits"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={applicationData?.buildingInfo?.plotDetails?.noOfUnits}
+              value={applicationData?.buildingInfo?.plotDetails?.noOfUnits}
             />
             <MainPageInput
               label="Total built up area :"
               id="totalBuiltUpArea"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.buildingInfo?.plotDetails?.totalBuiltUpArea
               }
             />
@@ -202,7 +196,7 @@ export default function ApplicationDetails({
               id="name1"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.applicantInfo?.applicantDetails?.[0]?.name
               }
             />
@@ -211,7 +205,7 @@ export default function ApplicationDetails({
               id="ownerDoorNo"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.applicantInfo?.applicantDetails?.[0]
                   ?.ownerDoorNo
               }
@@ -221,7 +215,7 @@ export default function ApplicationDetails({
               id="ownerStreetNo"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={
+              value={
                 applicationData?.applicantInfo?.applicantDetails?.[0]
                   ?.ownerStreetNo
               }
@@ -234,14 +228,14 @@ export default function ApplicationDetails({
               id="name2"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={applicationData?.applicantInfo?.ltpDetails?.name}
+              value={applicationData?.applicantInfo?.ltpDetails?.name}
             />
             <MainPageInput
               label="Address :"
               id="address2"
               type="text"
               placeholder="xxxxxxx"
-              ltpDetails={applicationData?.applicantInfo?.ltpDetails?.address}
+              value={applicationData?.applicantInfo?.ltpDetails?.address}
             />
           </div>
         </div>

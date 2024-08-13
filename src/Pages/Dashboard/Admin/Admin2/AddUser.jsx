@@ -95,6 +95,7 @@ const AddUser = () => {
   };
 
   const source = axios.CancelToken.source();
+
   const onSubmit = async (data) => {
     setLoading(true);
     console.log(data, "data");
@@ -171,32 +172,32 @@ const AddUser = () => {
 
       console.log(userInfo, "USER INFO");
 
-      // if (userInfo) {
-      //   // store users data in the database
-      //   fetch(`${baseUrl}/user/add`, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-type": "application/json",
-      //     },
-      //     body: JSON.stringify(userInfo),
-      //   })
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       console.log(data);
+      if (userInfo) {
+        // store users data in the database
+        fetch(`${baseUrl}/user/add`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
 
-      //       if (data.acknowledged) {
-      //         toast.success("User added successfully");
-      //         navigate("/dashboard/allUser");
-      //       }
-      //       if (data?.result === 0) {
-      //         console.log(data.message);
-      //         toast.error(data.message);
-      //       }
-      //     })
-      //     .catch(() => {
-      //       toast.error("Server is not responded");
-      //     });
-      // }
+            if (data.acknowledged) {
+              toast.success("User added successfully");
+              navigate("/dashboard/allUser");
+            }
+            if (data?.result === 0) {
+              console.log(data.message);
+              toast.error(data.message);
+            }
+          })
+          .catch(() => {
+            toast.error("Server is not responded");
+          });
+      }
     }
     setLoading(false);
   };

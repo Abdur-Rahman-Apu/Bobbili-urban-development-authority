@@ -1,8 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-export default function useDebounce(callback, delay) {
-  const timeoutIdRef = useRef(null);
-
+export default function useDebounce(callback, delay, timeoutIdRef) {
   useEffect(() => {
     return () => {
       if (timeoutIdRef.current) {

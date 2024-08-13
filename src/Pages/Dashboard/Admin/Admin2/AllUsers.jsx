@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
+import Swal from "sweetalert2";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../../Style/Home.module.css";
 import ErrorAnimation from "../../../../assets/ServerError.json";
@@ -81,22 +82,30 @@ const AllUsers = () => {
   const deleteUser = (id) => {
     console.log(id);
 
-    fetch(`${baseUrl}/user/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        console.log(response);
-        if (response.acknowledged) {
-          toast.success("Deleted successfully");
-          refetch();
-        } else {
-          toast.error("Failed to delete");
-        }
-      })
-      .catch(() => {
-        toast.error("Server Error");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result?.isConfirmed) {
+        fetch(`${baseUrl}/user/delete/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            console.log(response);
+            if (response.acknowledged) {
+              toast.success("Deleted successfully");
+              refetch();
+            } else {
+              toast.error("Failed to delete");
+            }
+          })
+          .catch(() => {
+            toast.error("Server Error");
+          });
+      }
+    });
   };
 
   // update user information
@@ -118,19 +127,20 @@ const AllUsers = () => {
   }, [showModal]);
 
   // update user profile information
-
   const onSubmit = (data) => {
     setLoadingForUpdate(true);
     setValidityError("");
-    console.log(data);
+    console.log(data, "update user info");
 
     const updateDataIntoDB = (id, data) => {
+      console.log(data, id, "data in update function");
+
       fetch(`${baseUrl}/user/update/${id}`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ data }),
       })
         .then((res) => res.json())
         .then((result) => {

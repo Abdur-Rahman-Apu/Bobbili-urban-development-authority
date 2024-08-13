@@ -14,7 +14,7 @@ const useGetPageWiseApplication = (searchApplicationName) => {
         searchApplicationName,
       };
       const response = await fetch(
-        `${baseUrl}/allPageWiseApplications?data=${JSON.stringify(query)}`
+        `${baseUrl}/apps/pageWise?data=${JSON.stringify(query)}`
       );
       return await response.json();
     }

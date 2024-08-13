@@ -1,7 +1,5 @@
-import axios from "axios";
 import Lottie from "lottie-react";
-import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import {
   useLoaderData,
@@ -11,83 +9,25 @@ import {
 } from "react-router-dom";
 import Swal from "sweetalert2";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
-import pendingAnimation from "../../../../../assets/Payment/Payment-Pending.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
-import { baseUrl } from "../../../../../utils/api";
-import { getCookie } from "../../../../../utils/utils";
+import { handlePaymentRequest } from "../../../../../services/paymentService";
 
 export default function PaymentStatus() {
   const params = useParams();
-  const ref = useRef(null);
   const navigate = useNavigate();
   const pathName = useLocation()?.pathname;
+  const [loadingPayment, setLoadingPayment] = useState(false);
+
   console.log(pathName, "pathName");
-  const [data, setData] = useState([]);
+
   console.log(params, "params");
   const loader = useLoaderData();
 
   console.log(loader, "loader");
 
-  useEffect(() => {
-    setData(loader?.onlinePaymentStatus);
-  }, [loader]);
-
-  // Function to fetch order status
-  async function fetchOrderStatus() {
-    try {
-      const response = await axios.get(
-        `${baseUrl}/paymentStatus?orderId=${params?.orderId}`
-      );
-      // const response = await axios.get(
-      //   `http://localhost:5000/paymentStatus?orderId=${params?.orderId}`
-      // );
-
-      setData(response?.data?.onlinePaymentStatus);
-
-      console.log(response?.data, "response");
-      const status = response?.data?.onlinePaymentStatus?.status;
-
-      console.log(`Order status for order ${params.orderId}: ${status}`);
-
-      if (
-        status.toLowerCase().includes("charged") ||
-        status.toLowerCase().includes("failed")
-      ) {
-        clearInterval(ref.current); // Stop polling if terminal status is received
-        console.log("Polling stopped.");
-      }
-    } catch (error) {
-      console.error("Error fetching order status:", error);
-    }
-  }
-
-  // TODO: If pending then recall after 15 sec
-  useEffect(() => {
-    clearInterval(ref.current);
-    // Start polling at specified intervals
-    ref.current = setInterval(fetchOrderStatus, 3000);
-
-    console.log("Polling stopped after order fulfillment window.");
-
-    return () => {
-      clearInterval(ref.current);
-    };
-  }, []);
-
-  // TODO: GET payment status
-
-  const paymentStatus = data?.status?.toLowerCase()?.includes("pending")
-    ? pendingAnimation
-    : data?.status?.toLowerCase()?.includes("failed")
-    ? errorAnimation
-    : successAnimation;
-
-  const getPaymentDate = (date) => {
-    if (date) {
-      return date?.split("T")[0]?.split("-")?.reverse()?.join("-");
-    }
-    return date;
-  };
+  const paymentStatus = loader?.order_status?.toLowerCase()?.includes("success")
+    ? successAnimation
+    : errorAnimation;
 
   const goBack = () => {
     if (pathName.includes("onlinePayment")) {
@@ -97,13 +37,10 @@ export default function PaymentStatus() {
     }
   };
 
-  const isEligibleForRetry =
-    data?.status === "AUTHENTICATION_FAILED" ||
-    data?.status === "AUTHORIZATION_FAILED";
+  const isEligibleForRetry = loader?.order_status?.toLowerCase() !== "success";
 
-  const [loadingPayment, setLoadingPayment] = useState(false);
   const retryPayment = () => {
-    console.log(data, "Data in retry payment");
+    console.log(loader, "Data in retry payment");
     Swal.fire({
       title: "Do you want to pay?",
       showCancelButton: true,
@@ -111,91 +48,28 @@ export default function PaymentStatus() {
     }).then((result) => {
       if (result.isConfirmed) {
         // make a order
-        console.log(data, "Data in payment status");
+        console.log(loader, "Data in payment status");
 
         setLoadingPayment(true);
-        const paymentData = {
-          amount: data?.amount,
-          customer_email: data?.customer_email,
-          customer_phone: data?.customer_phone,
-          first_name: loader?.applicantInfo?.ltpDetails?.name,
-          description: `Pay UDA fees`,
+
+        const initialData = {
           applicationNo: loader?.applicationNo,
-          userId: loader?._id,
-          page: "dashboard",
+          amount: loader?.amount,
+          billing_name: loader?.billing_name,
+          billing_email: loader?.billing_email,
+          billing_tel: loader?.billing_tel,
         };
 
-        console.log(paymentData, "payment data");
+        const pageName = pathName?.includes("dashboard") ? "dashboard" : "home";
 
-        const token = JSON.parse(getCookie("jwToken"));
-        fetch(
-          `${baseUrl}/storePaymentInfo`,
-          // "http://localhost:5000/storePaymentInfo",
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: token,
-            },
-            body: JSON.stringify({
-              applicationNo: loader.applicationNo,
-              amount: data?.amount,
-              customer_email: data?.customer_email,
-              customer_phone: data?.customer_phone,
-            }),
-          }
-        )
-          .then((res) => res.json())
-          .then((storeResult) => {
-            console.log(storeResult, "Store payment");
-            console.log(data, "data in store payment");
-            if (
-              storeResult.acknowledged &&
-              Number(storeResult?.onlinePaymentStatus?.amount) ===
-                Number(data?.amount)
-            ) {
-              const token = JSON.parse(getCookie("jwToken"));
-              fetch(
-                `${baseUrl}/initiateJuspayPayment`,
-                // "http://localhost:5000/initiateJuspayPayment",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    authorization: token,
-                  },
-                  body: JSON.stringify(paymentData),
-                }
-              )
-                .then((response) => {
-                  if (!response.ok) {
-                    setLoadingPayment(false);
-                    throw new Error(`Failed to make payment`);
-                  }
-                  return response.json();
-                })
-                .then((paymentResponse) => {
-                  console.log(paymentResponse, "DATA");
-                  if (paymentResponse.status === "NEW") {
-                    const url = paymentResponse.payment_links.web;
-                    window.location.href = url;
-                  } else {
-                    toast.error(paymentResponse.message);
-                  }
-                  setLoadingPayment(false);
-                })
-                .catch((error) => {
-                  toast.error(error.message);
-                });
-            } else {
-              setLoadingPayment(false);
-              toast.error("Failed to make payment");
-            }
-          })
-          .catch((err) => {
-            setLoadingPayment(false);
-            toast.error("Failed to make payment");
-          });
+        const finalData = {
+          ...initialData,
+          page: pageName,
+        };
+
+        console.log(finalData, "payment data");
+
+        handlePaymentRequest(initialData, finalData, setLoadingPayment);
       }
     });
   };
@@ -211,34 +85,44 @@ export default function PaymentStatus() {
         >
           {/* Order id  */}
           <p className="text-lg mt-4 font-bold">Order Id:</p>
-          <p className="text-lg mt-4 break-words">{data?.order_id}</p>
+          <p className="text-lg mt-4 break-words">{loader?.order_id}</p>
 
           {/* TXN id  */}
-          <p className="text-lg mt-4 font-bold">TXN Id:</p>
-          <p className="text-lg mt-4 break-words">{data?.txn_id}</p>
+          <p className="text-lg mt-4 font-bold">Tracking Id:</p>
+          <p className="text-lg mt-4 break-words">{loader?.tracking_id}</p>
+
+          {/* Name  */}
+          <p className="text-lg mt-4 font-bold">Name:</p>
+          <p className="text-lg mt-4 break-words">{loader?.billing_name}</p>
 
           {/* Email  */}
           <p className="text-lg mt-4 font-bold">Email:</p>
-          <p className="text-lg mt-4 break-words">{data?.customer_email}</p>
+          <p className="text-lg mt-4 break-words">{loader?.billing_email}</p>
 
           {/* Phone  */}
           <p className="text-lg mt-4 font-bold">Phone:</p>
-          <p className="text-lg mt-4 break-words">{data?.customer_phone}</p>
+          <p className="text-lg mt-4 break-words">{loader?.billing_tel}</p>
 
           {/* Amount  */}
           <p className="text-lg mt-4 font-bold">Amount:</p>
-          <p className="text-lg mt-4 break-words">₹{data?.amount}</p>
+          <p className="text-lg mt-4 break-words">₹{loader?.amount}</p>
 
           {/* Payment method  */}
-          <p className="text-lg mt-4 font-bold">Payment method:</p>
-          <p className="text-lg mt-4 break-words">{data?.payment_method}</p>
+          {loader?.payment_mode && (
+            <>
+              <p className="text-lg mt-4 font-bold">Payment method:</p>
+              <p className="text-lg mt-4 break-words">{loader?.payment_mode}</p>
+            </>
+          )}
 
           {/* Payment date  */}
 
           <p className="text-lg mt-4 font-bold">Payment Date:</p>
-          <p className="text-lg mt-4 break-words">
-            {getPaymentDate(data?.date_created)}
-          </p>
+          <p className="text-lg mt-4 break-words">{loader?.trans_date}</p>
+
+          {/* payment status  */}
+          <p className="text-lg mt-4 font-bold">Status:</p>
+          <p className="text-lg mt-4 break-words">{loader?.order_status}</p>
         </div>
 
         <div
@@ -253,7 +137,7 @@ export default function PaymentStatus() {
           />
 
           <p className="text-center text-lg font-bold text-normalViolet capitalize">
-            {data?.message}
+            {loader?.status_message}
           </p>
         </div>
       </div>

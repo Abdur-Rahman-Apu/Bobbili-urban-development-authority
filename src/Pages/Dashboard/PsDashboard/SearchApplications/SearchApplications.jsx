@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../AuthProvider/AuthProvider";
@@ -24,6 +24,7 @@ function SearchApplications() {
   const [tableData, setTableData] = useState({});
   const [tableComponentProps, setTableComponentProps] = useState({});
   const [error, setError] = useState("");
+  const timeoutIdRef = useRef(null);
   const {
     register,
     handleSubmit,
@@ -83,29 +84,33 @@ function SearchApplications() {
       });
     }
   }, [allData]);
-  const doSearch = useDebounce((searchValue, searchType) => {
-    setLoading(true);
-    setError("");
+  const doSearch = useDebounce(
+    (searchValue, searchType) => {
+      setLoading(true);
+      setError("");
 
-    const query = JSON.stringify({
-      searchValue,
-      psId: userInfoFromCookie()._id,
-    });
-
-    fetchDataFromTheDb(
-      `${baseUrl}/${searchType}?search=${query}`
-      // `http://localhost:5000/${searchType}?search=${query}`
-    )
-      .then((data) => {
-        setLoading(false);
-        console.log(data, "After search");
-        setAllData(data?.result);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError("Network Error");
+      const query = JSON.stringify({
+        searchValue,
+        psId: userInfoFromCookie()._id,
       });
-  }, 2000);
+
+      fetchDataFromTheDb(
+        `${baseUrl}/${searchType}?search=${query}`
+        // `http://localhost:5000/${searchType}?search=${query}`
+      )
+        .then((data) => {
+          setLoading(false);
+          console.log(data, "After search");
+          setAllData(data?.result);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError("Network Error");
+        });
+    },
+    2000,
+    timeoutIdRef
+  );
 
   const onSubmit = (data) => {
     const { search } = data;
@@ -114,9 +119,10 @@ function SearchApplications() {
 
     if (search?.trim()?.length) {
       search?.includes("BUDA")
-        ? doSearch(search, "getSearchedApplicationForPsByAppNo")
-        : doSearch(search, "getSearchedApplicationForPsByOwnerName");
+        ? doSearch(search, "searchApp/forPsByAppNo")
+        : doSearch(search, "searchApp/forPsByOwnerName");
     } else {
+      clearTimeout(timeoutIdRef.current);
       setAllData(storeData);
     }
 
@@ -191,7 +197,7 @@ function SearchApplications() {
       </form>
       {loading && <SearchApplicationLoading />}
 
-      {!loading && error.length === 0 && (
+      {!loading && error.length === 0 && allData?.length !== 0 && (
         <TableLayout
           tableData={tableData}
           Component={showSearchedApplication}

@@ -56,7 +56,7 @@ const RevenueReport = () => {
     (async function () {
       try {
         const applicationData = await fetchDataFromTheDb(
-          `${baseUrl}/totalApplications`
+          `${baseUrl}/apps/amountWithApps`
         );
         console.log(applicationData, "AD");
         if (Object.keys(applicationData)?.length) {

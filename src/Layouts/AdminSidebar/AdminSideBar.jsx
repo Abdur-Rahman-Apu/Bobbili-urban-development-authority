@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BiSolidUserPlus } from "react-icons/bi";
+import { FaCcAmazonPay } from "react-icons/fa";
 import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
 import { MdSpaceDashboard } from "react-icons/md";
 import { RiCustomerService2Fill } from "react-icons/ri";
@@ -94,6 +95,20 @@ const AdminSideBar = () => {
           </span>
           <Link className={`p-[10px] font-medium `} to="/dashboard/support">
             Customer Support
+          </Link>
+        </li>
+      )}
+      {role.toLowerCase().includes("super") && (
+        <li
+          className={`${
+            path === "/dashboard/paymentInfo" && activeColor
+          }  ps-4 mb-1 flex items-center  ${hoverColor}`}
+        >
+          <span>
+            <FaCcAmazonPay size={20} />
+          </span>
+          <Link className={`p-[10px] font-medium `} to="/dashboard/paymentInfo">
+            Payment Status
           </Link>
         </li>
       )}

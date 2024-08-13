@@ -31,8 +31,17 @@ const Inward = () => {
     ["allInwardApplications"],
     async () => {
       const response = await fetch(
-        `${baseUrl}/submitApp/getByPsInfo?userId=${userInfoFromCookie()?._id}`
+        `${baseUrl}/submitApp/getByPsInfo?userId=${
+          userInfoFromCookie()?.userId
+        }`
       );
+
+      console.log(response, "response in inward");
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data);
+      }
       return await response.json();
     }
   );
@@ -43,7 +52,11 @@ const Inward = () => {
 
   useEffect(() => {
     if (isError) {
-      setError("Failed to fetch");
+      if (data) {
+        setError(data);
+      } else {
+        setError("Failed to fetch");
+      }
       setLoading(false);
     } else {
       setError("");
@@ -53,6 +66,9 @@ const Inward = () => {
     setAllData(data);
     setStoreData(data);
   }, [isError, data]);
+
+  console.log(isError, "Is error in inward");
+  console.log(data, "data in inward");
 
   // TODO: owner name search pending
 
@@ -104,9 +120,7 @@ const Inward = () => {
             loop={true}
             className="w-[40%] h-[40%]"
           />
-          <p className="text-red-500 font-bold text-lg uppercase">
-            {error} data
-          </p>
+          <p className="text-red-500 font-bold text-lg uppercase">{error}</p>
         </div>
       ) : (
         <div>

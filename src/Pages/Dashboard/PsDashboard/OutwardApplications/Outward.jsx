@@ -23,7 +23,7 @@ function Outward() {
     ["allOutwardApplications"],
     async () => {
       const response = await fetch(
-        `${baseUrl}/totalApplications?data=${JSON.stringify(
+        `${baseUrl}/apps/amountWithApps?data=${JSON.stringify(
           userInfoFromCookie()
         )}`
       );

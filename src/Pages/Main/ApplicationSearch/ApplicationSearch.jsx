@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
 import { baseUrl } from "../../../utils/api";
@@ -9,42 +9,47 @@ import SearchApplicationLoading from "../../Shared/SearchApplicationLoading";
 import ApplicationDetails from "./ApplicationDetails";
 
 const ApplicationSearch = () => {
+  const { fetchDataFromTheDb } = useContext(AuthContext);
   const [applicationData, setApplicationData] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const timeoutIdRef = useRef(null);
 
-  const { fetchDataFromTheDb } = useContext(AuthContext);
+  const doSearch = useDebounce(
+    (searchValue, searchType) => {
+      setLoading(true);
+      setError("");
 
-  const doSearch = useDebounce((searchValue, searchType) => {
-    setLoading(true);
-    setError("");
-
-    const query = JSON.stringify({
-      searchValue,
-      page: "applicationSearch",
-    });
-    fetchDataFromTheDb(`${baseUrl}/${searchType}?search=${query}`)
-      .then((data) => {
-        setLoading(false);
-        console.log(data);
-        setApplicationData(data?.result);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError("Network Error");
+      const query = JSON.stringify({
+        searchValue,
+        page: "applicationSearch",
       });
-  }, 2000);
+      fetchDataFromTheDb(`${baseUrl}/${searchType}?search=${query}`)
+        .then((data) => {
+          setLoading(false);
+          console.log(data);
+          setApplicationData(data?.result);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError("Network Error");
+        });
+    },
+    2000,
+    timeoutIdRef
+  );
 
   //   console.log(applicationData, "APPLICATION DATA");
   const searchApplicationData = (e) => {
-    const value = e.target.value.trim();
+    setError("");
     setLoading(true);
+    const value = e.target.value.trim();
     if (value?.length) {
       value?.includes("BUDA")
-        ? doSearch(value, "getSearchedApplicationByAppNo")
-        : doSearch(value, "getSearchedApplicationByOwnerName");
+        ? doSearch(value, "searchApp/byAppNo")
+        : doSearch(value, "searchApp/byOwnerName");
     } else {
+      clearTimeout(timeoutIdRef.current);
       setApplicationData([]);
       setLoading(false);
     }
@@ -93,6 +98,7 @@ const ApplicationSearch = () => {
       {loading && <SearchApplicationLoading />}
 
       {error && <NetworkError errMsg={error} />}
+
       {applicationData?.length === 0 && !loading && !error && (
         <ApplicationDetails applicationData={applicationData} />
       )}

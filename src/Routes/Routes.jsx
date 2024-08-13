@@ -4,6 +4,7 @@ import MainLayout from "../Layouts/MainLayout";
 import CustomerSupport from "../Pages/Dashboard/Admin/Admin1/CustomerSupport/CustomerSupport";
 import AddUser from "../Pages/Dashboard/Admin/Admin2/AddUser";
 import AllUsers from "../Pages/Dashboard/Admin/Admin2/AllUsers";
+import PaymentStatusCheck from "../Pages/Dashboard/Admin/SuperAdmin/PaymentStatusCheck";
 import UpdateLocation from "../Pages/Dashboard/Admin/SuperAdmin/UpdateLocation";
 import Approved from "../Pages/Dashboard/LtpDashboard/Approved/Approved";
 import ApplicantInfo from "../Pages/Dashboard/LtpDashboard/DraftApplication/ApplicantInfo/ApplicantInfo";
@@ -65,15 +66,13 @@ const router = createBrowserRouter([
             element: <OnlinePayment />,
           },
           {
-            path: "/onlinePayment/paymentStatus/:orderId",
+            path: "/onlinePayment/paymentStatus/:id",
             element: <PaymentStatus />,
             loader: async ({ request, params }) => {
               // return fetch(
               //   `${baseUrl}/paymentStatus?orderId=${params.orderId}`
               // );
-              return fetch(
-                `http://localhost:5000/paymentStatus?orderId=${params.orderId}`
-              );
+              return await fetch(`${baseUrl}/payment/payInfo?id=${params.id}`);
             },
           },
           {
@@ -150,6 +149,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/dashboard/paymentInfo",
+        element: (
+          <AdminRoute>
+            <PaymentStatusCheck />
+          </AdminRoute>
+        ),
+      },
+      {
         path: "/dashboard/draftApplication",
         element: (
           <BothUserRoute>
@@ -220,7 +227,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "/dashboard/draftApplication/paymentStatus/:orderId",
+            path: "/dashboard/draftApplication/paymentStatus/:id",
             element: (
               <LtpRoute>
                 {" "}
@@ -231,9 +238,7 @@ const router = createBrowserRouter([
               // return fetch(
               //   `${baseUrl}/paymentStatus?orderId=${params.orderId}`
               // );
-              return fetch(
-                `${baseUrl}/paymentStatus?orderId=${params.orderId}`
-              );
+              return await fetch(`${baseUrl}/payment/payInfo?id=${params.id}`);
             },
           },
           {

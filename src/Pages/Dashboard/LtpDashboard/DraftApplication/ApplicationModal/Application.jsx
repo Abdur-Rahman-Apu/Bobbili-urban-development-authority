@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { IoIosPrint } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
+import { useReactToPrint } from "react-to-print";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import ApplicationHeader from "./ApplicationHeader";
 
@@ -16,7 +18,10 @@ function Application({ setOpenApplication, filteredData }) {
   const [plotDetails, setPlotDetails] = useState({});
   const [ltpDetailsData, setLtpDetailsData] = useState({});
   const [applicantDetailsData, setApplicantDetailsData] = useState([]);
-
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   console.log(applicationNo, "Application no");
 
   useEffect(() => {
@@ -138,6 +143,7 @@ function Application({ setOpenApplication, filteredData }) {
         <div
           className={`ScrollingHidden relative overflow-hidden overflow-y-auto modal-box w-full max-w-4xl p-14 bg-white`}
         >
+          {/* cancel btn  */}
           <form method="dialog" className="absolute top-6 right-6 z-50">
             <button
               onClick={() => setOpenApplication(false)}
@@ -147,9 +153,21 @@ function Application({ setOpenApplication, filteredData }) {
             </button>
           </form>
 
-          <div className="z-[10]">
+          {/* print button  */}
+          <button
+            className="w-fit ms-auto flex gap-1 items-center bg-normalViolet text-white px-3 rounded-full py-2 text-sm absolute top-20 right-6 z-50"
+            onClick={handlePrint}
+          >
+            Print
+            <IoIosPrint />
+          </button>
+
+          <div className="z-[10]" ref={componentRef}>
             {/* Header */}
-            <ApplicationHeader applicationNo={applicationNo} />
+            <ApplicationHeader
+              applicationNo={applicationNo}
+              handlePrint={handlePrint}
+            />
             <div>
               <div>
                 <div className="container mx-auto px-4 font-roboto ">
@@ -563,10 +581,10 @@ function Application({ setOpenApplication, filteredData }) {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr className="text-base">
+                            <tr className="text-base h-20">
                               <td
                                 className="border-b border-black font-bold text-center p-1"
-                                style={{ width: "10%" }}
+                                style={{ width: "10%", height: "80px" }}
                               >
                                 01
                               </td>
@@ -581,7 +599,7 @@ function Application({ setOpenApplication, filteredData }) {
                                 style={{ width: "50%" }}
                               ></td>
                             </tr>
-                            <tr className="text-base">
+                            <tr className="text-base h-20">
                               <td
                                 className="font-bold text-center p-1"
                                 style={{ width: "10%" }}

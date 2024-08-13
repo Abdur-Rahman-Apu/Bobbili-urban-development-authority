@@ -124,7 +124,7 @@ const Location = () => {
       console.log(data, "Data");
     } else {
       console.log("all");
-      fetch(`${baseUrl}/totalApplications`)
+      fetch(`${baseUrl}/apps/amountWithApps`)
         .then((res) => res.json())
         .then((result) => {
           console.log(result);

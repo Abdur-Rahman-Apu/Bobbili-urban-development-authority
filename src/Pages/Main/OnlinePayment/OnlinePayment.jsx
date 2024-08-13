@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import HomeCss from "../../../Style/Home.module.css";
 import { baseUrl } from "../../../utils/api";
@@ -14,7 +14,7 @@ const OnlinePayment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { fetchDataFromTheDb, textTypingAnimation } = useContext(AuthContext);
-
+  const timeoutIdRef = useRef(null);
   // useEffect(() => {
   //   getAllDraftApplicationData().then((data) => {
   //     console.log(data);
@@ -22,28 +22,32 @@ const OnlinePayment = () => {
   //   });
   // }, []);
 
-  const doSearch = useDebounce((searchValue, searchType) => {
-    setLoading(true);
-    setError("");
+  const doSearch = useDebounce(
+    (searchValue, searchType) => {
+      setLoading(true);
+      setError("");
 
-    const query = JSON.stringify({
-      searchValue,
-      page: "onlinePayment",
-    });
-    fetchDataFromTheDb(
-      `${baseUrl}/${searchType}?search=${query}`
-      // `http://localhost:5000/${searchType}?search=${query}`
-    )
-      .then((data) => {
-        setLoading(false);
-        console.log(data);
-        setApplicationData(data?.result);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError("Network Error");
+      const query = JSON.stringify({
+        searchValue,
+        page: "onlinePayment",
       });
-  }, 2000);
+      fetchDataFromTheDb(
+        `${baseUrl}/${searchType}?search=${query}`
+        // `http://localhost:5000/${searchType}?search=${query}`
+      )
+        .then((data) => {
+          setLoading(false);
+          console.log(data);
+          setApplicationData(data?.result);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError("Network Error");
+        });
+    },
+    2000,
+    timeoutIdRef
+  );
 
   const searchApplicationData = (e) => {
     const value = e.target.value;
@@ -52,12 +56,17 @@ const OnlinePayment = () => {
 
     setLoading(true);
     if (value?.length) {
-      doSearch(value, "getSearchedApplicationByAppNo");
+      console.log(value, value.length, "Inside");
+      // doSearch(value, "getSearchedApplicationByAppNo");
 
       // value?.includes("BUDA")
       //   ? doSearch(value, "getSearchedApplicationByAppNo")
       //   : doSearch(value, "getSearchedApplicationByOwnerName");
+      value?.includes("BUDA")
+        ? doSearch(value, "searchApp/byAppNo")
+        : doSearch(value, "searchApp/byOwnerName");
     } else {
+      clearTimeout(timeoutIdRef.current);
       setApplicationData([]);
       setLoading(false);
     }
@@ -108,7 +117,7 @@ const OnlinePayment = () => {
 
       {loading && <SearchApplicationLoading />}
 
-      {error && <NetworkError errMsg={error} />}
+      {!loading && error && <NetworkError errMsg={error} />}
 
       {/* TODO: MOVE TO ONLINE DETAIL PAGE  */}
       {applicationData?.length === 0 && !loading && !error && (

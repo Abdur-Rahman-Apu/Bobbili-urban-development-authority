@@ -87,7 +87,7 @@ const Home = () => {
     setOtpStoreError("");
     setResetPassFormData({ ...resetData });
     // const otp=otpGenerator()
-    const otp = "1235";
+    const otp = "1234";
     const data = {
       userId: resetData?.id,
       otp,

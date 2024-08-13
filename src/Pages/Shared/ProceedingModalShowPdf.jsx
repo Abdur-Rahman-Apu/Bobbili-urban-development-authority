@@ -41,7 +41,7 @@ export default function ProceedingModalShowPdf({
   const getPsSignedFiles = async (applicationData) => {
     try {
       const response = await fetch(
-        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.proceedingFile}`
+        `${baseUrl}/storage/pdf?fileId=${applicationData?.psSignedFiles?.proceeding}`
       );
       console.log(response, "response");
       const blob = await response.blob();
