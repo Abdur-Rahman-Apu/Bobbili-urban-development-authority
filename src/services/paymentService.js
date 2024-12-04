@@ -66,7 +66,8 @@ const handlePaymentRequest = (initialData, finalData, setLoadingPayment) => {
           console.log(response, "Response of payment request");
 
           // Redirect to CCAvenue with the encrypted data
-          window.location.href = ` https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=${response.data.encryptedData}&access_code=AVEX05LF81CC25XECC`;
+          // return;
+          window.location.href = response.data.url;
 
           setLoadingPayment(false);
         } catch (error) {

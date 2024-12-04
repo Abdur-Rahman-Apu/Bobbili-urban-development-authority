@@ -4,7 +4,6 @@ import { AiFillMessage, AiOutlineHome } from "react-icons/ai";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { MdOutlineDashboard } from "react-icons/md";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import ParticleBg from "../Pages/Components/ParticleBg";
 
 import toast from "react-hot-toast";
 import { FaUsers } from "react-icons/fa6";
@@ -72,7 +71,7 @@ const MainLayout = () => {
       {/* particle  */}
 
       <div className="px-10 min-h-screen z-[10] bg-[#E8EAEC] relative">
-        {!path.includes("/statistics") && <ParticleBg />}
+        {/* {!path.includes("/statistics") && <ParticleBg />} */}
         {/* upper part  */}
         <div className="py-3 flex-col lg:flex-row flex justify-between items-center z-[10]">
           <div className="basis-3/4 z-[10] pt-2">
