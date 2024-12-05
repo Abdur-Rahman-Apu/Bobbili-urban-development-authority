@@ -280,9 +280,12 @@ export default function OnlinePaymentDetails({
           viewport={{ once: true }}
         >
           <button
-            className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center`}
+            className={`save-btn bg-[#8980FD] px-3 py-2 rounded-full nm_Container text-sm flex justify-center items-center disabled:cursor-not-allowed`}
             onClick={confirmMessageForPayment}
-            disabled={applicationData?.length === 0}
+            disabled={
+              applicationData?.length === 0 ||
+              !payment?.udaCharge?.UDATotalCharged
+            }
           >
             <IoIosSend size={20} />
             <span className="ml-1 ">
