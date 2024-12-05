@@ -962,7 +962,7 @@ const BuildingInfo = () => {
                   <option value="" disabled>
                     Select Division
                   </option>
-                  <option value="Bobbili ">Bobbili</option>
+                  <option value="Bobbili">Bobbili</option>
                   <option value="Parvatipuram">Parvatipuram</option>
                   <option value="Vizianagaram">Vizianagaram</option>
                   {/* {districtData.map((district) => (

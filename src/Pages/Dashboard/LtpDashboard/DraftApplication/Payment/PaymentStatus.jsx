@@ -10,7 +10,10 @@ import {
 import Swal from "sweetalert2";
 import errorAnimation from "../../../../../assets/Payment/Payment-Error.json";
 import successAnimation from "../../../../../assets/Payment/Payment-Success.json";
-import { handlePaymentRequest } from "../../../../../services/paymentService";
+import {
+  getPaymentStatus,
+  handlePaymentRequest,
+} from "../../../../../services/paymentService";
 
 export default function PaymentStatus() {
   const params = useParams();
@@ -25,9 +28,8 @@ export default function PaymentStatus() {
 
   console.log(loader, "loader");
 
-  const paymentStatus = loader?.order_status?.toLowerCase()?.includes("success")
-    ? successAnimation
-    : errorAnimation;
+  const paymentStatus =
+    loader?.statusCode === "E000" ? successAnimation : errorAnimation;
 
   const goBack = () => {
     if (pathName.includes("onlinePayment")) {
@@ -37,7 +39,7 @@ export default function PaymentStatus() {
     }
   };
 
-  const isEligibleForRetry = loader?.order_status?.toLowerCase() !== "success";
+  const isEligibleForRetry = loader?.statusCode !== "E000";
 
   const retryPayment = () => {
     console.log(loader, "Data in retry payment");
@@ -55,9 +57,7 @@ export default function PaymentStatus() {
         const initialData = {
           applicationNo: loader?.applicationNo,
           amount: loader?.amount,
-          billing_name: loader?.billing_name,
-          billing_email: loader?.billing_email,
-          billing_tel: loader?.billing_tel,
+          payerInfo: loader?.payerInfo,
         };
 
         const pageName = pathName?.includes("dashboard") ? "dashboard" : "home";
@@ -85,44 +85,54 @@ export default function PaymentStatus() {
         >
           {/* Order id  */}
           <p className="text-lg mt-4 font-bold">Order Id:</p>
-          <p className="text-lg mt-4 break-words">{loader?.order_id}</p>
+          <p className="text-lg mt-4 break-words">{loader?.orderId}</p>
 
           {/* TXN id  */}
-          <p className="text-lg mt-4 font-bold">Tracking Id:</p>
-          <p className="text-lg mt-4 break-words">{loader?.tracking_id}</p>
+          {loader?.transactionId ? (
+            <>
+              <p className="text-lg mt-4 font-bold">Tracking Id:</p>
+              <p className="text-lg mt-4 break-words">
+                {loader?.transactionId}
+              </p>
+            </>
+          ) : null}
 
           {/* Name  */}
           <p className="text-lg mt-4 font-bold">Name:</p>
-          <p className="text-lg mt-4 break-words">{loader?.billing_name}</p>
+          <p className="text-lg mt-4 break-words">{loader?.payerInfo?.name}</p>
 
           {/* Email  */}
           <p className="text-lg mt-4 font-bold">Email:</p>
-          <p className="text-lg mt-4 break-words">{loader?.billing_email}</p>
+          <p className="text-lg mt-4 break-words">{loader?.payerInfo?.email}</p>
 
           {/* Phone  */}
           <p className="text-lg mt-4 font-bold">Phone:</p>
-          <p className="text-lg mt-4 break-words">{loader?.billing_tel}</p>
+          <p className="text-lg mt-4 break-words">
+            {loader?.payerInfo?.mobile}
+          </p>
 
           {/* Amount  */}
           <p className="text-lg mt-4 font-bold">Amount:</p>
           <p className="text-lg mt-4 break-words">₹{loader?.amount}</p>
 
           {/* Payment method  */}
-          {loader?.payment_mode && (
+          {loader?.paymentMode && (
             <>
               <p className="text-lg mt-4 font-bold">Payment method:</p>
-              <p className="text-lg mt-4 break-words">{loader?.payment_mode}</p>
+              <p className="text-lg mt-4 break-words">{loader?.paymentMode}</p>
             </>
           )}
 
           {/* Payment date  */}
 
           <p className="text-lg mt-4 font-bold">Payment Date:</p>
-          <p className="text-lg mt-4 break-words">{loader?.trans_date}</p>
+          <p className="text-lg mt-4 break-words">{loader?.paymentDate}</p>
 
           {/* payment status  */}
           <p className="text-lg mt-4 font-bold">Status:</p>
-          <p className="text-lg mt-4 break-words">{loader?.order_status}</p>
+          <p className="text-lg mt-4 break-words">
+            {getPaymentStatus(loader?.statusCode)}
+          </p>
         </div>
 
         <div
@@ -135,10 +145,6 @@ export default function PaymentStatus() {
             loop={true}
             className="w-[50%] lg:w-[70%] mx-auto"
           />
-
-          <p className="text-center text-lg font-bold text-normalViolet capitalize">
-            {loader?.status_message}
-          </p>
         </div>
       </div>
 
