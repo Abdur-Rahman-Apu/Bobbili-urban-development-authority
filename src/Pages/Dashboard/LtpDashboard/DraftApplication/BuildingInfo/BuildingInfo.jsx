@@ -71,6 +71,7 @@ const BuildingInfo = () => {
     useState("General");
   const [selectedNatureOfTheSite, setSelectedNatureOfTheSite] = useState("");
 
+  const [selectedDivision, setSelectedDivision] = useState("");
   const [districtData, setDistrictData] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMandal, setSelectedMandal] = useState("");
@@ -207,6 +208,7 @@ const BuildingInfo = () => {
         setSelectedOptionCase(generalInformation?.caseType);
         setSelectedOptionPermission(generalInformation?.natureOfPermission);
         setSelectedNatureOfTheSite(generalInformation?.natureOfTheSite);
+        setSelectedDivision(generalInformation?.division);
         setSelectedDistrict(generalInformation?.district);
         setSelectedMandal(generalInformation?.mandal);
         setSelectedGrama(generalInformation?.gramaPanchayat);
@@ -274,6 +276,8 @@ const BuildingInfo = () => {
       }
     }
   }, [dataFromDB]);
+
+  console.log(selectedDivision, "selected division");
 
   // useEffect(() => {
 
@@ -422,7 +426,11 @@ const BuildingInfo = () => {
   };
   // =========================================<<<(Built Up Area Calculation End)>>>>...
 
-  //=========================================<<<<<(District, Mandal & Village Start)>>>>> :
+  //=========================================<<<<<(Division, District, Mandal & Village Start)>>>>> :
+
+  const handleDivisionChange = (e) => {
+    setSelectedDivision(e.target.value);
+  };
   const handleDistrictChange = (event) => {
     setSelectedDistrict(event.target.value);
     // Reset selected mandal and village when district changes
@@ -595,6 +603,7 @@ const BuildingInfo = () => {
       natureOfPermission,
       natureOfTheSite,
       surveyNo,
+      division: selectedDivision,
       district,
       mandal,
       gramaPanchayat,
@@ -931,6 +940,38 @@ const BuildingInfo = () => {
                 type="text"
                 ltpDetails={surveyNo}
               />
+
+              <motion.div
+                className="flex flex-col justify-center my-4 mx-3"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0, transition: { duration: 1 } }}
+                viewport={{ once: true }}
+              >
+                <label className={labelClass}>
+                  <span>Division</span>
+                </label>
+                <select
+                  id="district"
+                  name="Division"
+                  className={`${inputClass}`}
+                  onChange={handleDivisionChange}
+                  value={selectedDivision}
+                  disabled={isReadOnly}
+                  required
+                >
+                  <option value="" disabled>
+                    Select Division
+                  </option>
+                  <option value="Bobbili ">Bobbili</option>
+                  <option value="Parvatipuram">Parvatipuram</option>
+                  <option value="Vizianagaram">Vizianagaram</option>
+                  {/* {districtData.map((district) => (
+                    <option key={district.name} value={district.name}>
+                      {district.name}
+                    </option>
+                  ))} */}
+                </select>
+              </motion.div>
 
               <motion.div
                 className="flex flex-col justify-center my-4 mx-3"
