@@ -951,7 +951,7 @@ const BuildingInfo = () => {
                   <span>Division</span>
                 </label>
                 <select
-                  id="district"
+                  id="division"
                   name="Division"
                   className={`${inputClass}`}
                   onChange={handleDivisionChange}
