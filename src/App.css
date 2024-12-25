@@ -13,6 +13,10 @@ body {
   scroll-behavior: smooth;
 }
 
+header {
+  background: url("./assets/images/home/budbg.png");
+}
+
 .modal-box {
   cursor: auto;
 }
@@ -1351,9 +1355,9 @@ ol > li:before {
 
 /*===========================<<< Scrollbar >>> */
 /* width */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 5px;
-}
+} */
 
 /* Track */
 ::-webkit-scrollbar-track {
@@ -1362,13 +1366,13 @@ ol > li:before {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #8073ef;
+  /* background: #8073ef; */
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #8071ff;
+  /* background: #8071ff; */
 }
 
 .ScrollingHidden::-webkit-scrollbar {

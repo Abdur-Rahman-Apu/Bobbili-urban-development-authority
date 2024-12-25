@@ -21,12 +21,7 @@ const Login = ({ onShowForgotPassModal }) => {
   cookieUserId = getCookie("userId");
   cookieUserPassword = getCookie("password");
 
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      id: "ltp1",
-      password: "ltp1",
-    },
-  });
+  const { register, handleSubmit } = useForm();
 
   // handling login
   const onSubmit = async (data) => {
@@ -112,7 +107,7 @@ const Login = ({ onShowForgotPassModal }) => {
               {...register("id", { required: true })}
               id="userId"
               className={`${LoginCSS.loginInput} rounded-full block text-base w-full py-2 px-4 text-gray-900`}
-              defaultValue={cookieUserId}
+              // defaultValue={cookieUserId}
               autoFocus
               required
             />
@@ -129,7 +124,7 @@ const Login = ({ onShowForgotPassModal }) => {
               type={`${show === true ? "text" : "password"}`}
               id="password"
               // placeholder="••••••••"
-              defaultValue={cookieUserPassword}
+              // defaultValue={cookieUserPassword}
               className={`${LoginCSS.loginInput} rounded-full block text-base w-full py-2 px-4 text-gray-900`}
               {...register("password", { required: true })}
               required

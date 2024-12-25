@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { AiFillMessage, AiOutlineHome } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
-import { MdOutlineDashboard } from "react-icons/md";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/images/home/logo2.jpg";
 
 import toast from "react-hot-toast";
+import { FaFilePdf, FaFileVideo, FaSearch } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
+import { IoHome, IoPersonSharp } from "react-icons/io5";
+import { MdDashboard, MdOutlinePolicy, MdPayment } from "react-icons/md";
 import ChatBox from "../Pages/Shared/ChatBox";
 import { baseUrl } from "../utils/api";
 import { getCookie } from "../utils/utils";
@@ -35,8 +38,8 @@ const MainLayout = () => {
       });
   }, []);
 
-  const active =
-    "bg-normalViolet shadow-md shadow-violetDark text-white border-none ";
+  // const active =
+  //   "bg-normalViolet shadow-md shadow-violetDark text-white border-none ";
 
   const notActive =
     "hover:bg-normalViolet text-normalViolet hover:text-white border border-violetLight";
@@ -66,14 +69,105 @@ const MainLayout = () => {
     navigate("/dashboard");
   }
 
+  const hoverGradientColor =
+    "hover:bg-Primary hover:text-brown hover:font-bold";
+  const active = "font-bold bg-Primary text-brown";
+  // const active = "nm_Container font-bold bg-[#8B5BF6] text-white";
+
+  const menu = (
+    <>
+      <Link
+        to="/"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-2 py-2 text-base border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.length === 1 && path.includes("/") ? active : ""
+        }`}
+      >
+        <IoHome />
+        Home
+      </Link>
+      <Link
+        to="/"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2  text-base border-r-2 text-white border-white ${hoverGradientColor} ${
+          path.length === 1 && path.includes("/") ? "" : ""
+        }`}
+      >
+        <MdDashboard />
+        Dashboard
+      </Link>
+      <Link
+        to="/"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base border-r-2 border-white  text-white ${hoverGradientColor} ${
+          path.length === 1 && path.includes("/") ? "" : ""
+        }`}
+      >
+        <FaSearch />
+        App. Search
+      </Link>
+      <Link
+        to="/onlinePayment"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.includes("onlinePayment") ? active : ""
+        }`}
+      >
+        <MdPayment />
+        Pay Online
+      </Link>
+      <Link
+        to="/listOfLTP"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base  border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.includes("listOfLTP") ? active : ""
+        }`}
+      >
+        {/* <FaThList /> */}
+        <IoPersonSharp />
+        List of LTP's
+      </Link>
+      <Link
+        to="/demoVideos"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.includes("demoVideos") ? active : ""
+        }`}
+      >
+        <FaFileVideo />
+        Demo Videos
+      </Link>
+      <Link
+        to="/privacyPolicy"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base  border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.includes("privacyPolicy") ? active : ""
+        }`}
+      >
+        <MdOutlinePolicy />
+        Privacy Policy
+      </Link>
+      <Link
+        to="/defaultDrawingFormat"
+        type="button"
+        className={`relative inline-flex gap-1 items-center w-full h-full px-4 py-2 text-base border-r-2 border-white text-white ${hoverGradientColor} ${
+          path.includes("defaultDrawingFormat") ? active : ""
+        }`}
+      >
+        <FaFilePdf />
+        Drawing Format
+      </Link>
+    </>
+  );
+
   return (
     <>
       {/* particle  */}
 
-      <div className="px-10 min-h-screen z-[10] bg-[#E8EAEC] relative">
+      <div className="z-[10] relative">
         {/* {!path.includes("/statistics") && <ParticleBg />} */}
         {/* upper part  */}
-        <div className="py-3 flex-col lg:flex-row flex justify-between items-center z-[10]">
+        {/* <div className="py-3 flex-col lg:flex-row flex justify-between items-center z-[10]">
           <div className="basis-3/4 z-[10] pt-2">
             <p className="w-fit italic tracking-wider p-2 text-5xl font-bold font-titleFont text-black">
               Bobbili Urban Development Authority
@@ -110,15 +204,75 @@ const MainLayout = () => {
               <MdOutlineDashboard size={25} className="text-2xl" />
             </Link>
           </div>
-        </div>
+        </div> */}
+        <header className=" p-2 ">
+          {/* <div>
+            <figure className="flex items-center gap-2">
+              <img
+                src={CBNImg}
+                alt="logo"
+                width={80}
+                className="rounded-full"
+              />
+              <figcaption>
+                <strong>Sri Nara Chandrababu Naidu,</strong>
+                <p>Hon'ble Chief Minister of AP.</p>
+              </figcaption>
+            </figure>
+          </div> */}
+          <div className="flex  flex-col flex-1 items-center gap-3">
+            <div>
+              <img src={logo} alt="logo" width={80} className="rounded-full" />
+            </div>
+            <div className="w-3/5 text-center">
+              {/* text-[#008c33] text-[#f9900e]*/}
+              <h1 className="font-poppins uppercase text-2xl font-bold  text-leaf">
+                bobbili urban development authority
+              </h1>
+              <p lang="tel" className="mt-2 font-bold text-brown">
+                బొబ్బిలి అర్బన్ డెవలప్‌మెంట్ అథారిటీ
+              </p>
+            </div>
+            {/* <div>
+              <img src={logo} alt="logo" width={80} className="rounded-full" />
+            </div> */}
+          </div>
+
+          {/* <div>
+            <figure className="flex flex-row-reverse items-center gap-2">
+              <img
+                src={pongurunarayanaImg}
+                alt="logo"
+                width={80}
+                className="rounded-full"
+              />
+              <figcaption>
+                <strong>Sri Ponguru Narayana,</strong>
+
+                <p>Hon'ble Minister for MA&UD of AP.</p>
+              </figcaption>
+            </figure>
+          </div> */}
+        </header>
+        <nav className="bg-leaf hidden lg:flex z-[10] w-full text-base justify-between  text-black border border-gray-200  shadow-md">
+          {menu}
+        </nav>
 
         {/* lower part  */}
         <Outlet />
 
-        <p className="z-[10] text-black  mt-5 text-xl relative font-bold italic hidden 2xl:flex justify-center items-center gap-2 font-titleFont">
-          {`Total visitors - ${visitorCount}`}
-          <FaUsers size={20} />
-        </p>
+        <footer className="flex flex-col gap-2 bg-leaf p-5">
+          <p className="text-lg text-center text-white">
+            &copy; 2024 Bobbili Urban Development Authority. All Rights
+            Reserved.
+          </p>
+          <p className="z-[10] text-white text-lg relative flex justify-center items-center gap-2  font-titleFont">
+            <FaUsers size={20} />
+            {`Visitor count - `}
+            <span className="bg-Primary text-brown h-7 p-2 rounded-sm inline-flex items-center">{`${visitorCount}`}</span>
+          </p>
+        </footer>
+
         <div
           className="chatbox-wrapper"
           onClick={async () => {

@@ -5,13 +5,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        Primary: "#FFD66C",
+        Primary: "#FFC800",
         btnHover: "#edab03",
         violetLight: "#a36ee0",
         violetDark: "#6a39a1",
         normalViolet: "#8B5BF6",
         black: "#1f1132",
         bgColor: "#E8EAEC",
+        leaf: "#149777",
+        brown: "#673500",
       },
       fontFamily: {
         sofadi: ["Sofadi One", "cursive"],
