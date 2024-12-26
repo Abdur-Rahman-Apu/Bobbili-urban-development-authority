@@ -6,8 +6,12 @@ import { FaCcAmazonPay, FaMoneyCheckAlt } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import { IoReceipt } from "react-icons/io5";
 import { MdOutlinePayments, MdReceiptLong } from "react-icons/md";
-import { useLocation, useNavigate, useOutletContext } from "react-router";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import { handlePaymentProcess } from "../../../../../services/paymentService";
 import { baseUrl } from "../../../../../utils/api";
