@@ -1,5 +1,4 @@
 import axios from "axios";
-import _ from "lodash";
 import Lottie from "lottie-react";
 import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";

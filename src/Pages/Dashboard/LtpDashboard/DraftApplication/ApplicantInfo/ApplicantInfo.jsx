@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { FaBuildingUser } from "react-icons/fa6";
-import { useOutletContext } from "react-router";
+import { useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../../../../AuthProvider/AuthProvider";
 import InputField from "../../../../Components/InputField";
 import useGetUser from "../../../../CustomHook/useGetUser";
