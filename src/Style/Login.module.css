@@ -1,21 +1,23 @@
 .formGroup input:valid,
 .formGroup input:focus {
   outline: none;
-  background: transparent;
-  box-shadow: inset -5px -5px 12px #fff, inset 5px 5px 12px #c7cbce;
+  /* background: transparent; */
+  /* box-shadow: inset -5px -5px 12px #fff, inset 5px 5px 12px #c7cbce; */
 }
 
 .formGroup input:valid + label,
 .formGroup input:focus + label {
-  color: #000000;
-  transform: translate(8px, 8px);
-  background: #e8eaec;
-  border-radius: 3px;
+  /* color: #000000; */
+  /* transform: translate(1px, -10px); */
+  display: none;
+  background: #fff;
+  /* border-radius: 3px; */
   padding: 0px 3px;
 }
 
 .formGroup label {
   transition: all 0.2s ease-in-out;
+  background-color: #fff;
 }
 
 input[type="checkbox"]:checked {
@@ -27,17 +29,17 @@ input[type="checkbox"]:checked {
   display: flex;
   align-items: center;
   justify-content: center;
-  outline: none;
-  background-image: linear-gradient(to top, #d8d9db 0%, #fff 80%, #fdfdfd 100%);
-  border: 1.5px solid #8b5bf6;
+  /* outline: none; */
+  /* background-image: linear-gradient(to top, #d8d9db 0%, #fff 80%, #fdfdfd 100%); */
+  /* border: 1.5px solid #8b5bf6; */
   transition: all 0.2s ease;
-  font-family: "Source Sans Pro", sans-serif;
+  /* font-family: "Source Sans Pro", sans-serif; */
   font-size: 16px;
   font-weight: 600;
   color: #606060;
 }
 
-.loginInput:hover {
+/* .loginInput:hover {
   box-shadow: 0 4px 3px 1px #fcfcfc, 0 6px 8px #d6d7d9, 0 -4px 4px #cecfd1,
     0 -6px 4px #fefefe, inset 0 0 3px 3px #cecfd1;
 }
@@ -50,6 +52,6 @@ input[type="checkbox"]:checked {
 .loginInput:focus {
   box-shadow: 0 4px 3px 1px #fcfcfc, 0 6px 8px #d6d7d9, 0 -4px 4px #cecfd1,
     0 -6px 4px #fefefe, inset 0 0 5px 3px #999, inset 0 0 30px #aaa;
-}
+} */
 
 /* ==========================> loginInput design  End*/

@@ -1,15 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { AiFillMessage } from "react-icons/ai";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
+// import { AiFillMessage } from "react-icons/ai";
+// import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/images/home/logo2.jpg";
+import logo from "../assets/images/home/279267565_320376033559878_7910645826457098899_n.jpg";
 
 import toast from "react-hot-toast";
 import { FaFilePdf, FaFileVideo, FaSearch } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 import { IoHome, IoPersonSharp } from "react-icons/io5";
 import { MdDashboard, MdOutlinePolicy, MdPayment } from "react-icons/md";
+import chatBoxImg from "../assets/images/home/chatting.png";
 import ChatBox from "../Pages/Shared/ChatBox";
 import { baseUrl } from "../utils/api";
 import { getCookie } from "../utils/utils";
@@ -79,8 +80,8 @@ const MainLayout = () => {
       <Link
         to="/"
         type="button"
-        className={`relative inline-flex gap-1 items-center w-full h-full px-2 py-2 text-base border-r-2 border-white text-white ${hoverGradientColor} ${
-          path.length === 1 && path.includes("/") ? active : ""
+        className={`relative inline-flex gap-1 items-center w-full h-full px-2 py-2 text-base border-r-2 border-white  ${hoverGradientColor} ${
+          path.length === 1 && path.includes("/") ? active : "text-white"
         }`}
       >
         <IoHome />
@@ -164,7 +165,7 @@ const MainLayout = () => {
     <>
       {/* particle  */}
 
-      <div className="z-[10] relative">
+      <div className="z-[10] relative bg-white">
         {/* {!path.includes("/statistics") && <ParticleBg />} */}
         {/* upper part  */}
         {/* <div className="py-3 flex-col lg:flex-row flex justify-between items-center z-[10]">
@@ -226,10 +227,13 @@ const MainLayout = () => {
             </div>
             <div className="w-3/5 text-center">
               {/* text-[#008c33] text-[#f9900e]*/}
-              <h1 className="font-poppins uppercase text-2xl font-bold  text-leaf">
+              <h1 className="font-poppins uppercase text-[26px] 3xl:text-3xl font-bold  text-leaf">
                 bobbili urban development authority
               </h1>
-              <p lang="tel" className="mt-2 font-bold text-brown">
+              <p
+                lang="tel"
+                className="my-2 font-bold text-brown text-lg 3xl:text-xl"
+              >
                 బొబ్బిలి అర్బన్ డెవలప్‌మెంట్ అథారిటీ
               </p>
             </div>
@@ -266,15 +270,15 @@ const MainLayout = () => {
             &copy; 2024 Bobbili Urban Development Authority. All Rights
             Reserved.
           </p>
-          <p className="z-[10] text-white text-lg relative flex justify-center items-center gap-2  font-titleFont">
+          <p className="z-[10] text-white text-base relative flex justify-center items-center gap-2">
             <FaUsers size={20} />
-            {`Visitor count - `}
-            <span className="bg-Primary text-brown h-7 p-2 rounded-sm inline-flex items-center">{`${visitorCount}`}</span>
+            {`Visitors - `}
+            <span className="bg-Primary text-brown h-6 font-bold p-2 rounded-sm inline-flex items-center">{`${visitorCount}`}</span>
           </p>
         </footer>
 
         <div
-          className="chatbox-wrapper"
+          className="chatbox-wrapper fixed 2xl:absolute"
           onClick={async () => {
             setToggleChat(!toggleChat);
             console.log(removeChatUser, "Remove chat user");
@@ -296,13 +300,14 @@ const MainLayout = () => {
             setRemoveChatUser(null);
           }}
         >
-          <div className="chatbox-toggle">
+          {/* <div className="chatbox-toggle">
             {toggleChat ? (
               <IoIosArrowDropdownCircle size={36} />
             ) : (
               <AiFillMessage size={33} />
             )}
-          </div>
+          </div> */}
+          <img src={chatBoxImg} alt="" />
         </div>
 
         {toggleChat && (

@@ -2,9 +2,14 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { BsFillHouseCheckFill, BsFillHouseLockFill } from "react-icons/bs";
+import { BiSolidHide, BiSolidShow, BiSolidUser } from "react-icons/bi";
+import { FaShieldAlt } from "react-icons/fa";
+import { IoMdLogIn } from "react-icons/io";
+import { MdReplay } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router";
 import BeatLoader from "react-spinners/BeatLoader";
+import logo from "../../../assets/images/home/279267565_320376033559878_7910645826457098899_n.jpg";
 import LoginCSS from "../../../Style/Login.module.css";
 import { baseUrl } from "../../../utils/api";
 import { getCookie, setCookie } from "../../../utils/utils";
@@ -81,75 +86,174 @@ const Login = ({ onShowForgotPassModal }) => {
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className=" bg-green-50 rounded-lg border border-leaf">
       {/* support icon  */}
-      <div className="nm_Inset mt-[-65%] ml-[-20%] h-[330px] lg:w-[120%] bg-gradient-to-r from-[#cecbf5] via-[#BDB9F6] to-[#8980fd] rounded-full flex justify-center flex-col items-center">
+      {/* <div className="nm_Inset mt-[-65%] ml-[-20%] h-[330px] lg:w-[120%] bg-gradient-to-r from-[#cecbf5] via-[#BDB9F6] to-[#8980fd] rounded-full flex justify-center flex-col items-center">
         <p
           className={`text text-white font-medium text-4xl uppercase pt-[50%] pr-[15%]`}
         >
           Sign in
         </p>
         <p className="text-white font-base text-lg">Welcome back!</p>
+      </div> */}
+
+      <div className="flex flex-col items-center w-full p-2">
+        <img
+          src={logo}
+          alt=""
+          width={80}
+          className="rounded-full object-cover"
+        />
+        <p className="text-3xl font-bold text-leaf">Sign In</p>
+        <p className="text-base text-brown">Welcome Back!</p>
       </div>
 
-      <div className="p-4 sm:p-6 md:px-5 md:pt-3 shadow-lg rounded-b-lg">
+      <div className="px-5 w-full shadow-lg">
         <form
-          className="space-y-2 font-roboto"
+          className="space-y-2 font-roboto "
           onSubmit={handleSubmit(onSubmit)}
         >
           {/* <h1 className="text-3xl text-center font-bold text-gray-50">
               Sign in
             </h1> */}
 
-          <div className={`${LoginCSS.formGroup} relative pt-[20px] max-w-xs`}>
-            <input
-              type="text"
-              {...register("id", { required: true })}
-              id="userId"
-              className={`${LoginCSS.loginInput} rounded-full block text-base w-full py-2 px-4 text-gray-900`}
-              // defaultValue={cookieUserId}
-              autoFocus
-              required
-            />
-            <label
-              htmlFor="userId"
-              className="text-violet-400 h-5 text-base font-semibold absolute top-0 left-[16px] pointer-events-none transform translate-y-7"
-            >
-              Your Id
-            </label>
+          <div className={`${LoginCSS.formGroup} flex  pt-4 `}>
+            <div className="w-12 h-12 flex justify-center items-center bg-leaf text-white rounded-tl-md rounded-bl-md">
+              <BiSolidUser size={23} />
+            </div>
+            <div className="relative flex-1">
+              <input
+                type="text"
+                {...register("id", { required: true })}
+                id="userId"
+                className={` input border border-leaf rounded-tl-none rounded-bl-none  block text-base w-full py-2 px-4 text-gray-900`}
+                placeholder="Enter user id..."
+                // defaultValue={cookieUserId}
+                required
+              />
+              <label
+                htmlFor="userId"
+                className="text-leaf w-1/2 h-5 text-base font-semibold absolute top-0 left-4 pointer-events-none transform translate-y-3"
+              >
+                User ID
+              </label>
+            </div>
           </div>
 
-          <div className={`${LoginCSS.formGroup} relative pt-[20px] max-w-xs`}>
-            <input
-              type={`${show === true ? "text" : "password"}`}
-              id="password"
-              // placeholder="••••••••"
-              // defaultValue={cookieUserPassword}
-              className={`${LoginCSS.loginInput} rounded-full block text-base w-full py-2 px-4 text-gray-900`}
-              {...register("password", { required: true })}
-              required
-            />
-            <label
-              htmlFor="password"
-              className="text-violet-400 h-5 text-base font-semibold absolute top-0 left-[20px] pointer-events-none transform translate-y-7"
-            >
-              Your password
-            </label>
+          <div className={`${LoginCSS.formGroup} flex relative pt-4 `}>
+            <div className="w-12 h-12 flex justify-center items-center bg-leaf text-white rounded-tl-md rounded-bl-md">
+              <RiLockPasswordFill size={23} />
+            </div>
+
+            <div className="relative flex-1">
+              <input
+                type={`${show === true ? "text" : "password"}`}
+                id="password"
+                placeholder="Enter password..."
+                // defaultValue={cookieUserPassword}
+                className={` input border border-leaf rounded-md rounded-tl-none rounded-bl-none text-base w-full py-2 px-4 text-gray-900`}
+                {...register("password", { required: true })}
+                required
+              />
+              <label
+                htmlFor="password"
+                className="text-leaf w-1/2 h-5 text-base font-semibold absolute top-0 left-4 pointer-events-none transform translate-y-3"
+              >
+                Your password
+              </label>
+            </div>
 
             <div
-              className="absolute top-[55%] right-3 w-fit dark:text-black"
+              className="absolute top-[52%] right-3 w-fit dark:text-black"
               onClick={handlePasswordShow}
             >
               {show ? (
-                <BsFillHouseCheckFill className="text-violet-400" />
+                <BiSolidShow size={20} className="text-leaf" />
               ) : (
-                <BsFillHouseLockFill className="text-violet-400" />
+                <BiSolidHide size={20} className="text-leaf" />
               )}
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
-            <div className="flex items-center pt-2 pb-3">
+          {/* captcha  */}
+          <div className={`${LoginCSS.formGroup} flex  pt-4 `}>
+            <div className="w-12 h-12 flex justify-center items-center bg-leaf text-white rounded-tl-md rounded-bl-md">
+              <FaShieldAlt size={23} />
+            </div>
+            <div className="relative flex-1">
+              <input
+                type="text"
+                {...register("userCaptcha", { required: true })}
+                id="user-captcha"
+                className={` input border border-leaf rounded-tl-none rounded-bl-none  block text-base w-full py-2 px-4 text-gray-900`}
+                placeholder="Enter captcha..."
+                // defaultValue={cookieUserId}
+                required
+              />
+              <label
+                htmlFor="captcha"
+                className="text-leaf w-3/4 h-5 text-base font-semibold absolute top-0 left-4 pointer-events-none transform translate-y-3"
+              >
+                Captcha
+              </label>
+            </div>
+
+            {/* actual captcha  */}
+            <div className="relative flex-1 flex ml-1">
+              <input
+                type="text"
+                {...register("generatedCaptcha", { required: true })}
+                id="generated-captcha"
+                className={` input border border-leaf rounded-tr-none rounded-br-none  block  w-full p-1 captcha-bg font-captcha font-bold text-2xl`}
+                value="A B C 2 I a"
+                required
+              />
+              <label
+                htmlFor="userId"
+                className="text-leaf w-1/2 h-5 text-base font-semibold absolute top-0 left-4 pointer-events-none transform translate-y-3"
+              >
+                User ID
+              </label>
+
+              {/* reset button  */}
+              <button
+                className="p-2 bg-leaf text-white rounded-md rounded-tl-none rounded-bl-none"
+                type="button"
+              >
+                <MdReplay size={20} />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-center pt-4 w-full">
+            {loading ? (
+              <BeatLoader
+                color={"#149777"}
+                loading={loading}
+                cssOverride={overrideStyleForBeatLoader}
+                size={15}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full flex justify-center"
+              >
+                <button
+                  type="submit"
+                  className={`nm_Container flex justify-center items-center gap-2  font-bold bg-leaf py-2 w-9/12 text-lg text-white rounded-md cursor-pointer`}
+                >
+                  <IoMdLogIn size={20} />
+                  Sign in
+                </button>
+              </motion.div>
+            )}
+          </div>
+
+          <div className="flex justify-center items-center">
+            {/* <div className="flex items-center pt-2 pb-3">
               <div className="flex items-center h-5">
                 <input
                   id="remember"
@@ -164,36 +268,15 @@ const Login = ({ onShowForgotPassModal }) => {
               >
                 Remember me
               </label>
-            </div>
+            </div> */}
+
+            {/* forgot-pasword  */}
             <p
-              className="text-sm font-bold text-normalViolet cursor-pointer hover:underline"
+              className="pt-1 mb-7 text-sm font-bold text-leaf cursor-pointer hover:underline"
               onClick={onShowForgotPassModal}
             >
               Forgot password?
             </p>
-          </div>
-          <div className="flex justify-center">
-            {loading ? (
-              <BeatLoader
-                color={"#a36ee0"}
-                loading={loading}
-                cssOverride={overrideStyleForBeatLoader}
-                size={15}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            ) : (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <input
-                  type="submit"
-                  value="Sign in"
-                  className={`nm_Container font-bold bg-[#8980FD] py-2 px-8 text-white rounded-full cursor-pointer`}
-                />
-              </motion.div>
-            )}
           </div>
         </form>
       </div>

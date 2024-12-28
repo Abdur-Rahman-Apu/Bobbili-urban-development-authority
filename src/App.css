@@ -15,6 +15,11 @@ body {
 
 header {
   background: url("./assets/images/home/budbg.png");
+  background-size: cover;
+}
+
+.captcha-bg {
+  background: url("./assets/images/captcha-bg.jpeg");
 }
 
 .modal-box {
@@ -1382,11 +1387,12 @@ ol > li:before {
 
 /* chat box  */
 .chatbox-wrapper {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  width: 3rem;
-  height: 3rem;
+  bottom: -1rem;
+  right: -1rem;
+
+  width: 6rem;
+  height: 6rem;
+  cursor: pointer;
   z-index: 1000;
 }
 .chatbox-toggle {

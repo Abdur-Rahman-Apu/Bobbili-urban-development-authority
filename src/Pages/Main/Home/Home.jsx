@@ -164,8 +164,8 @@ const Home = () => {
           handleOtpMatching={handleOtpMatching}
         />
       )}
-      <div className="w-full flex justify-between pt-6">
-        <div className="w-[70%]">
+      <div className="w-full flex justify-around py-6">
+        <div className="w-[65%]">
           {/* sidebar menus  */}
           {/* <div className=" hidden lg:flex  z-[10] w-full text-base justify-between  text-black border border-gray-200 rounded-lg">
             {menu}
@@ -173,13 +173,13 @@ const Home = () => {
 
           {/* Scrollable content */}
           <div
-            className={`overflow-hidden relative overflow-y-auto hidden w-full lg:flex lg:h-[410px] rounded-lg mx-4 z-[10] items-center `}
+            className={` w-full max-h-[495px] overflow-hidden lg:flex  rounded-lg  z-[10] shadow-md `}
           >
             <Outlet />
           </div>
         </div>
 
-        <div className="w-[25%] z-[10]   ">
+        <div className="w-[30%] z-[10] rounded-lg">
           <Login onShowForgotPassModal={() => setIsOpenForgotPassModal(true)} />
         </div>
       </div>

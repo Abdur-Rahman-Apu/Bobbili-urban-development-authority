@@ -22,6 +22,8 @@ export default {
         notSerif: ["Noto Serif JP", "seri"],
         poppins: ["Poppins", "sans-serif"],
         titleFont: ["Neuton", "sans-serif"],
+        captcha: ["Indie Flower", "serif"],
+        // captcha: ["Monofett", "serif"],
       },
     },
   },

@@ -30,6 +30,7 @@ import VerificationStatus from "../Pages/Dashboard/UDA/VerificationStatus/Verifi
 import ApplicationSearch from "../Pages/Main/ApplicationSearch/ApplicationSearch";
 import DefaultDrawingFormat from "../Pages/Main/DefaultDrawingFormat/DefaultDrawingFormat";
 import DemoVideos from "../Pages/Main/DemoVideos/DemoVideos";
+import Banner from "../Pages/Main/Home/Banner";
 import Home from "../Pages/Main/Home/Home";
 import ListOfLTP from "../Pages/Main/ListOfLTP/ListOfLTP";
 import OnlinePayment from "../Pages/Main/OnlinePayment/OnlinePayment";
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/",
+            element: <Banner />,
+          },
+          {
+            path: "/applicationSearch",
             element: <ApplicationSearch />,
           },
           {
