@@ -2,7 +2,7 @@
 
 A website to submit building approval application.
 
-### Live website link: [https://bobbili-urban-development-authority.netlify.app/]
+### Live website link: [(https://bpa-buda.ap.gov.in/)]
 
 ## Features
 
