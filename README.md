@@ -34,7 +34,7 @@ A website to submit building approval application.
 
 ## Applicant
 
-id: ltp1
+id: ltp-dev
 password: ltp1
 
 ## Reviewer
